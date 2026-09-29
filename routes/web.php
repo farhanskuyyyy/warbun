@@ -12,6 +12,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\DebtController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -52,4 +53,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/debt', [DebtController::class, 'store'])->name('debt.store');
     Route::post('/debt/payment', [DebtController::class, 'payment'])->name('debt.payment');
     Route::get('/debt/dashboard', [DebtController::class, 'dashboard'])->name('debt.dashboard');
+    
+    // Orders
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 });
