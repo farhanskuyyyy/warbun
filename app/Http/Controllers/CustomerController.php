@@ -1,0 +1,130 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Customer;
+use App\Models\DebtAccount;
+use App\Models\AuditLog;
+
+class CustomerController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Customer::with('debtAccount');
+        
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('phone', 'like', "%{$request->search}%")
+                  ->orWhere('email', 'like', "%{$request->search}%");
+            });
+        }
+        
+        if ($request->status === 'active') {
+            $query->where('is_active', true);
+        } elseif ($request->status === 'inactive') {
+            $query->where('is_active', false);
+        }
+        
+        if ($request->has_debt === 'yes') {
+            $query->where('outstanding_balance', '>', 0);
+        }
+        
+        $customers = $query->latest()->paginate(15);
+        
+        return view('customers.index', compact('customers'));
+    }
+
+    public function create()
+    {
+        return view('customers.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string',
+            'can_use_debt' => 'boolean',
+            'credit_limit' => 'required_if:can_use_debt,1|nullable|numeric|min:0',
+        ]);
+
+        $validated['is_active'] = true;
+        $validated['outstanding_balance'] = 0;
+        $validated['debt_status'] = $request->boolean('can_use_debt') ? 'eligible' : 'restricted';
+
+        $customer = Customer::create($validated);
+
+        if ($request->boolean('can_use_debt')) {
+            DebtAccount::create([
+                'customer_id' => $customer->id,
+                'credit_limit' => $validated['credit_limit'] ?? 0,
+            ]);
+        }
+
+        AuditLog::log('customer.created', $customer, null, $customer->toArray());
+
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully');
+    }
+
+    public function show(Customer $customer)
+    {
+        $customer->load('debtAccount', 'sales', 'debtTransactions');
+        
+        $recentSales = $customer->sales()->latest()->take(10)->get();
+        $debtTransactions = $customer->debtTransactions()->latest()->take(10)->get();
+        
+        return view('customers.show', compact('customer', 'recentSales', 'debtTransactions'));
+    }
+
+    public function edit(Customer $customer)
+    {
+        return view('customers.edit', compact('customer'));
+    }
+
+    public function update(Request $request, Customer $customer)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string',
+            'is_active' => 'boolean',
+            'can_use_debt' => 'boolean',
+            'credit_limit' => 'nullable|numeric|min:0',
+            'debt_status' => 'in:eligible,restricted,suspended,blocked',
+        ]);
+
+        $oldValues = $customer->toArray();
+        $validated['debt_status'] = $request->debt_status ?? $customer->debt_status;
+
+        $customer->update($validated);
+
+        if ($customer->debtAccount) {
+            $customer->debtAccount->update([
+                'credit_limit' => $validated['credit_limit'] ?? $customer->debtAccount->credit_limit,
+            ]);
+        }
+
+        AuditLog::log('customer.updated', $customer, $oldValues, $customer->toArray());
+
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully');
+    }
+
+    public function destroy(Customer $customer)
+    {
+        if ($customer->outstanding_balance > 0) {
+            return back()->withErrors(['error' => 'Cannot delete customer with outstanding debt']);
+        }
+
+        $oldValues = $customer->toArray();
+        $customer->delete();
+        
+        AuditLog::log('customer.deleted', null, $oldValues, null);
+
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully');
+    }
+}
