@@ -16,11 +16,17 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\CustomerFrontController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Landing / Customer pages (public)
+Route::get('/', [CustomerFrontController::class, 'landing'])->name('landing');
+Route::get('/shop', [CustomerFrontController::class, 'shop'])->name('customer.shop');
+Route::get('/shop/{product}', [CustomerFrontController::class, 'product'])->name('customer.product');
+Route::get('/cart', [CustomerFrontController::class, 'cart'])->name('customer.cart');
+Route::post('/checkout', [CustomerFrontController::class, 'checkout'])->name('customer.checkout');
+Route::get('/order-success/{order}', [CustomerFrontController::class, 'orderSuccess'])->name('customer.order.success');
 
+// CMS (admin/staff)
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
@@ -62,12 +68,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
     
-    // Reports
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
-    Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
-    Route::get('/reports/debt', [ReportController::class, 'debt'])->name('reports.debt');
-    
     // Payments
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/create', [PaymentController::class, 'createManual'])->name('payments.create');
@@ -76,7 +76,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payments/{payment}/confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
     Route::post('/payments/{payment}/refund', [PaymentController::class, 'refund'])->name('payments.refund');
     
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
+    Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
+    Route::get('/reports/debt', [ReportController::class, 'debt'])->name('reports.debt');
+    
     // Audit
     Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
     Route::get('/audit/{auditLog}', [AuditController::class, 'show'])->name('audit.show');
+    
+    // Profile
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
