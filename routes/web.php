@@ -15,6 +15,7 @@ use App\Http\Controllers\DebtController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AuditController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -74,4 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
     Route::post('/payments/{payment}/confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
     Route::post('/payments/{payment}/refund', [PaymentController::class, 'refund'])->name('payments.refund');
+    
+    // Audit
+    Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+    Route::get('/audit/{auditLog}', [AuditController::class, 'show'])->name('audit.show');
 });
