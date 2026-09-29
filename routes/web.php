@@ -10,6 +10,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PosController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -34,4 +35,13 @@ Route::middleware(['auth'])->group(function () {
     
     // Customers
     Route::resource('customers', CustomerController::class);
+    
+    // POS
+    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+    Route::get('/pos/products', [PosController::class, 'products'])->name('pos.products');
+    Route::post('/pos/process-sale', [PosController::class, 'processSale'])->name('pos.process-sale');
+    Route::get('/pos/receipt/{sale}', [PosController::class, 'receipt'])->name('pos.receipt');
+    Route::get('/pos/history', [PosController::class, 'history'])->name('pos.history');
+    Route::post('/pos/open-shift', [PosController::class, 'openShift'])->name('pos.open-shift');
+    Route::post('/pos/close-shift', [PosController::class, 'closeShift'])->name('pos.close-shift');
 });
