@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\DebtController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -44,4 +45,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pos/history', [PosController::class, 'history'])->name('pos.history');
     Route::post('/pos/open-shift', [PosController::class, 'openShift'])->name('pos.open-shift');
     Route::post('/pos/close-shift', [PosController::class, 'closeShift'])->name('pos.close-shift');
+    
+    // Debt
+    Route::get('/debt', [DebtController::class, 'index'])->name('debt.index');
+    Route::get('/debt/create', [DebtController::class, 'create'])->name('debt.create');
+    Route::post('/debt', [DebtController::class, 'store'])->name('debt.store');
+    Route::post('/debt/payment', [DebtController::class, 'payment'])->name('debt.payment');
+    Route::get('/debt/dashboard', [DebtController::class, 'dashboard'])->name('debt.dashboard');
 });
