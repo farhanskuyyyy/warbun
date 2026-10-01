@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
@@ -12,7 +13,10 @@ class CustomerFrontController extends Controller
 {
     public function landing()
     {
-        return view('landing');
+        $featured = Product::with('category')->where('is_active', true)->where('is_available_online', true)->orderByDesc('current_stock')->orderBy('name')->limit(4)->get();
+        $categories = Category::where('is_active', true)->whereHas('products', fn ($query) => $query->where('is_active', true)->where('is_available_online', true))->orderBy('name')->get();
+
+        return view('landing', compact('featured', 'categories'));
     }
 
     public function shop(Request $request)

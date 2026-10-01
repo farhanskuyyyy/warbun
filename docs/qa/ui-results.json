@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "results": [
+    "Landing renders actual product prices and linked categories",
+    "Clicked each distinct landing, navbar and footer destination",
+    "Storefront, catalog, empty search and cart fit 375/768/1024/1440px; account Escape returns focus",
+    "Cart badge updates after adding a product and survives navigation",
+    "Product detail add-to-cart redirects to cart with the correct badge",
+    "Login error feedback is visible after invalid credentials",
+    "CMS responsive layout, grouped sidebar, master-data disclosure, active route, mobile navigation and Escape focus restoration",
+    "Clicked every grouped sidebar destination including all five master-data links",
+    "Drawer close button, backdrop dismissal and outside-click account dismissal",
+    "Account menu switches Indonesian and English"
+  ],
+  "errors": []
+}

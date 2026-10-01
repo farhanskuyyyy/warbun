@@ -2,6 +2,8 @@
 
 Tanggal: 1 Oktober 2026. Hasil: **PASS untuk implementasi development yang diuji**. Pengujian memakai database sementara; `.env` dan database operasional existing tidak diubah. Tidak ada deployment.
 
+Pembaruan UI (1 Oktober 2026): lihat [UI_QA_REPORT.md](UI_QA_REPORT.md) untuk screenshot desktop/mobile, bukti kontras, penerapan kedua skill desain, dan delivery gate anti-slop. Regression test 64/312 serta 13 skenario browser operasional telah lulus lagi setelah perubahan UI.
+
 ## Hasil verifikasi
 
 | Pemeriksaan | Hasil | Bukti |

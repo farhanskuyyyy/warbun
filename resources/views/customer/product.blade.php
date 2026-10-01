@@ -4,7 +4,7 @@
 @section('content')
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center">
-        @if($product->image)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">@else<span aria-hidden="true">📦</span>@endif
+        @if($product->image)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">@else<div class="product-placeholder w-full h-full flex items-center justify-center"><span>{{ $product->name }}</span></div>@endif
     </div>
     <div>
         <a href="{{ route('customer.shop') }}" class="text-sm text-primary hover:underline mb-2 inline-block">{{ __('← Kembali ke Toko') }}</a>
@@ -22,7 +22,7 @@
         @if($product->current_stock > 0)
         <button data-product="{{ json_encode(['id'=>$product->id,'name'=>$product->name,'price'=>$product->selling_price]) }}" onclick="const p=JSON.parse(this.dataset.product); addToCartAndGo(p.id,p.name,p.price)"
             class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition">
-            🛒 Tambah ke Keranjang
+            {{ __('Add to cart') }}
         </button>
         @endif
     </div>
@@ -32,7 +32,8 @@
 @push('scripts')
 <script>
 function addToCartAndGo(id, name, price) {
-    let cart = JSON.parse(localStorage.getItem('warbun_cart') || '[]');
+    let cart;
+    try { cart = JSON.parse(localStorage.getItem('warbun_cart') || '[]'); if (!Array.isArray(cart)) cart = []; } catch { cart = []; }
     const existing = cart.find(i => i.id === id);
     if (existing) { existing.quantity++; } else {
         cart.push({ id, name, price, quantity: 1 });

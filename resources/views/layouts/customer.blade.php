@@ -1,4 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Warbun · @yield('title', __('Shop'))</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
-<body class="bg-stone-50 text-gray-900"><header class="bg-white border-b p-4"><nav class="mx-auto max-w-6xl flex flex-wrap items-center gap-4" aria-label="{{ __('Main navigation') }}"><a href="{{ route('landing') }}" class="text-primary font-bold text-xl">{{ __('Warbun') }}</a><a href="{{ route('customer.shop') }}">{{ __('Shop') }}</a><a href="{{ route('customer.cart') }}">{{ __('Cart') }}</a>@auth<a href="{{ route('customer.history') }}">{{ __('My orders') }}</a><a href="{{ route('profile.edit') }}">{{ __('Profile') }}</a>@can('dashboard.view')<a href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>@endcan<form method="POST" action="{{ route('logout') }}">@csrf<button type="submit">{{ __('Logout') }}</button></form>@else<a href="{{ route('login') }}">{{ __('Login') }}</a><a href="{{ route('register') }}">{{ __('Register') }}</a>@endauth @include('components.locale-switcher')</nav></header>
-<main id="main" class="max-w-6xl mx-auto p-4 md:p-6">@include('components.feedback') @yield('content')</main>@stack('scripts')</body></html>
+<body class="store-shell"><a class="skip-link" href="#main">{{ __('Skip to content') }}</a><header class="store-header"><nav class="store-nav" aria-label="{{ __('Main navigation') }}"><a href="{{ route('landing') }}" class="brand">warbun<span>{{ __('Your everyday essentials') }}</span></a><a href="{{ route('customer.shop') }}" class="store-nav-link {{ request()->routeIs('customer.shop','customer.product') ? 'is-active' : '' }}">{{ __('Shop') }}</a><div class="store-tools"><a class="cart-link" href="{{ route('customer.cart') }}">{{ __('Cart') }} <span data-cart-count class="cart-count">0</span></a>@include('components.account-menu')</div></nav></header>
+<main id="main" class="store-content">@include('components.feedback') @yield('content')</main>
+<footer class="store-footer">
+    <div class="footer-top">
+        <div><a href="{{ route('landing') }}" class="brand">warbun</a><p>{{ __('Everyday shopping, a little easier.') }}</p></div>
+        <nav aria-label="{{ __('Footer navigation') }}">
+            <a href="{{ route('customer.shop') }}">{{ __('Browse products') }}</a>
+            <a href="{{ route('customer.cart') }}">{{ __('Cart') }}</a>
+            @auth
+                @if(auth()->user()->customer)<a href="{{ route('customer.history') }}">{{ __('My orders') }}</a>@else<a href="{{ route('profile.edit') }}">{{ __('Profile') }}</a>@endif
+            @else
+                <a href="{{ route('register') }}">{{ __('Create an account') }}</a>
+            @endauth
+        </nav>
+    </div>
+    <div class="footer-bottom"><span>© {{ date('Y') }} Warbun</span><span>{{ __('Pickup or delivery. Your choice.') }}</span></div>
+</footer>@stack('scripts')</body></html>

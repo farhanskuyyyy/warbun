@@ -13,6 +13,15 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 - [x] Automated regression QA, migrations/seed, build and browser checks
 - [x] Record QA evidence and remaining environment limitations
 
+## UI refinement
+
+- [x] Apply anti-slop and UI UX Pro Max to the existing Warbun identity
+- [x] Group CMS navigation and add master-data disclosure, active routes and mobile drawer
+- [x] Redesign customer navbar, account menu, footer and actual-catalog landing
+- [x] Improve dashboard hierarchy, catalog placeholders, auth/profile and cart feedback
+- [x] Run responsive/keyboard/contrast checks and operational regression
+- [x] Record screenshots and the delivery gate in UI_QA_REPORT.md
+
 ## Integration boundary
 
 Development QA is complete for the implemented scope; evidence is in [QA_REPORT.md](QA_REPORT.md). Live payment-provider session/refund integration and real email delivery require the selected provider/configuration. Deployment and DevOps are outside this task. Existing operational data must be rehearsed and reconciled on a copy before applying the new migration.

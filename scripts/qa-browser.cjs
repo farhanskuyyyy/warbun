@@ -13,7 +13,7 @@ fs.mkdirSync(path.join(out, 'screenshots'), { recursive: true });
     const errors = []; const results = [];
     page.on('pageerror', error => errors.push(error.message));
     async function goto(url) { const r = await page.goto(url); assert(r && r.status() < 400, url + ': ' + r?.status()); await page.waitForLoadState('networkidle'); }
-    async function english() { await page.locator('select[name=locale]').selectOption('en'); await Promise.all([page.waitForURL(url => url.pathname === new URL(page.url()).pathname), page.locator('form[action$="/locale"] button').click()]); await page.waitForLoadState('networkidle'); }
+    async function english() { if (await page.locator('.account-menu').count()) await page.locator('.account-menu summary').click(); await page.locator('select[name=locale]').selectOption('en'); await Promise.all([page.waitForURL(url => url.pathname === new URL(page.url()).pathname), page.locator('form[action$="/locale"] button').click()]); await page.waitForLoadState('networkidle'); }
     async function login(email) { await goto('/login'); await english(); await page.locator('input[name=email]').fill(email); await page.locator('input[name=password]').fill('password'); await Promise.all([page.waitForURL(/dashboard|my-orders/), page.locator('form[action$="/login"] button[type=submit]').click()]); }
     async function overflow(label) { const n = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth); assert(n <= 1, `${label} overflows by ${n}px`); }
     try {
@@ -35,7 +35,7 @@ fs.mkdirSync(path.join(out, 'screenshots'), { recursive: true });
         for (const url of ['/dashboard','/pos','/inventory','/debt','/users','/settings','/stock-opnames','/shop','/cart']) { await goto(url); await overflow('mobile '+url); }
         await goto('/pos'); await page.screenshot({ path:path.join(out,'screenshots','pos-mobile.png'),fullPage:true });results.push('375px mobile layout and table containment');
         await page.keyboard.press('Tab'); assert(await page.evaluate(() => document.activeElement !== document.body));results.push('Keyboard focus works');
-        await goto('/pos'); await Promise.all([page.waitForURL(base+'/'),page.locator('form[action$="/logout"] button').first().click()]); await page.waitForLoadState('networkidle'); await context.clearCookies(); await login('customer@warbun.local');
+        await goto('/pos'); await page.locator('.account-menu summary').click(); await Promise.all([page.waitForURL(base+'/'),page.locator('form[action$="/logout"] button').first().click()]); await page.waitForLoadState('networkidle'); await context.clearCookies(); await login('customer@warbun.local');
         await goto('/shop'); page.once('dialog',d=>d.accept()); await page.locator('[data-product]').first().click();
         await goto('/cart'); await page.locator('#checkoutBtn').click(); await page.waitForURL(/order-success\/\d+/); assert((await page.locator('main').innerText()).includes('pending') || (await page.locator('main').innerText()).includes('Pending'));results.push('Customer catalog, local cart, checkout and own order history');
         await page.screenshot({path:path.join(out,'screenshots','customer-order-mobile.png'),fullPage:true});
