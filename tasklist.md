@@ -35,6 +35,16 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 - [x] Pass 72 tests / 562 assertions, build, formatting and three browser runners
 - [x] Check the existing 8080 server read-only and record the delivery gate in SHOPPING_QA_REPORT.md
 
+## Barcode POS and receipts
+
+- [x] Preserve unique barcode strings and leading zeroes; improve product form/detail guidance
+- [x] Add permission-protected exact barcode lookup with missing/inactive/stock feedback
+- [x] Support keyboard scanner Enter, sequential rapid scans and quantity/stock limits
+- [x] Keep manual search and authoritative transactional checkout with retry idempotency
+- [x] Add change preview, optional automatic print dialog, 58/80mm receipts and manual reprint
+- [x] Pass 78 tests / 616 assertions, build, Pint, operational regression and barcode browser QA
+- [x] Record sample receipt PDFs, responsive screenshots and scanner/printer setup guide
+
 ## Integration boundary
 
 Development QA is complete for the implemented scope; evidence is in [QA_REPORT.md](QA_REPORT.md). Live payment-provider session/refund integration and real email delivery require the selected provider/configuration. Deployment and DevOps are outside this task. Existing operational data must be rehearsed and reconciled on a copy before applying the new migration.

@@ -27,7 +27,9 @@
 
                 <div>
                     <label for="field-barcode" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Barcode') }}</label>
-                    <input id="field-barcode" type="text" name="barcode" value="{{ old('barcode', $product->barcode) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                    <input id="field-barcode" type="text" name="barcode" value="{{ old('barcode', $product->barcode) }}" maxlength="50" autocomplete="off" data-barcode-field aria-describedby="barcode-help" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                    <p id="barcode-help" class="text-sm text-gray-500 mt-2">{{ __('Scan the packaging barcode into this field or type it exactly, including leading zeroes. Each barcode belongs to one product.') }}</p>
+                    @error('barcode') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">

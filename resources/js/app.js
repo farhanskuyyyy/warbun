@@ -4,6 +4,12 @@ import Alpine from 'alpinejs';
 import './cart';
 import './checkout';
 import './catalog';
+import './pos';
+import './receipt';
+
+document.querySelectorAll('[data-barcode-field]').forEach(input => input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') event.preventDefault();
+}));
 
 window.Alpine = Alpine;
 

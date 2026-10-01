@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "results": [
+    "Live POS renders scan and payment controls without overflow at 320px",
+    "Live POS renders scan and payment controls without overflow at 375px",
+    "Live POS renders scan and payment controls without overflow at 768px",
+    "Live POS renders scan and payment controls without overflow at 1440px",
+    "Live exact-barcode route returns unknown-code feedback; no shift opened, barcode saved or sale submitted"
+  ]
+}

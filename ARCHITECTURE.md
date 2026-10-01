@@ -61,6 +61,14 @@ Audit stock, sale, debt, payment, refund, order lifecycle, shifts, users/permiss
 
 QA: existing auth/profile tests; service/HTTP tests for atomic rollback, negative stock, duplicate lines, price override, registered credit, limits, overpayment, FIFO overdue, retries, order ownership/lifecycle, webhook tampering, refund consistency, shifts/opname, permissions and localization. Browser QA with seeded disposable DB at mobile/desktop. Build assets and Pint check changed files. Production deployment excluded.
 
+## Barcode POS and printing
+
+Product barcode remains a nullable unique string in the existing schema, preserving leading zeroes. GET /pos/barcode requires pos.access and matches the complete saved barcode on active, non-archived products. Missing/inactive products return 404; zero stock returns 409. Lookup does not reserve or mutate stock. Keyboard scanners submit the dedicated scan form with Enter; a sequential queue adds one unit per scan and disables checkout while requests are pending. Manual search remains separate.
+
+SaleService retains the authoritative price/stock/shift/credit checks, locks and request-key idempotency. The client retains the same key for an unchanged failed checkout and sends product IDs/quantities without price overrides. Print preferences are separately validated, then included in the receipt redirect after the transaction succeeds. The receipt retains own-sale/staff-report authorization. Tender shown on the receipt is the exact sum of stored paid amount and change; ledger/payment amounts remain unchanged.
+
+58/80mm layouts use browser print media. An optional query flag opens window.print once per receipt per browser session when sessionStorage is available; manual reprint remains available. There is no direct ESC/POS connection or physical-print confirmation. Scanner/printer setup and boundaries: [BARCODE_WORKFLOW.md](BARCODE_WORKFLOW.md).
+
 ## Roadmap
 1. Auth/permissions + transactional stock/POS/debt/payment/shift foundations.
 2. Customer ordering, refunds, opname, management/settings/reporting, localization.

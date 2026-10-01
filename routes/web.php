@@ -58,6 +58,7 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
     // POS
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::get('/pos/products', [PosController::class, 'products'])->name('pos.products');
+    Route::get('/pos/barcode', [PosController::class, 'barcode'])->name('pos.barcode');
     Route::post('/pos/process-sale', [PosController::class, 'processSale'])->name('pos.process-sale');
     Route::get('/pos/receipt/{sale}', [PosController::class, 'receipt'])->name('pos.receipt');
     Route::get('/pos/history', [PosController::class, 'history'])->name('pos.history');

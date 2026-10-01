@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "results": [
+    "Product barcode saves with leading zeroes; scanner Enter does not submit the product form",
+    "Shift gate, exact scan, repeated quantity, clear/refocus and unknown-barcode feedback",
+    "Rapid scans queue without lost quantities; payment waits for pending lookups",
+    "Stock limit and network failure preserve cart; next scan and manual search recover",
+    "Insufficient tender feedback; retry keeps idempotency key; successful scan sale opens print once",
+    "58/80mm print CSS and PDF export pass; controls excluded from print; manual reprint works; reload does not repeat auto print",
+    "New sale starts clean; automatic print can be disabled"
+  ],
+  "errors": []
+}

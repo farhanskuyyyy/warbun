@@ -2,30 +2,48 @@
 @section('title', __('POS / Cashier'))
 @section('header', __('Point of Sale'))
 @section('content')
-@if(!$activeShift)<div class="panel mb-4"><p>{{ __('Open a shift before making sales.') }}</p><form action="{{ route('pos.open-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Opening cash') }}<input name="opening_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Open Shift') }}</button></form></div>
-@else<div class="panel mb-4"><p>{{ __('Active Shift') }} · {{ $activeShift->opened_at->translatedFormat('d M Y H:i') }}</p><form action="{{ route('pos.close-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Closing cash') }}<input name="closing_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Close Shift') }}</button></form></div>@endif
-<div class="grid lg:grid-cols-3 gap-4"><section class="panel lg:col-span-2"><label class="field">{{ __('Search product or barcode') }}<input id="productSearch" type="search" autocomplete="off"></label><p id="productState" role="status" class="my-3"></p><div id="productList" class="max-h-[60vh] overflow-y-auto grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3"></div></section>
-<section class="panel"><h2 class="text-xl font-semibold mb-3">{{ __('Cart') }}</h2><div id="cartItems" class="space-y-3"></div>
-<form id="saleForm" class="space-y-3 mt-4"><label class="field">{{ __('Customer') }}<select id="customerId"><option value="">{{ __('Walk-in customer') }}</option>@foreach(\App\Models\Customer::where('is_active',true)->orderBy('name')->get() as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select></label>
-<label class="field">{{ __('Payment Method') }}<select id="paymentMethod">@foreach(['cash','transfer','ewallet','qr','debt'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach</select></label>
-<label class="field">{{ __('Paid amount') }}<input id="paidAmount" type="number" min="0" step="0.01" value="0" required></label>
-@can('sales.override-discount')<label class="field">{{ __('Discount') }}<input id="discount" type="number" min="0" step="0.01" value="0"></label>@endcan
-<p class="flex justify-between font-semibold text-xl"><span>{{ __('Total') }}</span><span id="total">Rp 0</span></p><p id="saleError" role="alert" class="text-red-700"></p><button id="payBtn" class="button-primary w-full" disabled>{{ __('Complete sale') }}</button></form></section></div>
+@if(!$activeShift)
+<div class="panel mb-4"><p>{{ __('Open a shift before making sales.') }}</p><form action="{{ route('pos.open-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Opening cash') }}<input name="opening_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Open Shift') }}</button></form></div>
+@else
+<div class="panel mb-4"><p>{{ __('Active Shift') }} · {{ $activeShift->opened_at->translatedFormat('d M Y H:i') }}</p><form action="{{ route('pos.close-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Closing cash') }}<input name="closing_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Close Shift') }}</button></form></div>
+@endif
+<div class="pos-workbench">
+    <section class="panel pos-products">
+        <form id="barcodeForm" class="pos-scanner">
+            <label class="field" for="barcodeInput">{{ __('Scan barcode') }}<input id="barcodeInput" type="text" maxlength="50" autocomplete="off" spellcheck="false" aria-describedby="scannerHelp" @disabled(!$activeShift) @if($activeShift) autofocus @endif></label>
+            <button id="scanBtn" type="submit" class="button-primary" @disabled(!$activeShift)>{{ __('Add scanned item') }}</button>
+            <p id="scannerHelp">{{ __('Use a USB or Bluetooth keyboard scanner with an Enter suffix. Click this field before scanning.') }}</p>
+        </form>
+        <p id="scanState" class="pos-scan-state" role="status" aria-live="polite"></p>
+        <label class="field">{{ __('Search product or barcode') }}<input id="productSearch" type="search" autocomplete="off"></label>
+        <p id="productState" role="status" class="my-3"></p>
+        <div id="productList" class="max-h-[60vh] overflow-y-auto grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3"></div>
+    </section>
+    <section class="panel">
+        <h2 class="text-xl font-semibold mb-3">{{ __('Cart') }}</h2><div id="cartItems" class="space-y-3"></div>
+        <form id="saleForm" class="space-y-3 mt-4">
+            <label class="field">{{ __('Customer') }}<select id="customerId"><option value="">{{ __('Walk-in customer') }}</option>@foreach(\App\Models\Customer::where('is_active',true)->orderBy('name')->get() as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select></label>
+            <label class="field">{{ __('Payment Method') }}<select id="paymentMethod">@foreach(['cash','transfer','ewallet','qr','debt'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach</select></label>
+            <label class="field">{{ __('Paid amount') }}<input id="paidAmount" type="number" min="0" step="0.01" value="0" required></label>
+            @can('sales.override-discount')<label class="field">{{ __('Discount') }}<input id="discount" type="number" min="0" step="0.01" value="0"></label>@endcan
+            <p class="flex justify-between font-semibold text-xl"><span>{{ __('Total') }}</span><span id="total">Rp 0</span></p>
+            <p class="flex justify-between"><span>{{ __('Change') }}</span><span id="changeTotal">Rp 0</span></p>
+            <label class="field">{{ __('Receipt paper') }}<select id="receiptPaper"><option value="80">80 mm</option><option value="58">58 mm</option></select></label>
+            <label class="pos-print-choice"><input id="printReceipt" type="checkbox" checked><span>{{ __('Open print dialog after payment') }}</span></label>
+            <p id="saleError" role="alert" class="text-red-700"></p>
+            <button id="payBtn" class="button-primary w-full" disabled>{{ __('Complete sale') }}</button>
+        </form>
+    </section>
+</div>
+<script id="pos-config" type="application/json">{!! json_encode([
+    'productsUrl' => route('pos.products'), 'barcodeUrl' => route('pos.barcode'), 'saleUrl' => route('pos.process-sale'),
+    'csrf' => csrf_token(), 'activeShift' => (bool) $activeShift, 'locale' => app()->getLocale() === 'id' ? 'id-ID' : 'en-US',
+    'text' => ['loading' => __('Loading products...'), 'empty' => __('No products found'), 'error' => __('Unable to load products. Try searching again.'),
+        'emptyCart' => __('No items in cart'), 'stock' => __('Stock'), 'remove' => __('Remove'), 'processing' => __('Processing...'),
+        'pay' => __('Complete sale'), 'failed' => __('Unable to process sale. Retry with the same cart.'),
+        'increase' => __('Increase quantity'), 'decrease' => __('Decrease quantity'), 'scanReady' => __('Ready to scan.'),
+        'scanning' => __('Looking up barcode...'), 'scanFailed' => __('Unable to read this barcode. Try scanning again.'),
+        'added' => __('Added to cart'), 'stockLimit' => __('Quantity exceeds available stock.'),
+        'tooMany' => __('The cart can contain up to 100 different products.'), 'shift' => __('Open a shift before making sales.')],
+], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
 @endsection
-@push('scripts')<script>
-const posText={{ \Illuminate\Support\Js::from(['loading'=>__('Loading products...'),'empty'=>__('No products found'),'error'=>__('Unable to load products. Try searching again.'),'emptyCart'=>__('No items in cart'),'stock'=>__('Stock'),'remove'=>__('Remove'),'processing'=>__('Processing...'),'pay'=>__('Complete sale'),'failed'=>__('Unable to process sale. Retry with the same cart.')]) }};
-const productsUrl=@json(route('pos.products'));const saleUrl=@json(route('pos.process-sale'));const csrf=@json(csrf_token());
-let cart=[];let requestKey=crypto.randomUUID();let loading=false;let controller;
-const money=n=>new Intl.NumberFormat(@json(app()->getLocale()==='id'?'id-ID':'en-US'),{style:'currency',currency:'IDR',maximumFractionDigits:2}).format(n);
-function text(tag,value,classes=''){const e=document.createElement(tag);e.textContent=value;e.className=classes;return e;}
-async function loadProducts(search=''){
-    controller?.abort();controller=new AbortController();document.getElementById('productState').textContent=posText.loading;
-    try{const r=await fetch(productsUrl+'?search='+encodeURIComponent(search),{signal:controller.signal,headers:{Accept:'application/json'}});if(!r.ok)throw new Error();const products=await r.json();const list=document.getElementById('productList');list.replaceChildren();
-        for(const p of products){const b=document.createElement('button');b.type='button';b.className='panel text-left hover:border-primary';b.append(text('strong',p.name,'block'),text('span',p.sku,'block text-sm'),text('span',money(p.selling_price),'block font-semibold'),text('span',posText.stock+': '+p.current_stock,'block text-sm'));b.addEventListener('click',()=>add(p));list.append(b);}document.getElementById('productState').textContent=products.length?'':posText.empty;
-    }catch(e){if(e.name!=='AbortError')document.getElementById('productState').textContent=posText.error;}
-}
-function add(p){if(loading)return;const item=cart.find(x=>x.product_id===p.id);if(item){if(item.quantity<p.current_stock)item.quantity++;}else cart.push({product_id:p.id,name:p.name,quantity:1,unit_price:p.selling_price,max:p.current_stock});requestKey=crypto.randomUUID();render();}
-function render(){const list=document.getElementById('cartItems');list.replaceChildren();if(!cart.length)list.append(text('p',posText.emptyCart));for(const [i,item] of cart.entries()){const row=document.createElement('div');row.className='border-b pb-3';row.append(text('strong',item.name,'block'),text('span',money(item.unit_price),'block text-sm'));const controls=document.createElement('div');controls.className='flex flex-wrap items-center gap-3';for(const delta of [-1,1]){const b=text('button',delta===1?'+':'−','px-4 border rounded');b.type='button';b.setAttribute('aria-label',(delta===1?@json(__('Increase quantity')):@json(__('Decrease quantity')))+' '+item.name);b.addEventListener('click',()=>{if(loading)return;if(item.quantity+delta>0&&item.quantity+delta<=item.max)item.quantity+=delta;requestKey=crypto.randomUUID();render();});controls.append(b);}controls.append(text('span',item.quantity));const remove=text('button',posText.remove,'text-red-700 px-2');remove.type='button';remove.onclick=()=>{if(loading)return;cart.splice(i,1);requestKey=crypto.randomUUID();render();};controls.append(remove);row.append(controls);list.append(row);}const subtotal=cart.reduce((s,i)=>s+Math.round(Number(i.unit_price)*100)*i.quantity,0);const discount=Math.round(Number(document.getElementById('discount')?.value||0)*100);document.getElementById('total').textContent=money((subtotal-discount)/100);document.getElementById('payBtn').disabled=loading||!cart.length||!@json((bool)$activeShift);}
-document.getElementById('saleForm').addEventListener('submit',async e=>{e.preventDefault();if(loading||!cart.length)return;loading=true;render();document.getElementById('payBtn').textContent=posText.processing;document.getElementById('saleError').textContent='';try{const r=await fetch(saleUrl,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':csrf,Accept:'application/json'},body:JSON.stringify({request_key:requestKey,items:cart.map(({product_id,quantity})=>({product_id,quantity})),customer_id:document.getElementById('customerId').value||null,payment_method:document.getElementById('paymentMethod').value,paid_amount:document.getElementById('paidAmount').value,discount:document.getElementById('discount')?.value||0})});const data=await r.json();if(!r.ok){document.getElementById('saleError').textContent=data.errors?Object.values(data.errors).flat().join(' '):posText.failed;return;}location.href=data.redirect;}catch{document.getElementById('saleError').textContent=posText.failed;}finally{loading=false;document.getElementById('payBtn').textContent=posText.pay;render();}});
-document.getElementById('productSearch').addEventListener('input',e=>loadProducts(e.target.value));document.getElementById('discount')?.addEventListener('input',()=>{requestKey=crypto.randomUUID();render();});for(const id of ['customerId','paymentMethod','paidAmount'])document.getElementById(id).addEventListener('change',()=>{requestKey=crypto.randomUUID();});render();loadProducts();
-</script>@endpush

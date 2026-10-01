@@ -13,7 +13,7 @@ class BackofficePermission
         $name = $request->route()->getName();
         $map = [
             'opnames.index' => 'inventory.opname', 'opnames.store' => 'inventory.opname', 'opnames.approve' => 'inventory.approve-adjustment', 'refunds.index' => 'payments.view', 'refunds.store' => 'sales.refund', 'shifts.index' => 'pos.access', 'debt.correction' => 'debt.view',
-            'dashboard' => 'dashboard.view', 'pos.index' => 'pos.access', 'pos.products' => 'pos.access', 'pos.process-sale' => 'sales.create',
+            'dashboard' => 'dashboard.view', 'pos.index' => 'pos.access', 'pos.products' => 'pos.access', 'pos.barcode' => 'pos.access', 'pos.process-sale' => 'sales.create',
             'pos.receipt' => 'sales.view', 'pos.history' => 'sales.view', 'pos.open-shift' => 'pos.access', 'pos.close-shift' => 'pos.access',
             'inventory.index' => 'inventory.view', 'inventory.stock-in' => 'inventory.stock-in', 'inventory.stock-out' => 'inventory.stock-out', 'inventory.adjust' => 'inventory.adjust',
             'debt.index' => 'debt.view', 'debt.dashboard' => 'debt.view', 'debt.create' => 'debt.create', 'debt.store' => 'debt.create', 'debt.payment' => 'debt.pay',

@@ -43,6 +43,8 @@ Gambar produk memakai disk public Laravel. Jika link storage belum tersedia, jal
 
 ## Cara memakai alur utama
 
+Alur scan kasir dan cetak struk 58/80 mm: [BARCODE_WORKFLOW.md](BARCODE_WORKFLOW.md). Scanner yang didukung mengirim barcode sebagai keyboard dengan suffix Enter.
+
 1. Kasir membuka shift di POS, mencari nama/SKU/barcode, mengisi keranjang dan pembayaran, lalu mendapat struk.
 2. Pembelian utang harus memakai pelanggan yang terhubung ke akun terdaftar, aktif, eligible, dan mempunyai limit kredit.
 3. Pelunasan dapat dicatat per penjualan lewat Payments atau per pelanggan lewat Debt. Pembayaran pelanggan dialokasikan ke utang terbuka menurut due date dan ID.

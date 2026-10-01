@@ -46,6 +46,10 @@ The existing direction and dials also apply to authentication, checkout and orde
 
 The order page clears the cart only for the matching checkout request. Opening a previous order preserves the customer's current cart. Demo catalog assumptions are disclosed in [SEED_DATA.md](SEED_DATA.md); UI evidence is in [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md).
 
+## Barcode POS and receipt
+
+The existing retail direction and dials apply to POS. A dedicated scan field sits before manual search so scanner Enter adds a product without submitting payment. A persistent live status names the added product or explains a lookup/stock error. Checkout stays separate and waits for pending scans. The workbench uses two columns when item browsing and payment fit, and stacks below 1024px; scan controls stack below 480px with 44px targets. Printing controls remain outside the receipt and disappear in print media. Black receipt text, dashed ledger dividers, actual item prices and 4mm inner paper margins favor legibility on 58/80mm rolls. The store heading uses configured store data; no emoji or fabricated imagery is used. A paper selector and manual reprint action retain control when automatic print is cancelled. Reasons and verification: [BARCODE_QA_REPORT.md](BARCODE_QA_REPORT.md).
+
 ## Navigation icons
 
 Font Awesome Free 6.7.2 Solid icons are served from a local SVG sprite. The shared Blade component inherits text color and hides decorative SVGs from assistive technology. CMS labels remain beside 18px icons because symbols alone do not clearly distinguish debt, payments, refunds and stock tasks. Cart uses a 22px icon with a screen-reader label and visible quantity. Language retains a native select with a language icon and labeled 44px apply control. Drawer/account controls use the same family. Original paths are wrapped in symbols for reuse, with attribution and license in public/icons. No font package, CDN or dependency added. Evidence: [ICON_QA_REPORT.md](ICON_QA_REPORT.md).

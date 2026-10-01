@@ -10,6 +10,7 @@
             <div>
                 <h2 class="text-xl font-bold">{{ $product->name }}</h2>
                 <p class="text-gray-500">SKU: {{ $product->sku }}</p>
+                <p class="text-gray-500">{{ __('Barcode') }}: {{ $product->barcode ?? __('Not set') }}</p>
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('products.edit', $product) }}" class="px-3 py-1 bg-primary text-white rounded text-sm">{{ __('Edit') }}</a>
