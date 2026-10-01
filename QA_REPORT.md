@@ -1,6 +1,8 @@
 # Warbun — QA development
 
-Latest status-color update: [STATUS_COLOR_QA.md](STATUS_COLOR_QA.md). Shared semantic badges, monitoring accents, 16 targeted tests / 222 assertions, production build, AA contrast and five-width browser checks pass.
+Latest MCP development setup: [MCP_SETUP.md](MCP_SETUP.md). Context7/GitHub/Boost read calls, Playwright tool discovery, project scoping, Composer validation and full 90 tests / 741 assertions pass. Five development dependencies added without changing existing versions.
+
+Status-color update: [STATUS_COLOR_QA.md](STATUS_COLOR_QA.md). Shared semantic badges, monitoring accents, 16 targeted tests / 222 assertions, production build, AA contrast and five-width browser checks pass.
 
 Order monitoring, cashier delivery and debt verification: [ORDER_MONITOR_QA.md](ORDER_MONITOR_QA.md). 90 tests / 741 assertions, production build, seven browser scenarios, responsive checks and additive local MySQL migration rehearsal pass. Pint changes pass; unrelated existing formatting findings are recorded in the report.
 

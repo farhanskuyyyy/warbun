@@ -4,6 +4,8 @@ Aplikasi operasional warung: katalog pelanggan, POS, pesanan online, stok, piuta
 
 ## Dokumen project
 
+- [MCP_SETUP.md](MCP_SETUP.md): konfigurasi Context7, GitHub, Playwright dan Laravel Boost beserta QA.
+
 - [ORDER_MONITORING.md](ORDER_MONITORING.md): alur monitoring, pengantaran dan utang kasir; [QA](ORDER_MONITOR_QA.md).
 
 - [PRD.md](PRD.md): brief asli dari warbun.md.

@@ -1,0 +1,5 @@
+[mcp_servers.laravel-boost]
+command = "sh"
+args = ["-c", "warbun_project_dir=$(git rev-parse --show-toplevel) && cd \"$warbun_project_dir\" && exec php artisan boost:mcp"]
+startup_timeout_sec = 30
+tool_timeout_sec = 60
