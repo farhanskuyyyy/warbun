@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    body { font-family: system-ui, sans-serif; }
+    :focus-visible { outline: 3px solid #8B1E2D; outline-offset: 3px; }
+    input, select, textarea { max-width: 100%; min-width: 0; font-size: 1rem; border-radius: .375rem; }
+    button, select, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), summary { min-height: 44px; }
+    th, td { padding: .75rem; text-align: left; overflow-wrap: anywhere; }
+    tbody tr { border-top: 1px solid #e7e5e4; }
+    a { overflow-wrap: anywhere; }
+}
+@layer components {
+    .panel { @apply bg-white border border-stone-200 rounded-lg p-4; }
+    .button-primary { @apply inline-flex items-center justify-center bg-primary text-white rounded-md px-4 py-3 font-semibold hover:bg-primary-dark; }
+    .field { @apply flex flex-col gap-1 min-w-0; }
+}
+.text-gray-400, .text-gray-500 { color: #4b5563; }
+.text-red-500 { color: #b91c1c; }
+.text-green-500 { color: #15803d; }
+.text-orange-500 { color: #9a3412; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+.overflow-x-auto > table { min-width: 36rem; }
+.overflow-x-auto > table th, .overflow-x-auto > table td { overflow-wrap: normal; }
+
+dialog::backdrop { background: rgb(0 0 0 / 0.5); }
+dialog { max-height: calc(100dvh - 2rem); overflow-y: auto; }

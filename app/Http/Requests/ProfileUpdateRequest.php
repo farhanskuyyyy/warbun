@@ -18,6 +18,8 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['sometimes', 'nullable', 'string', 'max:20', Rule::unique('customers', 'phone')->ignore($this->user()->customer?->id)],
+            'address' => ['sometimes', 'nullable', 'string', 'max:2000'],
             'email' => [
                 'required',
                 'string',
@@ -25,6 +27,7 @@ class ProfileUpdateRequest extends FormRequest
                 'email',
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
+                Rule::unique('customers', 'email')->ignore($this->user()->customer?->id),
             ],
         ];
     }

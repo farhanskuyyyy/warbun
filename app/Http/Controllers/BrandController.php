@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Brand;
 use App\Models\AuditLog;
+use App\Models\Brand;
+use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
@@ -15,10 +15,14 @@ class BrandController extends Controller
             $query->where('name', 'like', "%{$request->search}%");
         }
         $brands = $query->latest()->paginate(15);
+
         return view('brands.index', compact('brands'));
     }
 
-    public function create() { return view('brands.create'); }
+    public function create()
+    {
+        return view('brands.create');
+    }
 
     public function store(Request $request)
     {
@@ -26,19 +30,24 @@ class BrandController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $brand = Brand::create($validated);
         AuditLog::log('brand.created', $brand, null, $brand->toArray());
-        return redirect()->route('brands.index')->with('success', 'Brand created');
+
+        return redirect()->route('brands.index')->with('success', __('Brand created'));
     }
 
-    public function edit(Brand $brand) { return view('brands.edit', compact('brand')); }
+    public function edit(Brand $brand)
+    {
+        return view('brands.edit', compact('brand'));
+    }
 
     public function update(Request $request, Brand $brand)
     {
-        $validated = $request->validate(['name' => 'required|string|max:255|unique:brands,name,' . $brand->id, 'code' => 'nullable|string|max:50', 'description' => 'nullable|string', 'is_active' => 'boolean']);
+        $validated = $request->validate(['name' => 'required|string|max:255|unique:brands,name,'.$brand->id, 'code' => 'nullable|string|max:50', 'description' => 'nullable|string', 'is_active' => 'boolean']);
         $old = $brand->toArray();
         $validated['is_active'] = $request->boolean('is_active');
         $brand->update($validated);
         AuditLog::log('brand.updated', $brand, $old, $brand->toArray());
-        return redirect()->route('brands.index')->with('success', 'Brand updated');
+
+        return redirect()->route('brands.index')->with('success', __('Brand updated'));
     }
 
     public function destroy(Brand $brand)
@@ -46,6 +55,7 @@ class BrandController extends Controller
         $old = $brand->toArray();
         $brand->delete();
         AuditLog::log('brand.deleted', null, $old, null);
-        return redirect()->route('brands.index')->with('success', 'Brand deleted');
+
+        return redirect()->route('brands.index')->with('success', __('Brand deleted'));
     }
 }

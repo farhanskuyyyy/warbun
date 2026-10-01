@@ -47,6 +47,10 @@
             @endif
         </div>
 
+        @if($user->customer)
+        <label class="field">{{ __('Phone') }}<input name="phone" maxlength="20" value="{{ old('phone',$user->customer->phone) }}" autocomplete="tel"></label>
+        <label class="field">{{ __('Address') }}<textarea name="address" maxlength="2000" autocomplete="street-address">{{ old('address',$user->customer->address) }}</textarea></label>
+        @endif
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

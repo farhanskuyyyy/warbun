@@ -1,47 +1,14 @@
-<laravel-boost-guidelines>
-# Laravel Application
+# Warbun
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+Aplikasi POS Laravel/Blade + Alpine, Vite dan Tailwind. Versi: composer.json/composer.lock serta package.json/package-lock.json. Baca tasklist.md untuk pekerjaan existing.
 
-## Prerequisites
+Area penting: routes/web.php, app/Http/Controllers/, app/Models/, database/migrations/, resources/views/, tests/. Permission menggunakan Spatie. Perubahan POS/inventory/debt/payment harus mempertahankan authorization, transaksi DB, perhitungan uang, dan konsistensi stok.
 
-Verify that PHP and Composer are available:
+Check bila runtime/dependency tersedia: php artisan test --filter=<test>, vendor/bin/pint --test, npm run build. Baca phpunit.xml sebelum test; gunakan DB test terisolasi. Ini command kandidat, bukan hasil test yang sudah dijalankan.
 
-```sh
-php -v
-composer -V
-```
+## Cara kerja
+Baca manifest, lockfile, README, CI, dan kode terkait sebelum patch. Ikuti stack/convention existing. Tugas kecil langsung dikerjakan; gunakan tasklist.md existing untuk pekerjaan panjang. Jangan install Boost/framework atau upgrade dependency hanya untuk memulai tugas.
 
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
+Gunakan regression test untuk behavior yang berubah, check terarah, lalu review diff. Laporkan command dan hasil aktual; catat NOT RUN bila environment tidak tersedia. Jangan membuka/menyalin nilai secret ke output. Test database terisolasi; jangan menjalankan setup/migrate:fresh/seed terhadap environment existing. Deployment, push, DNS/SSL mengikuti scope yang diotorisasi.
 
-macOS:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
-```
-
-Windows PowerShell:
-
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
-```
-
-Linux:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
-```
-
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
-
-## Agent Setup
-
-Install Laravel Boost from the application root before making application changes:
-
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
-```
-
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+Baca PRD.md, ARCHITECTURE.md dan tasklist.md di folder project ini. Laporan hasil verifikasi disimpan di QA_REPORT.md. Project instructions dan requirement user lebih spesifik daripada workflow global. Model/provider dipilih di runtime, tidak dipatok di file ini.

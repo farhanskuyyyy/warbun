@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Categories')
-@section('header', 'Product Categories')
+@section('title', __('Categories'))
+@section('header', __('Product Categories'))
 
 @section('content')
 <div class="space-y-4">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <p class="text-sm text-gray-500">Manage your product categories</p>
+            <p class="text-sm text-gray-500">{{ __('Manage your product categories') }}</p>
         </div>
         <a href="{{ route('categories.create') }}" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark">
             + Add Category
@@ -18,7 +18,7 @@
     <!-- Search -->
     <div class="bg-white rounded-xl p-4 border border-gray-100">
         <form method="GET" class="flex gap-2">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search categories..."
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('Search categories...') }}"
                 class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
             <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
                 Search
@@ -31,11 +31,11 @@
         <table class="w-full text-sm">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Name</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Slug</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Products</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                    <th class="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Name') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Slug') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Products') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Status') }}</th>
+                    <th class="text-right px-4 py-3 font-medium text-gray-600">{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,18 +51,18 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('categories.edit', $category) }}" class="text-primary hover:text-primary-dark">Edit</a>
-                            <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                            <a href="{{ route('categories.edit', $category) }}" class="text-primary hover:text-primary-dark">{{ __('Edit') }}</a>
+                            <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm(@js(__('Are you sure?')))">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                                <button type="submit" class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
                             </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-4 py-8 text-center text-gray-500">No categories found</td>
+                    <td colspan="5" class="px-4 py-8 text-center text-gray-500">{{ __('No categories found') }}</td>
                 </tr>
                 @endforelse
             </tbody>

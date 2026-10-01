@@ -11,9 +11,10 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'request_key',
         'order_number', 'customer_id', 'subtotal', 'discount', 'tax',
-        'shipping_cost', 'total', 'status', 'payment_status', 
-        'fulfillment_type', 'shipping_address', 'notes'
+        'shipping_cost', 'total', 'status', 'payment_status',
+        'fulfillment_type', 'shipping_address', 'notes',
     ];
 
     protected $casts = [
@@ -26,7 +27,7 @@ class Order extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class)->withTrashed();
     }
 
     public function items()
@@ -41,6 +42,6 @@ class Order extends Model
 
     public function generateOrderNumber()
     {
-        return 'ORD-' . date('Ymd') . '-' . str_pad(self::whereDate('created_at', today())->count() + 1, 5, '0', STR_PAD_LEFT);
+        return 'ORD-'.date('Ymd').'-'.str_pad(self::whereDate('created_at', today())->count() + 1, 5, '0', STR_PAD_LEFT);
     }
 }

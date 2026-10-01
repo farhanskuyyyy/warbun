@@ -2,15 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
             'dashboard.view',
@@ -29,27 +31,27 @@ class RolesAndPermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
+            Permission::findOrCreate($permission, 'web');
         }
 
-        $superAdmin = Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
+        $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
         $superAdmin->givePermissionTo(Permission::all());
 
-        $owner = Role::create(['name' => 'owner', 'guard_name' => 'web']);
+        $owner = Role::firstOrCreate(['name' => 'owner', 'guard_name' => 'web']);
         $owner->givePermissionTo(Permission::all());
 
-        $manager = Role::create(['name' => 'manager', 'guard_name' => 'web']);
+        $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
         $manager->givePermissionTo(['dashboard.view', 'products.view', 'products.create', 'products.update', 'products.archive', 'inventory.view', 'inventory.stock-in', 'inventory.stock-out', 'inventory.adjust', 'inventory.opname', 'sales.view', 'pos.access', 'orders.view', 'orders.update', 'orders.confirm', 'orders.complete', 'payments.view', 'customers.view', 'customers.create', 'customers.update', 'debt.view', 'debt.pay', 'reports.view', 'reports.sales', 'reports.inventory', 'reports.payments', 'reports.debt', 'reports.staff', 'users.view', 'audit.view']);
 
-        $cashier = Role::create(['name' => 'cashier', 'guard_name' => 'web']);
-        $cashier->givePermissionTo(['dashboard.view', 'products.view', 'inventory.view', 'pos.access', 'sales.view', 'sales.create', 'customers.view', 'customers.create', 'debt.view', 'debt.create', 'debt.pay']);
+        $cashier = Role::firstOrCreate(['name' => 'cashier', 'guard_name' => 'web']);
+        $cashier->givePermissionTo(['dashboard.view', 'products.view', 'inventory.view', 'pos.access', 'sales.view', 'sales.create', 'customers.view', 'customers.create', 'debt.view', 'debt.create', 'debt.pay', 'payments.view', 'payments.create', 'orders.view', 'orders.update']);
 
-        $customer = Role::create(['name' => 'customer', 'guard_name' => 'web']);
-        $customer->givePermissionTo(['dashboard.view', 'products.view', 'orders.view', 'orders.create', 'customers.view']);
+        $customer = Role::firstOrCreate(['name' => 'customer', 'guard_name' => 'web']);
+        $customer->syncPermissions([]);
 
-        \App\Models\User::create(['name' => 'Admin', 'email' => 'admin@warbun.local', 'password' => bcrypt('password')])->assignRole('super-admin');
-        \App\Models\User::create(['name' => 'Owner', 'email' => 'owner@warbun.local', 'password' => bcrypt('password')])->assignRole('owner');
-        \App\Models\User::create(['name' => 'Manager', 'email' => 'manager@warbun.local', 'password' => bcrypt('password')])->assignRole('manager');
-        \App\Models\User::create(['name' => 'Kasir', 'email' => 'kasir@warbun.local', 'password' => bcrypt('password')])->assignRole('cashier');
+        User::firstOrCreate(['name' => 'Admin', 'email' => 'admin@warbun.local'], ['password' => bcrypt('password')])->assignRole('super-admin');
+        User::firstOrCreate(['name' => 'Owner', 'email' => 'owner@warbun.local'], ['password' => bcrypt('password')])->assignRole('owner');
+        User::firstOrCreate(['name' => 'Manager', 'email' => 'manager@warbun.local'], ['password' => bcrypt('password')])->assignRole('manager');
+        User::firstOrCreate(['name' => 'Kasir', 'email' => 'kasir@warbun.local'], ['password' => bcrypt('password')])->assignRole('cashier');
     }
 }

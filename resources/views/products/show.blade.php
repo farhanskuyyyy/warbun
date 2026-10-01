@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Product Details')
+@section('title', __('Product Details'))
 @section('header', $product->name)
 
 @section('content')
@@ -12,51 +12,51 @@
                 <p class="text-gray-500">SKU: {{ $product->sku }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('products.edit', $product) }}" class="px-3 py-1 bg-primary text-white rounded text-sm">Edit</a>
-                <a href="{{ route('products.index') }}" class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">Back</a>
+                <a href="{{ route('products.edit', $product) }}" class="px-3 py-1 bg-primary text-white rounded text-sm">{{ __('Edit') }}</a>
+                <a href="{{ route('products.index') }}" class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">{{ __('Back') }}</a>
             </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <p class="text-xs text-gray-500 uppercase">Category</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Category') }}</p>
                 <p class="font-medium">{{ $product->category->name }}</p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Type</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Type') }}</p>
                 <p class="font-medium">{{ $product->productType->name }}</p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Brand</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Brand') }}</p>
                 <p class="font-medium">{{ $product->brand?->name ?? '-' }}</p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Unit</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Unit') }}</p>
                 <p class="font-medium">{{ $product->unit->name }} ({{ $product->unit->symbol }})</p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Cost Price</p>
-                <p class="font-medium">Rp {{ number_format($product->cost_price, 0, ',', '.') }}</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Cost Price') }}</p>
+                <p class="font-medium">{{ \App\Support\Money::format($product->cost_price) }}</p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Selling Price</p>
-                <p class="font-medium text-primary">Rp {{ number_format($product->selling_price, 0, ',', '.') }}</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Selling Price') }}</p>
+                <p class="font-medium text-primary">{{ \App\Support\Money::format($product->selling_price) }}</p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Current Stock</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Current Stock') }}</p>
                 <p class="font-medium {{ $product->isOutOfStock() ? 'text-red-600' : ($product->isLowStock() ? 'text-orange-500' : '') }}">
                     {{ $product->current_stock }} {{ $product->unit->symbol }}
                 </p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase">Minimum Stock</p>
+                <p class="text-xs text-gray-500 uppercase">{{ __('Minimum Stock') }}</p>
                 <p class="font-medium">{{ $product->minimum_stock }} {{ $product->unit->symbol }}</p>
             </div>
         </div>
 
         @if($product->description)
             <div class="mt-4 pt-4 border-t border-gray-200">
-                <p class="text-xs text-gray-500 uppercase mb-1">Description</p>
+                <p class="text-xs text-gray-500 uppercase mb-1">{{ __('Description') }}</p>
                 <p class="text-gray-700">{{ $product->description }}</p>
             </div>
         @endif
@@ -66,10 +66,10 @@
                 {{ $product->is_active ? 'Active' : 'Inactive' }}
             </span>
             @if($product->is_available_online)
-                <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700">Online</span>
+                <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700">{{ __('Online') }}</span>
             @endif
             @if($product->is_featured)
-                <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">Featured</span>
+                <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">{{ __('Featured') }}</span>
             @endif
         </div>
     </div>

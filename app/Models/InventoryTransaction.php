@@ -11,8 +11,8 @@ class InventoryTransaction extends Model
 
     protected $fillable = [
         'reference_number', 'product_id', 'type', 'source_type', 'source_id',
-        'quantity', 'unit_cost', 'previous_stock', 'new_stock', 
-        'reason', 'notes', 'user_id'
+        'quantity', 'unit_cost', 'previous_stock', 'new_stock',
+        'reason', 'notes', 'user_id',
     ];
 
     protected $casts = [
@@ -21,7 +21,7 @@ class InventoryTransaction extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->withTrashed();
     }
 
     public function user()

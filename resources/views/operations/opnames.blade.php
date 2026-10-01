@@ -1,0 +1,8 @@
+@extends('layouts.app')
+@section('title', __('Stock Opname'))
+@section('header', __('Stock Opname'))
+@section('content')
+@can('inventory.opname')<form method="POST" action="{{ route('opnames.store') }}" class="panel mb-5 space-y-3">@csrf<label class="field">{{ __('Reason') }}<input name="reason" required maxlength="255"></label><div class="overflow-x-auto"><table class="w-full"><thead><tr><th>{{ __('Product') }}</th><th>{{ __('Expected stock') }}</th><th>{{ __('Physical stock') }}</th></tr></thead><tbody>@foreach($products as $i=>$p)<tr><td>{{ $p->name }}<input type="hidden" name="items[{{ $i }}][product_id]" value="{{ $p->id }}"></td><td>{{ $p->current_stock }}</td><td><input aria-label="{{ __('Physical stock') }} {{ $p->name }}" type="number" min="0" name="items[{{ $i }}][physical_stock]" value="{{ $p->current_stock }}" required class="w-28"></td></tr>@endforeach</tbody></table></div><button class="button-primary">{{ __('Submit count') }}</button></form>@endcan
+@forelse($opnames as $o)<article class="panel mb-3"><h2 class="break-all font-semibold">{{ $o->reference_number }}</h2><p>{{ __('status.'.$o->status) }} · {{ $o->reason }}</p><ul>@foreach($o->items as $i)<li>{{ $i->product->name }}: {{ $i->expected_stock }} → {{ $i->physical_stock }}</li>@endforeach</ul>@can('inventory.approve-adjustment')@if($o->status==='pending')<form method="POST" action="{{ route('opnames.approve',$o) }}" class="mt-3">@csrf<button class="button-primary">{{ __('Approve count') }}</button></form>@endif
+@endcan</article>@empty<p>{{ __('No transactions yet') }}</p>@endforelse{{ $opnames->links() }}
+@endsection

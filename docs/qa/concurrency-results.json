@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "scenario": "Two independent PHP workers, different cashiers, one remaining item",
+  "workers": [
+    {
+      "status": "sold",
+      "id": 1
+    },
+    {
+      "status": "rejected",
+      "errors": [
+        "items"
+      ]
+    }
+  ],
+  "database": {
+    "stock": 0,
+    "sales": 1,
+    "payments": 1,
+    "sale_movements": 1
+  },
+  "engine": "MySQL 9.4.0"
+}

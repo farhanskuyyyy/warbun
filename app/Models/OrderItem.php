@@ -19,11 +19,11 @@ class OrderItem extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class)->withTrashed();
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->withTrashed();
     }
 }

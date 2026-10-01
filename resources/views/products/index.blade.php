@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Products')
-@section('header', 'Products')
+@section('title', __('Products'))
+@section('header', __('Products'))
 
 @section('content')
 <div class="space-y-4">
     <!-- Header -->
     <div class="flex items-center justify-between">
-        <p class="text-sm text-gray-500">Manage your product catalog</p>
+        <p class="text-sm text-gray-500">{{ __('Manage your product catalog') }}</p>
         <a href="{{ route('products.create') }}" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark">
             + Add Product
         </a>
@@ -16,20 +16,20 @@
     <!-- Filters -->
     <div class="bg-white rounded-xl p-4 border border-gray-100">
         <form method="GET" class="flex gap-2 flex-wrap">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search name, SKU, barcode..."
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('Search name, SKU, barcode...') }}"
                 class="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary">
             <select name="category_id" class="px-4 py-2 border border-gray-300 rounded-lg text-sm">
-                <option value="">All Categories</option>
+                <option value="">{{ __('All Categories') }}</option>
                 @foreach(\App\Models\Category::where('is_active', true)->get() as $cat)
                     <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                 @endforeach
             </select>
             <select name="status" class="px-4 py-2 border border-gray-300 rounded-lg text-sm">
-                <option value="">All Status</option>
-                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                <option value="">{{ __('All Status') }}</option>
+                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('Active') }}</option>
+                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('Inactive') }}</option>
             </select>
-            <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">Filter</button>
+            <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">{{ __('Filter') }}</button>
         </form>
     </div>
 
@@ -38,14 +38,14 @@
         <table class="w-full text-sm">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Product</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">SKU</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Category</th>
-                    <th class="text-right px-4 py-3 font-medium text-gray-600">Cost</th>
-                    <th class="text-right px-4 py-3 font-medium text-gray-600">Price</th>
-                    <th class="text-right px-4 py-3 font-medium text-gray-600">Stock</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                    <th class="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Product') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('SKU') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Category') }}</th>
+                    <th class="text-right px-4 py-3 font-medium text-gray-600">{{ __('Cost') }}</th>
+                    <th class="text-right px-4 py-3 font-medium text-gray-600">{{ __('Price') }}</th>
+                    <th class="text-right px-4 py-3 font-medium text-gray-600">{{ __('Stock') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Status') }}</th>
+                    <th class="text-right px-4 py-3 font-medium text-gray-600">{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,8 +59,8 @@
                     </td>
                     <td class="px-4 py-3 text-gray-500 font-mono text-xs">{{ $product->sku }}</td>
                     <td class="px-4 py-3">{{ $product->category->name }}</td>
-                    <td class="px-4 py-3 text-right">Rp {{ number_format($product->cost_price, 0, ',', '.') }}</td>
-                    <td class="px-4 py-3 text-right font-medium">Rp {{ number_format($product->selling_price, 0, ',', '.') }}</td>
+                    <td class="px-4 py-3 text-right">{{ \App\Support\Money::format($product->cost_price) }}</td>
+                    <td class="px-4 py-3 text-right font-medium">{{ \App\Support\Money::format($product->selling_price) }}</td>
                     <td class="px-4 py-3 text-right">
                         <span class="{{ $product->isOutOfStock() ? 'text-red-600 font-bold' : ($product->isLowStock() ? 'text-orange-500' : '') }}">
                             {{ $product->current_stock }} {{ $product->unit->symbol ?? '' }}
@@ -73,19 +73,19 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('products.show', $product) }}" class="text-blue-500 hover:text-blue-700">View</a>
-                            <a href="{{ route('products.edit', $product) }}" class="text-primary hover:text-primary-dark">Edit</a>
-                            <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Delete this product?')">
+                            <a href="{{ route('products.show', $product) }}" class="text-blue-500 hover:text-blue-700">{{ __('View') }}</a>
+                            <a href="{{ route('products.edit', $product) }}" class="text-primary hover:text-primary-dark">{{ __('Edit') }}</a>
+                            <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm(@js(__('Archive this product?')))">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                                <button type="submit" class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
                             </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" class="px-4 py-8 text-center text-gray-500">No products found</td>
+                    <td colspan="8" class="px-4 py-8 text-center text-gray-500">{{ __('No products found') }}</td>
                 </tr>
                 @endforelse
             </tbody>

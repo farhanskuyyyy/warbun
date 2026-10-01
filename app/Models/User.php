@@ -9,14 +9,17 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+    protected $attributes = ['is_active' => true, 'locale' => 'id'];
+
     protected $fillable = [
+        'is_active', 'locale',
         'name',
         'email',
         'password',
@@ -37,9 +40,20 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
+
     protected function casts(): array
     {
         return [
+            'is_active' => 'boolean',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

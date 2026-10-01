@@ -1,11 +1,11 @@
 @extends('layouts.app')
-@section('title', 'Product Types')
-@section('header', 'Product Types')
+@section('title', __('Product Types'))
+@section('header', __('Product Types'))
 
 @section('content')
 <div class="space-y-4">
     <div class="flex items-center justify-between">
-        <p class="text-sm text-gray-500">Manage product types</p>
+        <p class="text-sm text-gray-500">{{ __('Manage product types') }}</p>
         <a href="{{ route('product-types.create') }}" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark">+ Add Type</a>
     </div>
 
@@ -13,10 +13,10 @@
         <table class="w-full text-sm">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Name</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Slug</th>
-                    <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                    <th class="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Name') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Slug') }}</th>
+                    <th class="text-left px-4 py-3 font-medium text-gray-600">{{ __('Status') }}</th>
+                    <th class="text-right px-4 py-3 font-medium text-gray-600">{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,15 +30,15 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('product-types.edit', $type) }}" class="text-primary hover:text-primary-dark mr-2">Edit</a>
-                        <form action="{{ route('product-types.destroy', $type) }}" method="POST" class="inline" onsubmit="return confirm('Delete?')">
+                        <a href="{{ route('product-types.edit', $type) }}" class="text-primary hover:text-primary-dark mr-2">{{ __('Edit') }}</a>
+                        <form action="{{ route('product-types.destroy', $type) }}" method="POST" class="inline" onsubmit="return confirm(@js(__('Delete?')))">
                             @csrf @method('DELETE')
-                            <button class="text-red-500 hover:text-red-700">Delete</button>
+                            <button class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
                         </form>
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No product types found</td></tr>
+                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">{{ __('No product types found') }}</td></tr>
                 @endforelse
             </tbody>
         </table>

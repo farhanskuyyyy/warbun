@@ -10,8 +10,9 @@ class CashierShift extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'opened_at', 'closed_at', 'opening_cash', 
-        'closing_cash', 'expected_cash', 'cash_variance', 'status', 'notes'
+        'active_user_id',
+        'user_id', 'opened_at', 'closed_at', 'opening_cash',
+        'closing_cash', 'expected_cash', 'cash_variance', 'status', 'notes',
     ];
 
     protected $casts = [

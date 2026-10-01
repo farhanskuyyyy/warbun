@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,12 +11,14 @@ class DebtTransaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'remaining_amount', 'payment_id',
         'reference_number', 'debt_account_id', 'customer_id', 'sale_id',
         'type', 'debit_amount', 'credit_amount', 'balance_after',
-        'due_date', 'status', 'user_id', 'description', 'notes'
+        'due_date', 'status', 'user_id', 'description', 'notes',
     ];
 
     protected $casts = [
+        'remaining_amount' => 'decimal:2',
         'debit_amount' => 'decimal:2',
         'credit_amount' => 'decimal:2',
         'balance_after' => 'decimal:2',
@@ -29,12 +32,12 @@ class DebtTransaction extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class)->withTrashed();
     }
 
     public function sale()
     {
-        return $this->belongsTo(Sale::class);
+        return $this->belongsTo(Sale::class)->withTrashed();
     }
 
     public function user()
@@ -44,6 +47,6 @@ class DebtTransaction extends Model
 
     public function isOverdue()
     {
-        return $this->due_date && $this->due_date->isPast() && $this->status !== 'paid';
+        return $this->due_date && $this->due_date->lt(today()) && Money::cents($this->remaining_amount) > 0;
     }
 }

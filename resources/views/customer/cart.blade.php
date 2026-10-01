@@ -1,125 +1,19 @@
 @extends('layouts.customer')
-@section('title', 'Cart')
-
+@section('title', __('Cart'))
 @section('content')
-<h1 class="text-xl font-bold text-gray-800 mb-4">🛒 Keranjang Belanja</h1>
-
-<div id="cartEmpty" class="text-center py-12 text-gray-500">
-    <p class="text-4xl mb-2">🛒</p>
-    <p>Keranjang kosong</p>
-    <a href="{{ route('customer.shop') }}" class="text-primary mt-2 inline-block">Mulai Belanja →</a>
-</div>
-
-<div id="cartContent" class="hidden space-y-4">
-    <div id="cartItems" class="space-y-3"></div>
-    
-    <div class="bg-white rounded-xl border border-gray-100 p-4">
-        <div class="flex justify-between mb-2"><span class="text-gray-600">Subtotal</span><span id="subtotal" class="font-medium">Rp 0</span></div>
-        <div class="flex justify-between mb-2"><span class="text-gray-600">Ongkir</span><span id="shipping" class="font-medium">Rp 0</span></div>
-        <div class="flex justify-between border-t pt-2"><span class="font-bold">Total</span><span id="total" class="font-bold text-primary text-lg">Rp 0</span></div>
-    </div>
-
-    <!-- Delivery Options -->
-    <div class="bg-white rounded-xl border border-gray-100 p-4">
-        <h3 class="font-semibold mb-3">Opsi Pengambilan</h3>
-        <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer mb-2">
-            <input type="radio" name="delivery" value="pickup" checked class="text-primary" onchange="updateDelivery()">
-            <span>🏪 Ambil di Tempat (Gratis)</span>
-        </label>
-        <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer">
-            <input type="radio" name="delivery" value="delivery" class="text-primary" onchange="updateDelivery()">
-            <span>🚚 Diantar (+Rp 10.000)</span>
-        </label>
-        <div id="addressField" class="hidden mt-3">
-            <textarea id="address" placeholder="Alamat pengiriman..." class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"></textarea>
-        </div>
-    </div>
-
-    <button onclick="checkout()" class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition">
-        Checkout →
-    </button>
-</div>
+<h1 class="text-2xl font-semibold mb-4">{{ __('Cart') }}</h1><div id="cartItems" class="space-y-3 mb-4"></div><p id="cartTotal" class="text-xl font-semibold mb-4"></p>
+<form id="checkoutForm" action="{{ route('customer.checkout') }}" method="POST" class="panel space-y-3 max-w-xl">@csrf
+<label class="field">{{ __('Fulfillment') }}<select name="delivery_type"><option value="pickup">{{ __('Pickup') }}</option><option value="delivery">{{ __('Delivery') }}</option></select></label>
+<label class="field">{{ __('Shipping address') }}<textarea name="address" maxlength="2000">{{ old('address') }}</textarea></label>
+<label class="field">{{ __('Payment Method') }}<select name="payment_method">@foreach(['cash','transfer','ewallet','qr'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach @if(config('payments.gateway')==='signed-webhook')<option value="online">{{ __('status.online') }}</option>@endif</select></label>
+<label class="field">{{ __('Notes') }}<textarea name="notes" maxlength="2000">{{ old('notes') }}</textarea></label>
+<p>{{ __('Final total and stock are verified at checkout.') }}</p>@auth<button id="checkoutBtn" class="button-primary">{{ __('Place order') }}</button>@else<a href="{{ route('login') }}" class="button-primary">{{ __('Login to order') }}</a>@endauth
+</form><a class="inline-block mt-4" href="{{ route('customer.shop') }}">{{ __('Browse products') }}</a>
 @endsection
-
-@push('scripts')
-<script>
-let cart = JSON.parse(localStorage.getItem('warbun_cart') || '[]');
-
-function renderCart() {
-    const empty = document.getElementById('cartEmpty');
-    const content = document.getElementById('cartContent');
-    const items = document.getElementById('cartItems');
-    
-    if (cart.length === 0) {
-        empty.classList.remove('hidden');
-        content.classList.add('hidden');
-        return;
-    }
-    empty.classList.add('hidden');
-    content.classList.remove('hidden');
-    
-    let subtotal = 0;
-    items.innerHTML = cart.map((item, i) => {
-        const itemTotal = item.price * item.quantity;
-        subtotal += itemTotal;
-        return `
-            <div class="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
-                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-xl">📦</div>
-                <div class="flex-1">
-                    <p class="font-medium text-sm">${item.name}</p>
-                    <p class="text-primary text-sm">Rp ${new Intl.NumberFormat('id-ID').format(item.price)}</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="updateQty(${i}, -1)" class="w-8 h-8 bg-gray-100 rounded-lg text-sm">-</button>
-                    <span class="w-8 text-center font-medium">${item.quantity}</span>
-                    <button onclick="updateQty(${i}, 1)" class="w-8 h-8 bg-gray-100 rounded-lg text-sm">+</button>
-                </div>
-                <button onclick="removeItem(${i})" class="text-red-400 hover:text-red-600 text-sm">✕</button>
-            </div>`;
-    }).join('');
-    
-    const delivery = document.querySelector('input[name="delivery"]:checked').value;
-    const shipping = delivery === 'delivery' ? 10000 : 0;
-    document.getElementById('subtotal').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
-    document.getElementById('shipping').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(shipping);
-    document.getElementById('total').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal + shipping);
-}
-
-function updateQty(i, delta) {
-    cart[i].quantity += delta;
-    if (cart[i].quantity <= 0) cart.splice(i, 1);
-    localStorage.setItem('warbun_cart', JSON.stringify(cart));
-    renderCart();
-}
-
-function removeItem(i) {
-    cart.splice(i, 1);
-    localStorage.setItem('warbun_cart', JSON.stringify(cart));
-    renderCart();
-}
-
-function updateDelivery() {
-    const delivery = document.querySelector('input[name="delivery"]:checked').value;
-    document.getElementById('addressField').classList.toggle('hidden', delivery !== 'delivery');
-    renderCart();
-}
-
-function checkout() {
-    if (cart.length === 0) return alert('Keranjang kosong!');
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '{{ route("customer.checkout") }}';
-    form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-    cart.forEach((item, i) => {
-        form.innerHTML += `<input type="hidden" name="items[${i}][product_id]" value="${item.id}">`;
-        form.innerHTML += `<input type="hidden" name="items[${i}][quantity]" value="${item.quantity}">`;
-    });
-    form.innerHTML += `<input type="hidden" name="delivery_type" value="${document.querySelector('input[name="delivery"]:checked').value}">`;
-    form.innerHTML += `<input type="hidden" name="address" value="${document.getElementById('address')?.value || ''}">`;
-    document.body.appendChild(form);
-    form.submit();
-}
-
-renderCart();
-</script>
-@endpush
+@push('scripts')<script>
+let cart;try{cart=JSON.parse(localStorage.getItem('warbun_cart')||'[]');if(!Array.isArray(cart))cart=[];}catch{cart=[];}
+let key=localStorage.getItem('warbun_checkout_key')||crypto.randomUUID();localStorage.setItem('warbun_checkout_key',key);
+function refresh(){const list=document.getElementById('cartItems');list.replaceChildren();if(!cart.length){const p=document.createElement('p');p.textContent=@json(__('No items in cart'));list.append(p);}for(const [i,item] of cart.entries()){const row=document.createElement('div');row.className='panel flex flex-wrap gap-3 items-center';const name=document.createElement('strong');name.textContent=item.name;row.append(name);const input=document.createElement('input');input.type='number';input.min='1';input.max='100000';input.value=item.quantity;input.className='w-24';input.setAttribute('aria-label',@json(__('Quantity'))+' '+item.name);input.onchange=()=>{item.quantity=Math.max(1,Math.min(100000,parseInt(input.value)||1));save();};row.append(input);const remove=document.createElement('button');remove.type='button';remove.textContent=@json(__('Remove'));remove.onclick=()=>{cart.splice(i,1);save();};row.append(remove);list.append(row);}const cents=cart.reduce((s,i)=>s+Math.round(Number(i.price)*100)*i.quantity,0);document.getElementById('cartTotal').textContent=@json(__('Subtotal'))+': '+new Intl.NumberFormat(@json(app()->getLocale()==='id'?'id-ID':'en-US'),{style:'currency',currency:'IDR',maximumFractionDigits:2}).format(cents/100);const btn=document.getElementById('checkoutBtn');if(btn)btn.disabled=!cart.length;}
+function save(){localStorage.setItem('warbun_cart',JSON.stringify(cart));key=crypto.randomUUID();localStorage.setItem('warbun_checkout_key',key);refresh();}
+const form=document.getElementById('checkoutForm');form.addEventListener('change',()=>{key=crypto.randomUUID();localStorage.setItem('warbun_checkout_key',key);});form.addEventListener('submit',e=>{if(!cart.length){e.preventDefault();return;}for(const el of form.querySelectorAll('[data-cart]'))el.remove();const hidden=(name,value)=>{const el=document.createElement('input');el.type='hidden';el.name=name;el.value=value;el.dataset.cart='true';form.append(el);};hidden('request_key',key);for(const [i,item] of cart.entries()){hidden(`items[${i}][product_id]`,item.id);hidden(`items[${i}][quantity]`,item.quantity);}document.getElementById('checkoutBtn').disabled=true;});refresh();
+</script>@endpush

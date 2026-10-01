@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "checks": [
+    "Additive migration down",
+    "Additive migration up",
+    "Full migration history",
+    "Default seed",
+    "Concurrency setup"
+  ]
+}

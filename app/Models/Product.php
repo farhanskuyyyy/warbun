@@ -11,10 +11,10 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'sku', 'barcode', 'category_id', 'product_type_id', 
+        'name', 'sku', 'barcode', 'category_id', 'product_type_id',
         'brand_id', 'unit_id', 'supplier_id', 'description',
         'cost_price', 'selling_price', 'minimum_stock', 'current_stock',
-        'is_active', 'is_available_online', 'is_featured', 'image', 'weight'
+        'is_active', 'is_available_online', 'is_featured', 'image', 'weight',
     ];
 
     protected $casts = [
@@ -28,17 +28,17 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withTrashed();
     }
 
     public function productType()
     {
-        return $this->belongsTo(ProductType::class);
+        return $this->belongsTo(ProductType::class)->withTrashed();
     }
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class)->withTrashed();
     }
 
     public function unit()
@@ -48,7 +48,7 @@ class Product extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class)->withTrashed();
     }
 
     public function inventoryTransactions()

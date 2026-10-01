@@ -11,7 +11,7 @@ class AuditLog extends Model
 
     protected $fillable = [
         'user_id', 'action', 'entity_type', 'entity_id',
-        'old_values', 'new_values', 'ip_address', 'user_agent'
+        'old_values', 'new_values', 'ip_address', 'user_agent',
     ];
 
     protected $casts = [
@@ -29,7 +29,7 @@ class AuditLog extends Model
         return static::create([
             'user_id' => auth()->id(),
             'action' => $action,
-            'entity_type' => $entity ? get_class($entity) : null,
+            'entity_type' => $entity ? get_class($entity) : 'system',
             'entity_id' => $entity?->id,
             'old_values' => $oldValues,
             'new_values' => $newValues,

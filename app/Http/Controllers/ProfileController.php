@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\CashierShift;
+use App\Models\InventoryTransaction;
+use App\Models\Payment;
+use App\Models\Refund;
+use App\Models\StockOpname;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -26,13 +33,16 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
+        \DB::transaction(function () use ($request) {
+            $user = User::lockForUpdate()->findOrFail($request->user()->id);
+            $v = $request->validated();
+            $user->fill(Arr::only($v, ['name', 'email']));
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
+            }
+            $user->save();
+            $user->customer()->lockForUpdate()->first()?->update(Arr::only($v, ['name', 'email', 'phone', 'address']));
+        });
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -50,7 +60,11 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        if (CashierShift::where('user_id', $user->id)->exists() || InventoryTransaction::where('user_id', $user->id)->exists() || Refund::where('user_id', $user->id)->exists() || StockOpname::where('user_id', $user->id)->orWhere('approved_by', $user->id)->exists() || $user->sales()->exists() || Payment::where('user_id', $user->id)->exists() || $user->customer?->orders()->exists() || $user->customer?->debtTransactions()->exists()) {
+            $user->update(['is_active' => false]);
+        } else {
+            $user->delete();
+        }
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -10,9 +10,10 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'request_key', 'cashier_shift_id',
         'payment_number', 'payable_type', 'payable_id', 'customer_id',
         'amount', 'method', 'status', 'reference_number', 'gateway_reference',
-        'notes', 'user_id', 'paid_at', 'expires_at'
+        'notes', 'user_id', 'paid_at', 'expires_at',
     ];
 
     protected $casts = [
@@ -28,7 +29,7 @@ class Payment extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class)->withTrashed();
     }
 
     public function user()
@@ -38,6 +39,6 @@ class Payment extends Model
 
     public function generatePaymentNumber()
     {
-        return 'PAY-' . date('Ymd') . '-' . str_pad(self::whereDate('created_at', today())->count() + 1, 5, '0', STR_PAD_LEFT);
+        return 'PAY-'.date('Ymd').'-'.str_pad(self::whereDate('created_at', today())->count() + 1, 5, '0', STR_PAD_LEFT);
     }
 }

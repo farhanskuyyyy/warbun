@@ -1,223 +1,31 @@
 @extends('layouts.app')
-@section('title', 'POS / Cashier')
-@section('header', 'Point of Sale')
-
+@section('title', __('POS / Cashier'))
+@section('header', __('Point of Sale'))
 @section('content')
-<div class="space-y-4">
-    <!-- Shift Status -->
-    @if(!$activeShift)
-        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-            <p class="text-yellow-700 font-medium">⚠️ No Active Shift</p>
-            <p class="text-sm text-yellow-600 mb-3">You need to open a shift before making sales.</p>
-            <form action="{{ route('pos.open-shift') }}" method="POST" class="flex gap-2">
-                @csrf
-                <input type="number" name="opening_cash" placeholder="Opening cash (Rp)" min="0" required class="px-4 py-2 border border-yellow-300 rounded-lg text-sm">
-                <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded-lg text-sm font-medium hover:bg-yellow-700">Open Shift</button>
-            </form>
-        </div>
-    @else
-        <div class="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
-            <div>
-                <p class="text-green-700 font-medium">✅ Active Shift</p>
-                <p class="text-sm text-green-600">Opened: {{ $activeShift->opened_at->format('d M Y H:i') }} | Opening Cash: Rp {{ number_format($activeShift->opening_cash, 0, ',', '.') }}</p>
-            </div>
-            <form action="{{ route('pos.close-shift') }}" method="POST" onsubmit="return confirm('Close shift?')">
-                @csrf
-                <input type="number" name="closing_cash" placeholder="Closing cash" min="0" required class="px-3 py-2 border border-green-300 rounded-lg text-sm w-32">
-                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700">Close Shift</button>
-            </form>
-        </div>
-    @endif
-
-    <!-- POS Interface -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <!-- Products -->
-        <div class="lg:col-span-2 bg-white rounded-xl border border-gray-100">
-            <div class="p-4 border-b border-gray-200">
-                <input type="text" id="productSearch" placeholder="Search products..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-            </div>
-            <div id="productList" class="p-4 grid grid-cols-2 md:grid-cols-3 gap-2 max-h-[500px] overflow-y-auto">
-                <!-- Products loaded via JS -->
-            </div>
-        </div>
-
-        <!-- Cart -->
-        <div class="bg-white rounded-xl border border-gray-100">
-            <div class="p-4 border-b border-gray-200">
-                <h3 class="font-semibold">🛒 Cart</h3>
-            </div>
-            <div id="cartItems" class="p-4 space-y-2 max-h-[300px] overflow-y-auto">
-                <p class="text-gray-500 text-sm text-center">No items in cart</p>
-            </div>
-            <div class="p-4 border-t border-gray-200 space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span>Subtotal</span>
-                    <span id="subtotal">Rp 0</span>
-                </div>
-                <div class="flex justify-between text-lg font-bold">
-                    <span>Total</span>
-                    <span id="total" class="text-primary">Rp 0</span>
-                </div>
-                
-                <!-- Payment -->
-                <div class="space-y-2">
-                    <select id="paymentMethod" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                        <option value="cash">Cash</option>
-                        <option value="transfer">Transfer</option>
-                        <option value="ewallet">E-Wallet</option>
-                        <option value="debt">Debt</option>
-                    </select>
-                    <input type="number" id="paidAmount" placeholder="Paid amount" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                    <button onclick="processSale()" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark disabled:opacity-50" id="payBtn" disabled>
-                        💳 Pay
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+@if(!$activeShift)<div class="panel mb-4"><p>{{ __('Open a shift before making sales.') }}</p><form action="{{ route('pos.open-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Opening cash') }}<input name="opening_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Open Shift') }}</button></form></div>
+@else<div class="panel mb-4"><p>{{ __('Active Shift') }} · {{ $activeShift->opened_at->translatedFormat('d M Y H:i') }}</p><form action="{{ route('pos.close-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Closing cash') }}<input name="closing_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Close Shift') }}</button></form></div>@endif
+<div class="grid lg:grid-cols-3 gap-4"><section class="panel lg:col-span-2"><label class="field">{{ __('Search product or barcode') }}<input id="productSearch" type="search" autocomplete="off"></label><p id="productState" role="status" class="my-3"></p><div id="productList" class="max-h-[60vh] overflow-y-auto grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3"></div></section>
+<section class="panel"><h2 class="text-xl font-semibold mb-3">{{ __('Cart') }}</h2><div id="cartItems" class="space-y-3"></div>
+<form id="saleForm" class="space-y-3 mt-4"><label class="field">{{ __('Customer') }}<select id="customerId"><option value="">{{ __('Walk-in customer') }}</option>@foreach(\App\Models\Customer::where('is_active',true)->orderBy('name')->get() as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select></label>
+<label class="field">{{ __('Payment Method') }}<select id="paymentMethod">@foreach(['cash','transfer','ewallet','qr','debt'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach</select></label>
+<label class="field">{{ __('Paid amount') }}<input id="paidAmount" type="number" min="0" step="0.01" value="0" required></label>
+@can('sales.override-discount')<label class="field">{{ __('Discount') }}<input id="discount" type="number" min="0" step="0.01" value="0"></label>@endcan
+<p class="flex justify-between font-semibold text-xl"><span>{{ __('Total') }}</span><span id="total">Rp 0</span></p><p id="saleError" role="alert" class="text-red-700"></p><button id="payBtn" class="button-primary w-full" disabled>{{ __('Complete sale') }}</button></form></section></div>
 @endsection
-
-@push('scripts')
-<script>
-let cart = [];
-
-async function loadProducts(search = '') {
-    const response = await fetch(`/pos/products?search=${search}`);
-    const products = await response.json();
-    const container = document.getElementById('productList');
-    container.innerHTML = products.map(p => `
-        <div onclick="addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})" 
-             class="p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition">
-            <p class="font-medium text-sm">${p.name}</p>
-            <p class="text-xs text-gray-500">${p.sku}</p>
-            <p class="text-primary font-bold mt-1">Rp ${new Intl.NumberFormat('id-ID').format(p.selling_price)}</p>
-            <p class="text-xs ${p.current_stock <= 0 ? 'text-red-500' : 'text-green-500'}">Stock: ${p.current_stock}</p>
-        </div>
-    `).join('');
+@push('scripts')<script>
+const posText={{ \Illuminate\Support\Js::from(['loading'=>__('Loading products...'),'empty'=>__('No products found'),'error'=>__('Unable to load products. Try searching again.'),'emptyCart'=>__('No items in cart'),'stock'=>__('Stock'),'remove'=>__('Remove'),'processing'=>__('Processing...'),'pay'=>__('Complete sale'),'failed'=>__('Unable to process sale. Retry with the same cart.')]) }};
+const productsUrl=@json(route('pos.products'));const saleUrl=@json(route('pos.process-sale'));const csrf=@json(csrf_token());
+let cart=[];let requestKey=crypto.randomUUID();let loading=false;let controller;
+const money=n=>new Intl.NumberFormat(@json(app()->getLocale()==='id'?'id-ID':'en-US'),{style:'currency',currency:'IDR',maximumFractionDigits:2}).format(n);
+function text(tag,value,classes=''){const e=document.createElement(tag);e.textContent=value;e.className=classes;return e;}
+async function loadProducts(search=''){
+    controller?.abort();controller=new AbortController();document.getElementById('productState').textContent=posText.loading;
+    try{const r=await fetch(productsUrl+'?search='+encodeURIComponent(search),{signal:controller.signal,headers:{Accept:'application/json'}});if(!r.ok)throw new Error();const products=await r.json();const list=document.getElementById('productList');list.replaceChildren();
+        for(const p of products){const b=document.createElement('button');b.type='button';b.className='panel text-left hover:border-primary';b.append(text('strong',p.name,'block'),text('span',p.sku,'block text-sm'),text('span',money(p.selling_price),'block font-semibold'),text('span',posText.stock+': '+p.current_stock,'block text-sm'));b.addEventListener('click',()=>add(p));list.append(b);}document.getElementById('productState').textContent=products.length?'':posText.empty;
+    }catch(e){if(e.name!=='AbortError')document.getElementById('productState').textContent=posText.error;}
 }
-
-function addToCart(product) {
-    const existing = cart.find(item => item.product_id === product.id);
-    if (existing) {
-        if (existing.quantity < product.current_stock) {
-            existing.quantity++;
-        }
-    } else {
-        cart.push({
-            product_id: product.id,
-            name: product.name,
-            unit_price: product.selling_price,
-            quantity: 1,
-            max_stock: product.current_stock
-        });
-    }
-    updateCart();
-}
-
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCart();
-}
-
-function updateQuantity(index, delta) {
-    const item = cart[index];
-    const newQty = item.quantity + delta;
-    if (newQty > 0 && newQty <= item.max_stock) {
-        item.quantity = newQty;
-        updateCart();
-    }
-}
-
-function updateCart() {
-    const container = document.getElementById('cartItems');
-    const subtotalEl = document.getElementById('subtotal');
-    const totalEl = document.getElementById('total');
-    const payBtn = document.getElementById('payBtn');
-    
-    if (cart.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-sm text-center">No items in cart</p>';
-        subtotalEl.textContent = 'Rp 0';
-        totalEl.textContent = 'Rp 0';
-        payBtn.disabled = true;
-        return;
-    }
-    
-    let subtotal = 0;
-    container.innerHTML = cart.map((item, i) => {
-        const itemTotal = item.unit_price * item.quantity;
-        subtotal += itemTotal;
-        return `
-            <div class="flex items-center gap-2 text-sm">
-                <div class="flex-1">
-                    <p class="font-medium">${item.name}</p>
-                    <p class="text-xs text-gray-500">Rp ${new Intl.NumberFormat('id-ID').format(item.unit_price)}</p>
-                </div>
-                <div class="flex items-center gap-1">
-                    <button onclick="updateQuantity(${i}, -1)" class="w-6 h-6 bg-gray-100 rounded text-xs">-</button>
-                    <span class="w-8 text-center">${item.quantity}</span>
-                    <button onclick="updateQuantity(${i}, 1)" class="w-6 h-6 bg-gray-100 rounded text-xs">+</button>
-                </div>
-                <p class="w-24 text-right font-medium">Rp ${new Intl.NumberFormat('id-ID').format(itemTotal)}</p>
-                <button onclick="removeFromCart(${i})" class="text-red-500 text-xs">✕</button>
-            </div>
-        `;
-    }).join('');
-    
-    subtotalEl.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
-    totalEl.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
-    payBtn.disabled = false;
-}
-
-async function processSale() {
-    if (cart.length === 0) return;
-    
-    const subtotal = cart.reduce((sum, item) => sum + (item.unit_price * item.quantity), 0);
-    const paymentMethod = document.getElementById('paymentMethod').value;
-    const paidAmount = parseFloat(document.getElementById('paidAmount').value) || 0;
-    
-    if (paymentMethod === 'cash' && paidAmount < subtotal) {
-        alert('Paid amount must be equal or greater than total');
-        return;
-    }
-    
-    const formData = new FormData();
-    formData.append('_token', '{{ csrf_token() }}');
-    cart.forEach((item, i) => {
-        formData.append(`items[${i}][product_id]`, item.product_id);
-        formData.append(`items[${i}][quantity]`, item.quantity);
-        formData.append(`items[${i}][unit_price]`, item.unit_price);
-    });
-    formData.append('payment_method', paymentMethod);
-    formData.append('paid_amount', paidAmount || subtotal);
-    formData.append('discount', 0);
-    
-    try {
-        const response = await fetch('{{ route("pos.process-sale") }}', {
-            method: 'POST',
-            body: formData,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-        
-        if (response.redirected) {
-            window.location.href = response.url;
-        } else {
-            const result = await response.json();
-            if (result.errors) {
-                alert(Object.values(result.errors).join('\n'));
-            }
-        }
-    } catch (error) {
-        alert('Error processing sale');
-    }
-}
-
-document.getElementById('productSearch').addEventListener('input', (e) => {
-    loadProducts(e.target.value);
-});
-
-// Load products on page load
-loadProducts();
-</script>
-@endpush
+function add(p){if(loading)return;const item=cart.find(x=>x.product_id===p.id);if(item){if(item.quantity<p.current_stock)item.quantity++;}else cart.push({product_id:p.id,name:p.name,quantity:1,unit_price:p.selling_price,max:p.current_stock});requestKey=crypto.randomUUID();render();}
+function render(){const list=document.getElementById('cartItems');list.replaceChildren();if(!cart.length)list.append(text('p',posText.emptyCart));for(const [i,item] of cart.entries()){const row=document.createElement('div');row.className='border-b pb-3';row.append(text('strong',item.name,'block'),text('span',money(item.unit_price),'block text-sm'));const controls=document.createElement('div');controls.className='flex flex-wrap items-center gap-3';for(const delta of [-1,1]){const b=text('button',delta===1?'+':'−','px-4 border rounded');b.type='button';b.setAttribute('aria-label',(delta===1?@json(__('Increase quantity')):@json(__('Decrease quantity')))+' '+item.name);b.addEventListener('click',()=>{if(loading)return;if(item.quantity+delta>0&&item.quantity+delta<=item.max)item.quantity+=delta;requestKey=crypto.randomUUID();render();});controls.append(b);}controls.append(text('span',item.quantity));const remove=text('button',posText.remove,'text-red-700 px-2');remove.type='button';remove.onclick=()=>{if(loading)return;cart.splice(i,1);requestKey=crypto.randomUUID();render();};controls.append(remove);row.append(controls);list.append(row);}const subtotal=cart.reduce((s,i)=>s+Math.round(Number(i.unit_price)*100)*i.quantity,0);const discount=Math.round(Number(document.getElementById('discount')?.value||0)*100);document.getElementById('total').textContent=money((subtotal-discount)/100);document.getElementById('payBtn').disabled=loading||!cart.length||!@json((bool)$activeShift);}
+document.getElementById('saleForm').addEventListener('submit',async e=>{e.preventDefault();if(loading||!cart.length)return;loading=true;render();document.getElementById('payBtn').textContent=posText.processing;document.getElementById('saleError').textContent='';try{const r=await fetch(saleUrl,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':csrf,Accept:'application/json'},body:JSON.stringify({request_key:requestKey,items:cart.map(({product_id,quantity})=>({product_id,quantity})),customer_id:document.getElementById('customerId').value||null,payment_method:document.getElementById('paymentMethod').value,paid_amount:document.getElementById('paidAmount').value,discount:document.getElementById('discount')?.value||0})});const data=await r.json();if(!r.ok){document.getElementById('saleError').textContent=data.errors?Object.values(data.errors).flat().join(' '):posText.failed;return;}location.href=data.redirect;}catch{document.getElementById('saleError').textContent=posText.failed;}finally{loading=false;document.getElementById('payBtn').textContent=posText.pay;render();}});
+document.getElementById('productSearch').addEventListener('input',e=>loadProducts(e.target.value));document.getElementById('discount')?.addEventListener('input',()=>{requestKey=crypto.randomUUID();render();});for(const id of ['customerId','paymentMethod','paidAmount'])document.getElementById(id).addEventListener('change',()=>{requestKey=crypto.randomUUID();});render();loadProducts();
+</script>@endpush

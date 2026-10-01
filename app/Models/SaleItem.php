@@ -19,11 +19,11 @@ class SaleItem extends Model
 
     public function sale()
     {
-        return $this->belongsTo(Sale::class);
+        return $this->belongsTo(Sale::class)->withTrashed();
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->withTrashed();
     }
 }

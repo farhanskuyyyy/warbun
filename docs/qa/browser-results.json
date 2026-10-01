@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "results": [
+    "Owner login and locale switch",
+    "Desktop operational navigation without page errors or horizontal overflow",
+    "Store settings save and persist",
+    "Stock opname submission and approval",
+    "Inventory modal keyboard focus and Escape dismissal",
+    "Staff creation with assigned cashier role",
+    "POS search, cart, tender, successful sale and receipt",
+    "Controlled cash refund through UI",
+    "Shift closes after net cash refund",
+    "375px mobile layout and table containment",
+    "Keyboard focus works",
+    "Customer catalog, local cart, checkout and own order history",
+    "Customer cannot access staff or financial backoffice"
+  ],
+  "errors": []
+}
