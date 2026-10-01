@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest cashier category filter: [POS_CATEGORY_QA.md](POS_CATEGORY_QA.md). 80 tests / 634 assertions, build and category/browser checks pass; category buttons remain a single horizontal scrolling row.
+
 Latest barcode POS and receipt flow: [BARCODE_QA_REPORT.md](BARCODE_QA_REPORT.md). 78 tests / 616 assertions, production build, 13 operational browser scenarios and 7 barcode/printing scenarios pass on isolated QA data. Physical scanner/printer testing was not performed.
 
 Latest navigation-icon change: [ICON_QA_REPORT.md](ICON_QA_REPORT.md), local SVG rendering, responsive layout, destinations, locale and logout verified.

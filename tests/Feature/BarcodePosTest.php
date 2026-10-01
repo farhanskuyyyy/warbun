@@ -113,4 +113,29 @@ class BarcodePosTest extends TestCase
         $this->assertSame(0, Sale::count());
         $this->assertSame(0, Payment::count());
     }
+
+    public function test_pos_category_filter_combines_with_search_and_only_returns_sellable_products(): void
+    {
+        $other = Product::where('category_id', '!=', $this->product->category_id)->firstOrFail();
+        $response = $this->getJson(route('pos.products', ['category_id' => $this->product->category_id]))->assertOk();
+        $ids = collect($response->json())->pluck('id');
+        $this->assertTrue($ids->contains($this->product->id));
+        $this->assertFalse($ids->contains($other->id));
+        $this->getJson(route('pos.products', ['category_id' => $this->product->category_id, 'search' => $this->product->sku]))
+            ->assertOk()->assertJsonCount(1)->assertJsonPath('0.id', $this->product->id);
+        $this->getJson(route('pos.products', ['category_id' => $other->category_id, 'search' => $this->product->sku]))
+            ->assertOk()->assertExactJson([]);
+        $this->product->update(['current_stock' => 0]);
+        $this->getJson(route('pos.products', ['category_id' => $this->product->category_id, 'search' => $this->product->sku]))
+            ->assertOk()->assertExactJson([]);
+    }
+
+    public function test_pos_filters_validate_inputs_and_only_active_categories_appear_as_buttons(): void
+    {
+        $category = $this->product->category;
+        $category->update(['is_active' => false]);
+        $this->get(route('pos.index'))->assertOk()->assertDontSee('data-pos-category="'.$category->id.'"', false);
+        $this->getJson(route('pos.products', ['category_id' => 'invalid']))->assertUnprocessable()->assertJsonValidationErrors('category_id');
+        $this->getJson(route('pos.products', ['search' => ['invalid']]))->assertUnprocessable()->assertJsonValidationErrors('search');
+    }
 }

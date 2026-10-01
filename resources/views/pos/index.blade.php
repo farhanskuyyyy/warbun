@@ -16,6 +16,13 @@
         </form>
         <p id="scanState" class="pos-scan-state" role="status" aria-live="polite"></p>
         <label class="field">{{ __('Search product or barcode') }}<input id="productSearch" type="search" autocomplete="off"></label>
+        <div class="pos-category-filter">
+            <p>{{ __('Category') }}</p>
+            <div class="pos-categories" role="group" aria-label="{{ __('Filter by category') }}">
+                <button type="button" class="pos-category-button" data-pos-category="" aria-pressed="true" aria-controls="productList">{{ __('All categories') }}</button>
+                @foreach($categories as $category)<button type="button" class="pos-category-button" data-pos-category="{{ $category->id }}" aria-pressed="false" aria-controls="productList">{{ $category->name }}</button>@endforeach
+            </div>
+        </div>
         <p id="productState" role="status" class="my-3"></p>
         <div id="productList" class="max-h-[60vh] overflow-y-auto grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3"></div>
     </section>

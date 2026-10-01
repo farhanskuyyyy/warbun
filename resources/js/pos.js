@@ -11,6 +11,7 @@ if (configElement) {
     let scanQueue = Promise.resolve();
     let productsController;
     let searchTimer;
+    let selectedCategory = '';
 
     function text(tag, value, classes = '') {
         const element = document.createElement(tag);
@@ -89,13 +90,15 @@ if (configElement) {
         field('saleForm').querySelectorAll('input, select').forEach(input => { input.disabled = loading; });
     }
 
-    async function loadProducts(search = '') {
+    async function loadProducts(search = field('productSearch').value) {
         productsController?.abort();
         const controller = new AbortController();
         productsController = controller;
         field('productState').textContent = labels.loading;
+        field('productList').setAttribute('aria-busy', 'true');
         try {
-            const response = await fetch(config.productsUrl + '?search=' + encodeURIComponent(search), {signal: controller.signal, headers: {Accept: 'application/json'}});
+            const query = new URLSearchParams({search, category_id: selectedCategory});
+            const response = await fetch(config.productsUrl + '?' + query, {signal: controller.signal, headers: {Accept: 'application/json'}});
             if (!response.ok) throw new Error();
             const products = await response.json();
             const list = field('productList');
@@ -110,8 +113,18 @@ if (configElement) {
             field('productState').textContent = products.length ? '' : labels.empty;
         } catch (error) {
             if (error.name !== 'AbortError') field('productState').textContent = labels.error;
+        } finally {
+            if (controller === productsController) field('productList').setAttribute('aria-busy', 'false');
         }
     }
+
+    document.querySelectorAll('[data-pos-category]').forEach(button => button.addEventListener('click', () => {
+        clearTimeout(searchTimer);
+        selectedCategory = button.dataset.posCategory;
+        document.querySelectorAll('[data-pos-category]').forEach(control => control.setAttribute('aria-pressed', String(control === button)));
+        button.scrollIntoView({block: 'nearest', inline: 'nearest'});
+        loadProducts();
+    }));
 
     field('barcodeForm').addEventListener('submit', event => {
         event.preventDefault();

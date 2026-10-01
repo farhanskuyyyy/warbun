@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CashierShift;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Services\SaleService;
@@ -15,12 +16,14 @@ class PosController extends Controller
     {
         $activeShift = CashierShift::where('user_id', auth()->id())->where('status', 'active')->first();
         $recentSales = Sale::where('user_id', auth()->id())->latest()->take(10)->get();
+        $categories = Category::where('is_active', true)->orderBy('name')->get(['id', 'name']);
 
-        return view('pos.index', compact('activeShift', 'recentSales'));
+        return view('pos.index', compact('activeShift', 'recentSales', 'categories'));
     }
 
     public function products(Request $request)
     {
+        $request->validate(['search' => 'nullable|string|max:255', 'category_id' => 'nullable|integer|exists:categories,id']);
         $query = Product::where('is_active', true)->where('current_stock', '>', 0);
 
         if ($request->search) {

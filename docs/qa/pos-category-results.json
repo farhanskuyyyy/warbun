@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "results": [
+    "Category and search combine; All retains search; empty feedback and cart survive category changes",
+    "Mocked scan of product outside selected category adds quantity; barcode request has no category restriction",
+    "Fast category changes discard stale lookup results",
+    "One row, horizontal scrolling and 44px targets at 320/375/768/1024/1440px with no document overflow",
+    "Keyboard activation, selected aria state and loading aria-busy work without runtime errors"
+  ],
+  "errors": []
+}

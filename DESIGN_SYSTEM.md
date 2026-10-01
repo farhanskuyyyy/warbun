@@ -48,6 +48,8 @@ The order page clears the cart only for the matching checkout request. Opening a
 
 ## Barcode POS and receipt
 
+POS category filtering uses actual active categories as 44px buttons in one non-wrapping, horizontally scrolling row. Burgundy and aria-pressed identify the selected category; an All categories button resets the category while retaining search text. Eight pixels of scroll-container padding leave room for keyboard focus. Horizontal scrolling stays inside the product panel, avoiding page overflow. Category requests combine with text search and cancel stale responses; neither category changes nor search mutate the cart, and barcode scanning remains independent. Evidence: [POS_CATEGORY_QA.md](POS_CATEGORY_QA.md).
+
 The existing retail direction and dials apply to POS. A dedicated scan field sits before manual search so scanner Enter adds a product without submitting payment. A persistent live status names the added product or explains a lookup/stock error. Checkout stays separate and waits for pending scans. The workbench uses two columns when item browsing and payment fit, and stacks below 1024px; scan controls stack below 480px with 44px targets. Printing controls remain outside the receipt and disappear in print media. Black receipt text, dashed ledger dividers, actual item prices and 4mm inner paper margins favor legibility on 58/80mm rolls. The store heading uses configured store data; no emoji or fabricated imagery is used. A paper selector and manual reprint action retain control when automatic print is cancelled. Reasons and verification: [BARCODE_QA_REPORT.md](BARCODE_QA_REPORT.md).
 
 ## Navigation icons

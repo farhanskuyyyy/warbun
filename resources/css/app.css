@@ -263,6 +263,12 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .catalog-view-switch { display: none; }
 .pos-workbench { display: grid; grid-template-columns: minmax(0,2fr) minmax(280px,1fr); gap: 20px; }
 .pos-workbench > section { min-width: 0; }
+.pos-category-filter { margin-top: 18px; }
+.pos-category-filter > p { font-size: 13px; font-weight: 600; }
+.pos-categories { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; padding: 8px; min-width: 0; max-width: 100%; scroll-padding-inline: 8px; }
+.pos-category-button { flex: 0 0 auto; min-height: 44px; white-space: nowrap; padding: 10px 16px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--ink); font-size: 13px; }
+.pos-category-button:hover { background: var(--paper); }
+.pos-category-button[aria-pressed="true"] { background: var(--wine); color: white; border-color: var(--wine); font-weight: 600; }
 .pos-scanner { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: end; padding: 16px; background: var(--cream); border: 1px solid var(--line); border-radius: 5px; }
 .pos-scanner p { grid-column: 1/-1; color: var(--muted); font-size: 13px; }
 .pos-scanner input { width: 100%; }
