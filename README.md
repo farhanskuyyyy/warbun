@@ -4,6 +4,8 @@ Aplikasi operasional warung: katalog pelanggan, POS, pesanan online, stok, piuta
 
 ## Dokumen project
 
+- [ORDER_MONITORING.md](ORDER_MONITORING.md): alur monitoring, pengantaran dan utang kasir; [QA](ORDER_MONITOR_QA.md).
+
 - [PRD.md](PRD.md): brief asli dari warbun.md.
 - [ARCHITECTURE.md](ARCHITECTURE.md): arsitektur, ERD, alur transaksi, permissions, dan keputusan implementasi.
 - [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md): pedoman tampilan yang mengikuti project existing.

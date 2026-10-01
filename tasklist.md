@@ -45,6 +45,15 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 - [x] Pass 78 tests / 616 assertions, build, Pint, operational regression and barcode browser QA
 - [x] Record sample receipt PDFs, responsive screenshots and scanner/printer setup guide
 
-## Integration boundary
+## Order monitoring and cashier delivery
+
+- [x] Unified online and POS delivery queue with valid permission-aware actions
+- [x] Direct/delivery POS, customer modal, optional login and address snapshot
+- [x] Server-calculated shipping, eligible debt preview, deposit and repayment verification
+- [x] Audit fulfillment without duplicate stock, revenue or debt; refund regression
+- [x] 90 tests / 741 assertions, build, scoped Pint, seven browser scenarios and responsive QA
+- [x] Rehearse additive migration on temporary MySQL copy, apply locally and record ORDER_MONITOR_QA.md
+
+## Integration scope
 
 Development QA is complete for the implemented scope; evidence is in [QA_REPORT.md](QA_REPORT.md). Live payment-provider session/refund integration and real email delivery require the selected provider/configuration. Deployment and DevOps are outside this task. Existing operational data must be rehearsed and reconciled on a copy before applying the new migration.

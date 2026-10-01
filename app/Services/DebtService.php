@@ -19,7 +19,7 @@ class DebtService
     {
         return DB::transaction(function () use ($customerId, $amount, $reason, $saleId, $due, $override) {
             $customer = Customer::lockForUpdate()->findOrFail($customerId);
-            if (! $customer->user_id || ! $customer->is_active || ! $customer->can_use_debt || $customer->debt_status !== 'eligible') {
+            if (! $customer->user_id || ! $customer->user?->is_active || ! $customer->is_active || ! $customer->can_use_debt || $customer->debt_status !== 'eligible') {
                 $this->invalid('Registered eligible customer required.');
             }
             $account = DebtAccount::firstOrCreate(['customer_id' => $customer->id], ['credit_limit' => $customer->credit_limit]);

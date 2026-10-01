@@ -11,6 +11,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\OperationsController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderMonitorController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\PosController;
@@ -60,6 +61,7 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
     Route::get('/pos/products', [PosController::class, 'products'])->name('pos.products');
     Route::get('/pos/barcode', [PosController::class, 'barcode'])->name('pos.barcode');
     Route::post('/pos/process-sale', [PosController::class, 'processSale'])->name('pos.process-sale');
+    Route::post('/pos/customers', [PosController::class, 'createCustomer'])->name('pos.customers');
     Route::get('/pos/receipt/{sale}', [PosController::class, 'receipt'])->name('pos.receipt');
     Route::get('/pos/history', [PosController::class, 'history'])->name('pos.history');
     Route::post('/pos/open-shift', [PosController::class, 'openShift'])->name('pos.open-shift');
@@ -74,6 +76,8 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
 
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/monitor', [OrderMonitorController::class, 'index'])->name('orders.monitor');
+    Route::put('/orders/deliveries/{sale}/status', [OrderMonitorController::class, 'updateDelivery'])->name('orders.delivery-status');
     Route::post('/orders/{order}/payments', [OrderController::class, 'payment'])->name('orders.payment');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');

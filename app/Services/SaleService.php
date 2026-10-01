@@ -30,8 +30,10 @@ class SaleService
             if (! $shift) {
                 $this->invalid('No active cashier shift.');
             }
-            if (! empty($data['customer_id'])) {
-                Customer::lockForUpdate()->findOrFail($data['customer_id']);
+            $customer = ! empty($data['customer_id']) ? Customer::lockForUpdate()->findOrFail($data['customer_id']) : null;
+            $delivery = ($data['fulfillment_type'] ?? 'in_store') === 'delivery';
+            if (($customer && ! $customer->is_active) || ($delivery && (! $customer || ! $customer->phone || empty(trim($data['shipping_address'] ?? ''))))) {
+                $this->invalid('Delivery requires an active customer, phone number, and address.');
             }
             $grouped = collect($data['items'])->groupBy('product_id')->sortKeys();
             $items = [];
@@ -61,13 +63,16 @@ class SaleService
             if ($discount > $subtotal || ($discount && ! auth()->user()->can('sales.override-discount'))) {
                 $this->invalid('Discount is not allowed.');
             }
-            $total = $subtotal - $discount;
+            $shipping = $delivery ? Money::cents(DB::table('store_settings')->where('key', 'shipping_cost')->value('value') ?? '10000') : 0;
+            $total = $subtotal - $discount + $shipping;
             $paid = Money::cents($data['paid_amount']);
             $debt = $data['payment_method'] === 'debt';
             if ($total <= 0 || (! $debt && $paid < $total) || ($debt && ($paid >= $total || empty($data['customer_id'])))) {
                 $this->invalid('Invalid payment or customer.');
             }
             $sale = Sale::create([
+                'fulfillment_type' => $delivery ? 'delivery' : 'in_store', 'fulfillment_status' => $delivery ? 'confirmed' : null,
+                'shipping_address' => $delivery ? trim($data['shipping_address']) : null, 'shipping_cost' => Money::decimal($shipping), 'notes' => $data['notes'] ?? null,
                 'sale_number' => 'SAL-'.Str::uuid(), 'request_key' => $data['request_key'], 'user_id' => auth()->id(), 'cashier_shift_id' => $shift->id,
                 'customer_id' => $data['customer_id'] ?? null, 'subtotal' => Money::decimal($subtotal), 'discount' => Money::decimal($discount), 'tax' => 0,
                 'total' => Money::decimal($total), 'payment_method' => $data['payment_method'], 'paid_amount' => Money::decimal($debt ? $paid : $total),

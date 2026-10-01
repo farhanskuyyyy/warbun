@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "results": [
+    "Modal Escape, duplicate phone validation, customer selection and cart preservation; new customer cannot use credit",
+    "Delivery controls and customer account modal fit 320/375/768/1024/1440px",
+    "Optional customer login account is created through the modal",
+    "Real cashier delivery sale includes shipping and address receipt; all fulfillment buttons work; completed history, search, details and refresh work",
+    "Monitoring responsive at five widths; honest empty state and reset link",
+    "Approved registered customer debt checkout succeeds through receipt",
+    "Online monitoring actions lead to order detail; unpaid completion blocked, remaining payment recorded, then completion allowed"
+  ],
+  "errors": []
+}

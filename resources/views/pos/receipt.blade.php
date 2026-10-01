@@ -22,6 +22,7 @@
             <div><dt>{{ __('Date') }}</dt><dd>{{ $sale->created_at->translatedFormat('d M Y H:i') }}</dd></div>
             <div><dt>{{ __('Cashier') }}</dt><dd>{{ $sale->user->name }}</dd></div>
             @if($sale->customer)<div><dt>{{ __('Customer') }}</dt><dd>{{ $sale->customer->name }}</dd></div>@endif
+            @if($sale->fulfillment_type === 'delivery')<div><dt>{{ __('Delivery') }}</dt><dd>{{ __('status.'.$sale->fulfillment_status) }}</dd></div><div><dt>{{ __('Address') }}</dt><dd>{{ $sale->shipping_address }}</dd></div><div><dt>{{ __('Phone') }}</dt><dd>{{ $sale->customer?->phone }}</dd></div>@endif
         </dl>
         <div class="receipt-items">
             @foreach($sale->items as $item)
@@ -30,6 +31,7 @@
         </div>
         <dl class="receipt-totals">
             <div><dt>{{ __('Subtotal') }}</dt><dd>{{ \App\Support\Money::format($sale->subtotal) }}</dd></div>
+            @if($sale->shipping_cost > 0)<div><dt>{{ __('Shipping fee') }}</dt><dd>{{ \App\Support\Money::format($sale->shipping_cost) }}</dd></div>@endif
             @if($sale->discount > 0)<div><dt>{{ __('Discount') }}</dt><dd>−{{ \App\Support\Money::format($sale->discount) }}</dd></div>@endif
             <div class="receipt-total"><dt>{{ __('Total') }}</dt><dd>{{ \App\Support\Money::format($sale->total) }}</dd></div>
             <div><dt>{{ __('Payment') }} ({{ __('status.'.$sale->payment_method) }})</dt><dd>{{ \App\Support\Money::format(\App\Support\Money::decimal(\App\Support\Money::cents($sale->paid_amount) + \App\Support\Money::cents($sale->change_amount))) }}</dd></div>

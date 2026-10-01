@@ -12,6 +12,9 @@ if (configElement) {
     let productsController;
     let searchTimer;
     let selectedCategory = '';
+    const customers = new Map(config.customers.map(customer => [String(customer.id), customer]));
+    const isDelivery = () => field('saleForm').querySelector('[name="fulfillment_type"]:checked').value === 'delivery';
+    let savingCustomer = false;
 
     function text(tag, value, classes = '') {
         const element = document.createElement(tag);
@@ -81,10 +84,23 @@ if (configElement) {
             list.append(row);
         }
         const subtotal = cart.reduce((sum, item) => sum + Math.round(Number(item.unit_price) * 100) * item.quantity, 0);
-        const total = subtotal - Math.round(Number(field('discount')?.value || 0) * 100);
+        const total = subtotal - Math.round(Number(field('discount')?.value || 0) * 100) + (isDelivery() ? Math.round(Number(config.shippingCost) * 100) : 0);
+        const customer = customers.get(field('customerId').value);
+        const debt = field('paymentMethod').value === 'debt';
+        const remaining = Math.max(0, total - Math.round(Number(field('paidAmount').value || 0) * 100));
+        field('deliveryFields').hidden = !isDelivery();
+        field('shippingAddress').required = isDelivery();
+        field('customerId').required = isDelivery() || debt;
+        field('shippingFee').textContent = money(config.shippingCost);
+        field('creditInfo').textContent = debt ? (customer?.eligible ? labels.availableCredit + ': ' + money(customer.available) : labels.notEligible) : '';
+        field('paidAmountLabel').textContent = debt ? labels.deposit : labels.paidAmount;
+        field('depositHelp').hidden = !debt;
+        field('debtPreview').hidden = !debt;
+        field('debtPreview').textContent = labels.debtRemaining + ': ' + money(remaining / 100) + (customer?.eligible && remaining > Math.round(Number(customer.available) * 100) ? ' · ' + labels.creditExceeded : '');
         field('total').textContent = money(total / 100);
         field('changeTotal').textContent = money(field('paymentMethod').value === 'debt' ? 0 : Math.max(0, Math.round(Number(field('paidAmount').value || 0) * 100) - total) / 100);
-        field('payBtn').disabled = loading || pendingScans > 0 || !cart.length || !config.activeShift;
+        field('payBtn').disabled = loading || savingCustomer || pendingScans > 0 || !cart.length || !config.activeShift || (debt && (!customer?.eligible || remaining <= 0 || remaining > Math.round(Number(customer.available) * 100)));
+        if (field('newCustomerBtn')) field('newCustomerBtn').disabled = loading || savingCustomer;
         field('barcodeInput').disabled = loading || !config.activeShift;
         field('scanBtn').disabled = loading || !config.activeShift;
         field('saleForm').querySelectorAll('input, select').forEach(input => { input.disabled = loading; });
@@ -152,6 +168,7 @@ if (configElement) {
         event.preventDefault();
         if (loading || pendingScans || !cart.length || !config.activeShift) return;
         const payload = {
+            fulfillment_type: isDelivery() ? 'delivery' : 'in_store', shipping_address: isDelivery() ? field('shippingAddress').value : null, notes: field('saleNotes').value,
             request_key: requestKey, items: cart.map(({product_id, quantity}) => ({product_id, quantity})),
             customer_id: field('customerId').value || null, payment_method: field('paymentMethod').value,
             paid_amount: field('paidAmount').value, discount: field('discount')?.value || 0,
@@ -178,8 +195,65 @@ if (configElement) {
         productsController?.abort();
         searchTimer = setTimeout(() => loadProducts(event.target.value), 200);
     });
-    for (const id of ['discount', 'customerId', 'paymentMethod', 'paidAmount']) {
+    for (const id of ['discount', 'customerId', 'paymentMethod', 'paidAmount', 'shippingAddress', 'saleNotes']) {
         field(id)?.addEventListener('input', () => { if (!loading) { requestKey = crypto.randomUUID(); render(); } });
+    }
+    field('customerId').addEventListener('change', () => {
+        field('shippingAddress').value = customers.get(field('customerId').value)?.address || '';
+        requestKey = crypto.randomUUID();
+        render();
+    });
+    document.querySelectorAll('[name="fulfillment_type"]').forEach(input => input.addEventListener('change', () => {
+        requestKey = crypto.randomUUID();
+        render();
+    }));
+    if (field('customerDialog')) {
+        const dialog = field('customerDialog');
+        field('newCustomerBtn').addEventListener('click', () => { if (!loading) dialog.showModal(); });
+        field('closeCustomerBtn').addEventListener('click', () => { if (!savingCustomer) dialog.close(); });
+        dialog.addEventListener('cancel', event => { if (savingCustomer) event.preventDefault(); });
+        field('createCustomerAccount').addEventListener('change', event => {
+            field('customerAccountFields').hidden = !event.target.checked;
+            field('customerAccountFields').querySelectorAll('input').forEach(input => { input.required = event.target.checked; input.disabled = !event.target.checked; });
+        });
+        field('customerAccountFields').querySelectorAll('input').forEach(input => { input.disabled = true; });
+        field('customerForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            if (savingCustomer || loading) return;
+            const payload = Object.fromEntries(new FormData(event.target));
+            payload.create_account = field('createCustomerAccount').checked;
+            savingCustomer = true;
+            field('customerError').textContent = '';
+            field('saveCustomerBtn').textContent = labels.processing;
+            field('customerForm').querySelectorAll('input, textarea, button').forEach(input => { input.disabled = true; });
+            field('closeCustomerBtn').disabled = true;
+            render();
+            try {
+                const response = await fetch(config.customerUrl, {method: 'POST', headers: {'Content-Type':'application/json','X-CSRF-TOKEN':config.csrf,Accept:'application/json'},body:JSON.stringify(payload)});
+                const customer = await response.json();
+                if (!response.ok) {
+                    field('customerError').textContent = customer.errors ? Object.values(customer.errors).flat().join(' ') : labels.customerFailed;
+                    return;
+                }
+                customers.set(String(customer.id), {...customer, eligible:false, available:0});
+                field('customerId').append(new Option(customer.name + ' · ' + customer.phone, customer.id));
+                field('customerId').value = String(customer.id);
+                field('shippingAddress').value = customer.address;
+                requestKey = crypto.randomUUID();
+                dialog.close();
+                event.target.reset();
+                field('customerAccountFields').hidden = true;
+                scanStatus(labels.savedCustomer);
+            } catch { field('customerError').textContent = labels.customerFailed; }
+            finally {
+                savingCustomer = false;
+                field('customerForm').querySelectorAll('input, textarea, button').forEach(input => { input.disabled = false; });
+                field('customerAccountFields').querySelectorAll('input').forEach(input => { input.disabled = !field('createCustomerAccount').checked; input.required = field('createCustomerAccount').checked; });
+                field('saveCustomerBtn').textContent = labels.saveCustomer;
+                field('closeCustomerBtn').disabled = false;
+                render();
+            }
+        });
     }
     try { field('receiptPaper').value = localStorage.getItem('warbun_receipt_paper') === '58' ? '58' : '80'; } catch { /* Paper selection works without browser storage. */ }
     field('receiptPaper').addEventListener('change', () => {

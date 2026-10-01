@@ -1,6 +1,8 @@
 # Warbun — QA development
 
-Latest cashier category filter: [POS_CATEGORY_QA.md](POS_CATEGORY_QA.md). 80 tests / 634 assertions, build and category/browser checks pass; category buttons remain a single horizontal scrolling row.
+Latest order monitoring, cashier delivery and debt verification: [ORDER_MONITOR_QA.md](ORDER_MONITOR_QA.md). 90 tests / 741 assertions, production build, seven browser scenarios, responsive checks and additive local MySQL migration rehearsal pass. Pint changes pass; unrelated existing formatting findings are recorded in the report.
+
+Earlier cashier category filter: [POS_CATEGORY_QA.md](POS_CATEGORY_QA.md). 80 tests / 634 assertions, build and category/browser checks pass; category buttons remain a single horizontal scrolling row.
 
 Latest barcode POS and receipt flow: [BARCODE_QA_REPORT.md](BARCODE_QA_REPORT.md). 78 tests / 616 assertions, production build, 13 operational browser scenarios and 7 barcode/printing scenarios pass on isolated QA data. Physical scanner/printer testing was not performed.
 

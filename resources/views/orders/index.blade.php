@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="space-y-4">
+    <a class="button-primary" href="{{ route('orders.monitor') }}">{{ __('Order monitoring') }}</a>
     <!-- Filters -->
     <div class="bg-white rounded-xl p-4 border border-gray-100">
         <form method="GET" class="flex gap-2 flex-wrap">

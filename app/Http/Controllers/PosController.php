@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\CashierShift;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\User;
 use App\Services\SaleService;
 use App\Services\ShiftService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PosController extends Controller
 {
@@ -17,8 +22,34 @@ class PosController extends Controller
         $activeShift = CashierShift::where('user_id', auth()->id())->where('status', 'active')->first();
         $recentSales = Sale::where('user_id', auth()->id())->latest()->take(10)->get();
         $categories = Category::where('is_active', true)->orderBy('name')->get(['id', 'name']);
+        $customers = Customer::with('user', 'debtAccount')->where('is_active', true)->orderBy('name')->get();
 
-        return view('pos.index', compact('activeShift', 'recentSales', 'categories'));
+        return view('pos.index', compact('activeShift', 'recentSales', 'categories', 'customers'));
+    }
+
+    public function createCustomer(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255', 'phone' => 'required|string|max:20|unique:customers,phone',
+            'address' => 'required|string|max:2000', 'create_account' => 'sometimes|boolean',
+            'email' => 'nullable|required_if:create_account,true|email|max:255|unique:customers,email|unique:users,email',
+            'password' => 'nullable|required_if:create_account,true|string|min:8|max:255|confirmed',
+        ]);
+        $customer = DB::transaction(function () use ($data, $request) {
+            $user = null;
+            if ($request->boolean('create_account')) {
+                $user = User::create(['name' => $data['name'], 'email' => $data['email'], 'password' => Hash::make($data['password']), 'is_active' => true]);
+                $user->assignRole('customer');
+            }
+            $customer = Customer::create(['name' => $data['name'], 'phone' => $data['phone'], 'address' => $data['address'],
+                'email' => $data['email'] ?? null, 'user_id' => $user?->id, 'is_active' => true,
+                'can_use_debt' => false, 'credit_limit' => 0, 'outstanding_balance' => 0, 'debt_status' => 'restricted']);
+            AuditLog::log('customer.created', $customer, null, $customer->toArray());
+
+            return $customer;
+        });
+
+        return response()->json($customer->only(['id', 'name', 'phone', 'address']), 201);
     }
 
     public function products(Request $request)
@@ -45,9 +76,10 @@ class PosController extends Controller
 
     public function processSale(Request $request)
     {
+        $request->validate(['fulfillment_type' => 'sometimes|in:in_store,delivery', 'shipping_address' => 'nullable|required_if:fulfillment_type,delivery|string|max:2000', 'notes' => 'nullable|string|max:2000']);
         $request->validate(['print_receipt' => 'sometimes|boolean', 'receipt_paper' => 'sometimes|in:58,80']);
         $data = $request->validate(['request_key' => 'required|string|max:80', 'items' => 'required|array|min:1|max:100', 'items.*.product_id' => 'required|integer|exists:products,id', 'items.*.quantity' => 'required|integer|min:1|max:100000', 'items.*.unit_price' => 'nullable|decimal:0,2|min:0', 'customer_id' => 'nullable|integer|exists:customers,id', 'payment_method' => 'required|in:cash,transfer,ewallet,qr,debt', 'discount' => 'nullable|decimal:0,2|min:0', 'paid_amount' => 'required|decimal:0,2|min:0', 'credit_override' => 'sometimes|boolean']);
-        $sale = app(SaleService::class)->process($data);
+        $sale = app(SaleService::class)->process(array_merge($data, $request->only('fulfillment_type', 'shipping_address', 'notes')));
         $receiptUrl = route('pos.receipt', ['sale' => $sale, 'print' => $request->boolean('print_receipt') ? 1 : null, 'paper' => $request->input('receipt_paper')]);
         if ($request->expectsJson()) {
             return response()->json(['redirect' => $receiptUrl]);
