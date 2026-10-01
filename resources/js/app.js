@@ -1,10 +1,23 @@
 
 
 import Alpine from 'alpinejs';
+import './cart';
+import './checkout';
 
 window.Alpine = Alpine;
 
 Alpine.start();
+
+document.querySelectorAll('[data-password-toggle]').forEach(button => {
+    button.addEventListener('click', () => {
+        const input = document.getElementById(button.dataset.passwordToggle);
+        const visible = input.type === 'password';
+        input.type = visible ? 'text' : 'password';
+        button.setAttribute('aria-pressed', String(visible));
+        button.setAttribute('aria-label', visible ? button.dataset.hide : button.dataset.show);
+        button.textContent = visible ? button.dataset.hideText : button.dataset.showText;
+    });
+});
 
 const drawer = document.getElementById('workspace-menu');
 document.querySelector('[data-open-menu]')?.addEventListener('click', () => drawer.showModal());

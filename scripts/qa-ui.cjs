@@ -38,7 +38,7 @@ assert(['localhost', '127.0.0.1'].includes(new URL(base).hostname));
         await go('/cart'); assert.equal(await page.locator('[data-cart-count]').innerText(), '1');
         await page.locator('#cartItems input').fill('2'); await page.locator('#cartItems input').press('Tab');
         assert.equal(await page.locator('[data-cart-count]').innerText(), '2');
-        await page.locator('#cartItems button').click();
+        await page.locator('#cartItems .cart-remove').click();
         assert.equal(await page.locator('[data-cart-count]').innerText(), '0');
         await go('/shop'); await page.locator('[name=search]').fill('nonexistent-qa-product'); await page.locator('main form button').click(); await page.waitForLoadState('networkidle'); assert.equal(await page.locator('[data-product]').count(), 0);
         results.push('Cart badge updates after adding a product and survives navigation');

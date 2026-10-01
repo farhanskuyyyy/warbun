@@ -20,7 +20,7 @@
             </div>
         @endif
         @if($product->current_stock > 0)
-        <button data-product="{{ json_encode(['id'=>$product->id,'name'=>$product->name,'price'=>$product->selling_price]) }}" onclick="const p=JSON.parse(this.dataset.product); addToCartAndGo(p.id,p.name,p.price)"
+        <button type="button" data-go-to-cart="{{ route('customer.cart') }}" data-product="{{ json_encode(['id'=>$product->id,'name'=>$product->name,'price'=>$product->selling_price,'stock'=>$product->current_stock,'unit'=>$product->unit?->symbol]) }}"
             class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition">
             {{ __('Add to cart') }}
         </button>
@@ -28,18 +28,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-function addToCartAndGo(id, name, price) {
-    let cart;
-    try { cart = JSON.parse(localStorage.getItem('warbun_cart') || '[]'); if (!Array.isArray(cart)) cart = []; } catch { cart = []; }
-    const existing = cart.find(i => i.id === id);
-    if (existing) { existing.quantity++; } else {
-        cart.push({ id, name, price, quantity: 1 });
-    }
-    localStorage.setItem('warbun_cart', JSON.stringify(cart));
-    window.location.href = '{{ route("customer.cart") }}';
-}
-</script>
-@endpush

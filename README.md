@@ -9,6 +9,8 @@ Aplikasi operasional warung: katalog pelanggan, POS, pesanan online, stok, piuta
 - [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md): pedoman tampilan yang mengikuti project existing.
 - [tasklist.md](tasklist.md): pekerjaan development dan statusnya.
 - [QA_REPORT.md](QA_REPORT.md): hasil pengujian dan batas verifikasi.
+- [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md): QA auth, mobile shopping, checkout dan detail pesanan terbaru.
+- [SEED_DATA.md](SEED_DATA.md): riset katalog, asumsi data demo dan cakupan seeder.
 
 ## Development lokal
 
@@ -29,13 +31,13 @@ php artisan serve
 
 Migrasi baru bersifat tambahan. Jalankan migrasi pada salinan database existing terlebih dahulu. Migrasi menolak identitas pelanggan atau shift aktif yang duplikat sebelum perubahan schema dimulai; data tersebut perlu direkonsiliasi, bukan dihapus otomatis. Riwayat transaksi lama yang kurang lengkap memerlukan pemeriksaan terhadap bukti pembayaran dan shift sebelum dipakai untuk rekonsiliasi.
 
-Untuk database development yang terpisah, isi master data dan contoh operasional:
+Untuk database development terpisah, isi 53 SKU dan dataset seluruh tabel aplikasi. Dasar riset, asumsi harga dan cakupan tabel: [SEED_DATA.md](SEED_DATA.md).
 
 ```sh
-php artisan db:seed --class=DemoOperationsSeeder
+php artisan db:seed
 ```
 
-Akun demo: `owner@warbun.local`, `admin@warbun.local`, `manager@warbun.local`, `kasir@warbun.local`, `customer@warbun.local`; password `password`. Seeder demo menolak APP_ENV=production. Jangan gunakan akun demo sebagai akun toko sungguhan.
+Akun demo: `owner@warbun.local`, `admin@warbun.local`, `manager@warbun.local`, `kasir@warbun.local`, `customer@warbun.local`; password `password`. Dataset lengkap hanya menerima APP_ENV=local/testing dan aman diulang setelah sukses. Katalog saja: `php artisan db:seed --class=WarungCatalogSeeder`. Jangan gunakan akun demo sebagai akun toko sungguhan.
 
 Gambar produk memakai disk public Laravel. Jika link storage belum tersedia, jalankan `php artisan storage:link` di checkout development.
 
@@ -50,7 +52,7 @@ Gambar produk memakai disk public Laravel. Jika link storage belum tersedia, jal
 7. Stock Opname menyimpan expected stock ketika dibuat. Approve menolak hitungan jika stok sudah berubah.
 8. Kasir menutup shift dengan uang aktual. Sistem mencatat expected cash dan variance; kasir hanya melihat riwayat shift sendiri, manajer/owner dapat melihat seluruh staf.
 
-Settings menyediakan nama toko, termin utang, dan ongkir. Profil pelanggan menyimpan identitas, telepon, alamat, dan riwayat pembelian. ID/EN tersedia melalui pemilih bahasa; default bahasa Indonesia dan timezone Asia/Jakarta.
+Settings menyediakan nama toko, termin utang, ongkir, kontak toko opsional dan instruksi pembayaran. Keranjang memeriksa harga/stok terkini sebelum checkout, menampilkan ongkir sesuai metode penerimaan, dan menyimpan pilihan pelanggan ketika perlu login atau daftar. Profil pelanggan menyimpan identitas, telepon, alamat, dan riwayat pembelian. ID/EN tersedia melalui pemilih bahasa; default bahasa Indonesia dan timezone Asia/Jakarta.
 
 ## Definisi laporan
 

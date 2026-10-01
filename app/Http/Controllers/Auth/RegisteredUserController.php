@@ -53,6 +53,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('customer.history', absolute: false));
+        return redirect()->intended(route('customer.history', absolute: false));
     }
 }

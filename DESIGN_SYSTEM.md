@@ -22,3 +22,26 @@ Applied skills: [anti-slop](https://github.com/miqdadbadjuber/anti-slop) and [UI
 | Hover and focus only | Routine retail operations do not benefit from entrance animations or scroll choreography; reduced-motion settings remain respected. |
 
 The recurring motif is a retail ledger: shelf rows, real prices, tabular totals, fine dividers and numbered items. Landing data comes from active online products and active categories with available products. Empty catalog, empty search and empty cart remain explicit. Feedback uses the existing server component; cart additions use a live status region and update the real count. No dark-mode toggle or theme dependency was added.
+
+## Auth and shopping refinement
+
+The existing direction and dials also apply to authentication, checkout and order details.
+
+| Decision | Reason |
+| --- | --- |
+| Editorial auth introduction beside a readable form | Connect sign-in to the storefront identity while keeping the form as the main task; the introduction becomes compact on phones. |
+| Password visibility control with explicit text | Customers can check input without interpreting an unfamiliar icon; labels and pressed state remain accessible. |
+| Single product rows below 480px | Product names, unit prices, stock and add actions remain readable at 320px; wider screens retain the catalog grid. |
+| Native category select and labeled search | All categories fit on a phone without a scrolling strip competing with the products. |
+| Category/unit image placeholders | Identify unpictured products honestly without repeating their full name or inventing photography. |
+| Persistent cart summary after adding products | Shows actual quantity and subtotal and provides an obvious next destination. |
+| Shop, cart and order progress | Represents the real purchase flow, with links back to the earlier shopping tasks. |
+| Item controls followed by a separate checkout summary | Customers can review quantities before choosing fulfillment and payment; totals remain visually distinct. |
+| Server quote, loading, retry and stock errors | Current prices and availability are checked before the order action becomes available; checkout still validates transactionally. |
+| Saved checkout draft and intended auth return | Login or registration preserves address, fulfillment and payment choices instead of restarting shopping. |
+| Padded order ledger beside the next-step panel | Separates purchased items from status, fulfillment and payment instructions; the panels stack on phones. |
+| Primary order-history action and outlined shopping action | Makes the next task clear without placing competing filled buttons together. |
+| Responsive order-history cards | Reference, status, total and order link remain visible on narrow screens. |
+| Optional store contact and payment instructions | Gives customers actual shop guidance when configured; no bank details or contact information are fabricated. |
+
+The order page clears the cart only for the matching checkout request. Opening a previous order preserves the customer's current cart. Demo catalog assumptions are disclosed in [SEED_DATA.md](SEED_DATA.md); UI evidence is in [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md).

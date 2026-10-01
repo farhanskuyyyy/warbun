@@ -1,5 +1,7 @@
 # Warbun UI QA
 
+Snapshot redesign awal. Laporan auth dan shopping terbaru: [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md).
+
 Date: 2026-10-01. Scope: redesigned CMS and customer shells, navigation hierarchy, dashboard, landing, catalog, cart feedback, product detail and auth/profile presentation.
 
 Applied [anti-slop](https://github.com/miqdadbadjuber/anti-slop) in DURING mode and [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill). Design decisions and their reasons are in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). All documentation lives inside this project.

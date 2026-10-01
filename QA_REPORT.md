@@ -2,6 +2,8 @@
 
 Tanggal: 1 Oktober 2026. Hasil: **PASS untuk implementasi development yang diuji**. Pengujian memakai database sementara; `.env` dan database operasional existing tidak diubah. Tidak ada deployment.
 
+Pembaruan auth, seeder dan shopping: [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md). Verifikasi terbaru: 72 tes / 562 assertions pada SQLite, build, 13 skenario operasional, 10 skenario UI dan 9 skenario shopping. Bukti MySQL di bawah adalah baseline sebelumnya, bukan pengujian ulang perubahan terbaru.
+
 Pembaruan UI (1 Oktober 2026): lihat [UI_QA_REPORT.md](UI_QA_REPORT.md) untuk screenshot desktop/mobile, bukti kontras, penerapan kedua skill desain, dan delivery gate anti-slop. Regression test 64/312 serta 13 skenario browser operasional telah lulus lagi setelah perubahan UI.
 
 ## Hasil verifikasi

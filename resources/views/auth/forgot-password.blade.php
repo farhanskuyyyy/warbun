@@ -1,25 +1,9 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+<x-auth-layout :title="__('Forgot password?')">
+    <p class="eyebrow">{{ __('Your Warbun account') }}</p><h1>{{ __('Reset your password') }}</h1>
+    <p class="auth-form-description">{{ __('Enter your account email. We will send you a link to choose a new password.') }}</p>
+    <form method="POST" action="{{ route('password.email') }}" class="auth-form">@csrf
+        <div class="field"><label for="field-email">{{ __('Email') }}</label><input id="field-email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" @error('email') aria-invalid="true" aria-describedby="error-email" @enderror>@error('email')<p id="error-email" class="field-error">{{ $message }}</p>@enderror</div>
+        <button type="submit" class="button-primary auth-submit">{{ __('Email Password Reset Link') }}</button>
     </form>
-</x-guest-layout>
+    <p class="auth-alternative"><a href="{{ route('login') }}">{{ __('Back to sign in') }}</a></p>
+</x-auth-layout>

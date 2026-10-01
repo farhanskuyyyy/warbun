@@ -7,7 +7,9 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\OrderService;
+use App\Support\Money;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomerFrontController extends Controller
 {
@@ -21,7 +23,7 @@ class CustomerFrontController extends Controller
 
     public function shop(Request $request)
     {
-        $query = Product::where('is_active', true)->where('is_available_online', true);
+        $query = Product::with('category', 'unit')->where('is_active', true)->where('is_available_online', true);
 
         if ($request->search) {
             $query->where('name', 'like', "%{$request->search}%");
@@ -31,9 +33,10 @@ class CustomerFrontController extends Controller
             $query->whereHas('category', fn ($q) => $q->where('slug', $request->category));
         }
 
-        $products = $query->paginate(12);
+        $products = $query->orderBy('name')->paginate(12);
+        $categories = Category::where('is_active', true)->orderBy('name')->get();
 
-        return view('customer.shop', compact('products'));
+        return view('customer.shop', compact('products', 'categories'));
     }
 
     public function product(Product $product)
@@ -46,7 +49,38 @@ class CustomerFrontController extends Controller
 
     public function cart()
     {
-        return view('customer.cart');
+        $shippingCost = DB::table('store_settings')->where('key', 'shipping_cost')->value('value') ?? '10000';
+        $paymentInstructions = DB::table('store_settings')->where('key', 'payment_instructions')->value('value');
+        $storeContact = DB::table('store_settings')->where('key', 'store_contact')->value('value');
+
+        return view('customer.cart', compact('shippingCost', 'paymentInstructions', 'storeContact'));
+    }
+
+    public function quote(Request $request)
+    {
+        $data = $request->validate(['items' => 'required|array|min:1|max:100', 'items.*.product_id' => 'required|integer|distinct', 'items.*.quantity' => 'required|integer|min:1|max:100000', 'delivery_type' => 'required|in:pickup,delivery']);
+        $products = Product::with('unit')->whereIn('id', array_column($data['items'], 'product_id'))->where('is_active', true)->where('is_available_online', true)->get()->keyBy('id');
+        $subtotal = 0;
+        $errors = [];
+        $items = [];
+        foreach ($data['items'] as $item) {
+            $product = $products->get($item['product_id']);
+            if (! $product) {
+                $errors[] = __('A product is no longer available. Remove it to continue.');
+                $items[] = ['id' => $item['product_id'], 'available' => false];
+
+                continue;
+            }
+            if ($item['quantity'] > $product->current_stock) {
+                $errors[] = __('Not enough stock for :name. Available: :count.', ['name' => $product->name, 'count' => $product->current_stock]);
+            }
+            $line = Money::multiply(Money::cents($product->selling_price), $item['quantity']);
+            $subtotal += $line;
+            $items[] = ['id' => $product->id, 'available' => true, 'name' => $product->name, 'price' => $product->selling_price, 'stock' => $product->current_stock, 'unit' => $product->unit?->symbol];
+        }
+        $shipping = $data['delivery_type'] === 'delivery' ? Money::cents(DB::table('store_settings')->where('key', 'shipping_cost')->value('value') ?? '10000') : 0;
+
+        return response()->json(['items' => $items, 'subtotal' => Money::decimal($subtotal), 'shipping' => Money::decimal($shipping), 'total' => Money::decimal($subtotal + $shipping), 'errors' => $errors]);
     }
 
     public function checkout(Request $request)
@@ -62,7 +96,10 @@ class CustomerFrontController extends Controller
         abort_unless($order->customer?->user_id === auth()->id(), 403);
         $order->load('items.product', 'payments');
 
-        return view('customer.order-success', compact('order'));
+        $paymentInstructions = DB::table('store_settings')->where('key', 'payment_instructions')->value('value');
+        $storeContact = DB::table('store_settings')->where('key', 'store_contact')->value('value');
+
+        return view('customer.order-success', compact('order', 'paymentInstructions', 'storeContact'));
     }
 
     public function history()

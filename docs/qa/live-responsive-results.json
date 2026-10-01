@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "base": "http://127.0.0.1:8080",
+  "results": [
+    {
+      "route": "/shop",
+      "width": 320,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 320,
+      "overflow": 0
+    },
+    {
+      "route": "/register",
+      "width": 320,
+      "overflow": 0
+    },
+    {
+      "route": "/cart",
+      "width": 320,
+      "overflow": 0
+    },
+    {
+      "route": "/shop",
+      "width": 375,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 375,
+      "overflow": 0
+    },
+    {
+      "route": "/register",
+      "width": 375,
+      "overflow": 0
+    },
+    {
+      "route": "/cart",
+      "width": 375,
+      "overflow": 0
+    },
+    {
+      "route": "/shop",
+      "width": 390,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 390,
+      "overflow": 0
+    },
+    {
+      "route": "/register",
+      "width": 390,
+      "overflow": 0
+    },
+    {
+      "route": "/cart",
+      "width": 390,
+      "overflow": 0
+    },
+    {
+      "route": "/shop",
+      "width": 768,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 768,
+      "overflow": 0
+    },
+    {
+      "route": "/register",
+      "width": 768,
+      "overflow": 0
+    },
+    {
+      "route": "/cart",
+      "width": 768,
+      "overflow": 0
+    },
+    {
+      "route": "/shop",
+      "width": 1024,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 1024,
+      "overflow": 0
+    },
+    {
+      "route": "/register",
+      "width": 1024,
+      "overflow": 0
+    },
+    {
+      "route": "/cart",
+      "width": 1024,
+      "overflow": 0
+    },
+    {
+      "route": "/shop",
+      "width": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/register",
+      "width": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/cart",
+      "width": 1440,
+      "overflow": 0
+    },
+    {
+      "check": "Existing server cart quote succeeds, without placing an order"
+    }
+  ]
+}

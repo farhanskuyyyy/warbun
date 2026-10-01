@@ -29,6 +29,8 @@ Route::get('/', [CustomerFrontController::class, 'landing'])->name('landing');
 Route::get('/shop', [CustomerFrontController::class, 'shop'])->name('customer.shop');
 Route::get('/shop/{product}', [CustomerFrontController::class, 'product'])->name('customer.product');
 Route::get('/cart', [CustomerFrontController::class, 'cart'])->name('customer.cart');
+Route::post('/cart/quote', [CustomerFrontController::class, 'quote'])->middleware('throttle:60,1')->name('customer.cart.quote');
+Route::get('/checkout/continue', fn () => redirect()->route('customer.cart')->withFragment('checkout'))->middleware('auth')->name('customer.checkout.continue');
 Route::post('/checkout', [CustomerFrontController::class, 'checkout'])->middleware(['auth', 'throttle:30,1'])->name('customer.checkout');
 Route::get('/order-success/{order}', [CustomerFrontController::class, 'orderSuccess'])->middleware('auth')->name('customer.order.success');
 

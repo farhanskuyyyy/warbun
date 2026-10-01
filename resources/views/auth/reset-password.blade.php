@@ -1,39 +1,10 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
-
-        <!-- Password Reset Token -->
+<x-auth-layout :title="__('Reset Password')">
+    <p class="eyebrow">{{ __('Your Warbun account') }}</p><h1>{{ __('Choose a new password') }}</h1><p class="auth-form-description">{{ __('Use at least 8 characters.') }}</p>
+    <form method="POST" action="{{ route('password.store') }}" class="auth-form">@csrf
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
+        <div class="field"><label for="field-email">{{ __('Email') }}</label><input id="field-email" type="email" name="email" value="{{ old('email', $request->email) }}" required autocomplete="username">@error('email')<p class="field-error">{{ $message }}</p>@enderror</div>
+        <x-password-field autocomplete="new-password" />
+        <x-password-field name="password_confirmation" :label="__('Confirm Password')" autocomplete="new-password" />
+        <button type="submit" class="button-primary auth-submit">{{ __('Reset Password') }}</button>
     </form>
-</x-guest-layout>
+</x-auth-layout>

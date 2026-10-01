@@ -1,27 +1,7 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
-    </div>
-
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
-
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
+<x-auth-layout :title="__('Confirm Password')">
+    <p class="eyebrow">{{ __('Your Warbun account') }}</p><h1>{{ __('Confirm Password') }}</h1><p class="auth-form-description">{{ __('Enter your password to continue to your account settings.') }}</p>
+    <form method="POST" action="{{ route('password.confirm') }}" class="auth-form">@csrf
+        <x-password-field />
+        <button type="submit" class="button-primary auth-submit">{{ __('Confirm') }}</button>
     </form>
-</x-guest-layout>
+</x-auth-layout>

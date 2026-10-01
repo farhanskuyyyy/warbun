@@ -95,7 +95,7 @@ class ManagementController extends Controller
 
     public function saveSettings(Request $request)
     {
-        $v = $request->validate(['store_name' => 'required|string|max:120', 'debt_terms' => 'required|integer|min:1|max:365', 'shipping_cost' => 'required|decimal:0,2|min:0']);
+        $v = $request->validate(['store_name' => 'required|string|max:120', 'debt_terms' => 'required|integer|min:1|max:365', 'shipping_cost' => 'required|decimal:0,2|min:0', 'store_contact' => 'nullable|string|max:200', 'payment_instructions' => 'nullable|string|max:2000']);
         DB::transaction(function () use ($v) {
             $old = DB::table('store_settings')->pluck('value', 'key')->all();
             foreach ($v as $key => $value) {

@@ -49,9 +49,9 @@ class RolesAndPermissionsSeeder extends Seeder
         $customer = Role::firstOrCreate(['name' => 'customer', 'guard_name' => 'web']);
         $customer->syncPermissions([]);
 
-        User::firstOrCreate(['name' => 'Admin', 'email' => 'admin@warbun.local'], ['password' => bcrypt('password')])->assignRole('super-admin');
-        User::firstOrCreate(['name' => 'Owner', 'email' => 'owner@warbun.local'], ['password' => bcrypt('password')])->assignRole('owner');
-        User::firstOrCreate(['name' => 'Manager', 'email' => 'manager@warbun.local'], ['password' => bcrypt('password')])->assignRole('manager');
-        User::firstOrCreate(['name' => 'Kasir', 'email' => 'kasir@warbun.local'], ['password' => bcrypt('password')])->assignRole('cashier');
+        User::firstOrCreate(['email' => 'admin@warbun.local'], ['name' => 'Admin', 'password' => bcrypt('password')])->assignRole('super-admin');
+        User::firstOrCreate(['email' => 'owner@warbun.local'], ['name' => 'Owner', 'password' => bcrypt('password')])->assignRole('owner');
+        User::firstOrCreate(['email' => 'manager@warbun.local'], ['name' => 'Manager', 'password' => bcrypt('password')])->assignRole('manager');
+        User::firstOrCreate(['email' => 'kasir@warbun.local'], ['name' => 'Kasir', 'password' => bcrypt('password')])->assignRole('cashier');
     }
 }

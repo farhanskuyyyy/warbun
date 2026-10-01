@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "results": [
+    "Auth, catalog/filter/empty states and cart fit 320/375/390/768/1024/1440px",
+    "Password visibility toggle, locale and failed sign-in feedback",
+    "Mobile add-to-cart bar, quote, shipping fee, required address and guest sign-in return to cart",
+    "Delivery/transfer checkout, order breakdown, separate next-step buttons and confirmation cart clearing",
+    "Viewing an existing order or order history preserves the new shopping cart",
+    "Quote network failure blocks checkout and retry recovers",
+    "Stale/unavailable stock blocks checkout; removing the item shows empty state; corrupt cart recovery works",
+    "New-customer registration preserves shopping context and returns to checkout",
+    "Authenticated auth pages and other CMS screens remain contained on mobile; keyboard focus and reduced motion checked"
+  ],
+  "errors": []
+}

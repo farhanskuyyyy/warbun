@@ -1,0 +1,42 @@
+[
+  {
+    "text": "#64615b",
+    "background": "#eee7da",
+    "result": "ratio: 5.02:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#655d4e",
+    "background": "#ebe5d9",
+    "result": "ratio: 5.18:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#8b1e2d",
+    "background": "#faf9f6",
+    "result": "ratio: 8.59:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#ffffff",
+    "background": "#8b1e2d",
+    "result": "ratio: 9.05:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#f6f3ed",
+    "background": "#292925",
+    "result": "ratio: 13.18:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#282724",
+    "background": "#f6f3ed",
+    "result": "ratio: 13.49:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#b91c1c",
+    "background": "#ffffff",
+    "result": "ratio: 6.47:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  },
+  {
+    "text": "#315a35",
+    "background": "#ecf4e9",
+    "result": "ratio: 7.07:1\nnormal text (4.5:1): PASS\nlarge text  (3.0:1): PASS"
+  }
+]
