@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest mobile catalog display change: [CATALOG_VIEW_QA.md](CATALOG_VIEW_QA.md), grid/list behavior checked on the existing server at ten viewport widths.
+
 Tanggal: 1 Oktober 2026. Hasil: **PASS untuk implementasi development yang diuji**. Pengujian memakai database sementara; `.env` dan database operasional existing tidak diubah. Tidak ada deployment.
 
 Pembaruan auth, seeder dan shopping: [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md). Verifikasi terbaru: 72 tes / 562 assertions pada SQLite, build, 13 skenario operasional, 10 skenario UI dan 9 skenario shopping. Bukti MySQL di bawah adalah baseline sebelumnya, bukan pengujian ulang perubahan terbaru.

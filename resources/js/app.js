@@ -3,6 +3,7 @@
 import Alpine from 'alpinejs';
 import './cart';
 import './checkout';
+import './catalog';
 
 window.Alpine = Alpine;
 

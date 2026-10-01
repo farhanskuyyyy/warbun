@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "results": [
+    "320px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "375px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "390px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "479px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "480px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "600px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "767px: two-column grid, single-column list, persistence, no overflow and 44px targets",
+    "Cart survives view switch; keyboard Enter works; filtering retains preference and empty state",
+    "Desktop catalog preserved at 768/1024/1440px",
+    "Layout switching still works with browser storage blocked"
+  ],
+  "errors": []
+}

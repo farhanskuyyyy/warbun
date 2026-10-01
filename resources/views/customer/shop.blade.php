@@ -8,8 +8,13 @@
     <button type="submit" class="button-primary">{{ __('Cari') }}</button>
 </form>
 <div class="catalog-results"><p>{{ trans_choice('Products found: :count', $products->total(), ['count' => $products->total()]) }}</p>@if(request('search') || request('category'))<a href="{{ route('customer.shop') }}">{{ __('Clear filters') }}</a>@endif</div>
+<div class="catalog-view-switch" role="group" aria-label="{{ __('Product display') }}">
+    <span>{{ __('Display') }}</span>
+    <button type="button" data-catalog-view="grid" aria-pressed="true" aria-controls="shop-products">{{ __('Grid') }}</button>
+    <button type="button" data-catalog-view="list" aria-pressed="false" aria-controls="shop-products">{{ __('List') }}</button>
+</div>
 <p id="cart-notice" class="cart-notice" role="status" aria-live="polite"></p>
-<div class="catalog-grid">
+<div class="catalog-grid" id="shop-products" data-view="grid">
 @forelse($products as $product)
     <article class="catalog-product">
         <a class="catalog-product-image" href="{{ route('customer.product', $product) }}" aria-label="{{ $product->name }}">

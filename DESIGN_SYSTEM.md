@@ -31,7 +31,7 @@ The existing direction and dials also apply to authentication, checkout and orde
 | --- | --- |
 | Editorial auth introduction beside a readable form | Connect sign-in to the storefront identity while keeping the form as the main task; the introduction becomes compact on phones. |
 | Password visibility control with explicit text | Customers can check input without interpreting an unfamiliar icon; labels and pressed state remain accessible. |
-| Single product rows below 480px | Product names, unit prices, stock and add actions remain readable at 320px; wider screens retain the catalog grid. |
+| Mobile grid/list choice below 768px | Default two-column grid makes products easy to browse; optional single-column rows give names more space. Both retain 44px actions, and browser storage remembers the preference. |
 | Native category select and labeled search | All categories fit on a phone without a scrolling strip competing with the products. |
 | Category/unit image placeholders | Identify unpictured products honestly without repeating their full name or inventing photography. |
 | Persistent cart summary after adding products | Shows actual quantity and subtotal and provides an obvious next destination. |
