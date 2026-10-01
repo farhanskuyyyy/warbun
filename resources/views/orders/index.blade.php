@@ -47,12 +47,10 @@
                     <td class="px-4 py-3">{{ $order->customer->name }}</td>
                     <td class="px-4 py-3 text-right font-medium">{{ \App\Support\Money::format($order->total) }}</td>
                     <td class="px-4 py-3">
-                        @php $statusColors = ['pending' => 'bg-yellow-100 text-yellow-700', 'confirmed' => 'bg-blue-100 text-blue-700', 'preparing' => 'bg-purple-100 text-purple-700', 'ready' => 'bg-green-100 text-green-700', 'completed' => 'bg-gray-100 text-gray-700', 'cancelled' => 'bg-red-100 text-red-700']; @endphp
-                        <span class="px-2 py-1 text-xs rounded-full {{ $statusColors[$order->status] ?? '' }}">{{ __('status.'.$order->status) }}</span>
+                        <x-transaction-status :status="$order->status" />
                     </td>
                     <td class="px-4 py-3">
-                        @php $payColors = ['pending' => 'bg-yellow-100 text-yellow-700', 'paid' => 'bg-green-100 text-green-700']; @endphp
-                        <span class="px-2 py-1 text-xs rounded-full {{ $payColors[$order->payment_status] ?? '' }}">{{ __('status.'.$order->payment_status) }}</span>
+                        <x-transaction-status :status="$order->payment_status" />
                     </td>
                     <td class="px-4 py-3 text-gray-500">{{ $order->created_at->translatedFormat('d M Y H:i') }}</td>
                     <td class="px-4 py-3 text-right">

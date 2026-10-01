@@ -358,6 +358,20 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .monitor-stages a { flex:1 0 140px; border:1px solid var(--line); border-radius:8px; padding:16px; background:white; min-height:80px; }
 .monitor-stages strong { display:block; font-size:24px; font-variant-numeric:tabular-nums; margin-top:6px; }
 .monitor-stages a[aria-current="page"] { background:var(--wine); color:white; border-color:var(--wine); }
+.status-tone-pending { --status-ink:#854d0e; --status-bg:#fef3c7; --status-edge:#b7790b; }
+.status-tone-confirmed { --status-ink:#1e40af; --status-bg:#dbeafe; --status-edge:#2563eb; }
+.status-tone-preparing { --status-ink:#6b21a8; --status-bg:#f3e8ff; --status-edge:#9333ea; }
+.status-tone-ready { --status-ink:#115e59; --status-bg:#ccfbf1; --status-edge:#0f766e; }
+.status-tone-completed,.status-tone-paid { --status-ink:#166534; --status-bg:#dcfce7; --status-edge:#15803d; }
+.status-tone-cancelled,.status-tone-failed { --status-ink:#991b1b; --status-bg:#fee2e2; --status-edge:#dc2626; }
+.status-tone-refunded,.status-tone-expired,.status-tone-unknown { --status-ink:#475569; --status-bg:#e2e8f0; --status-edge:#64748b; }
+.status-tone-debt,.status-tone-partial { --status-ink:#9a3412; --status-bg:#ffedd5; --status-edge:#c2410c; }
+.transaction-status { display:inline-flex; align-items:center; gap:7px; max-width:100%; padding:6px 10px; border-radius:5px; background:var(--status-bg,#e2e8f0); color:var(--status-ink,#475569); font-size:12px; font-weight:600; line-height:1.5; overflow-wrap:anywhere; }
+.transaction-status-dot { flex:0 0 6px; width:6px; height:6px; border-radius:50%; background:currentColor; }
+.monitor-order { border-top:4px solid var(--status-edge,var(--line)); }
+.monitor-stages a.status-tone-pending,.monitor-stages a.status-tone-confirmed,.monitor-stages a.status-tone-preparing,.monitor-stages a.status-tone-ready { border-top:4px solid var(--status-edge); }
+.monitor-stages a[class*="status-tone-"][aria-current="page"] { background:var(--status-bg); color:var(--status-ink); border-color:var(--status-edge); box-shadow:inset 0 0 0 1px var(--status-edge); }
+.monitor-stages .transaction-status { padding:0; background:transparent; }
 .monitor-filters { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto; gap:16px; align-items:end; margin-bottom:24px; }
 .monitor-orders { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
 .monitor-order { min-width:0; display:flex; flex-direction:column; gap:16px; overflow-wrap:anywhere; }

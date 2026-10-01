@@ -4,7 +4,7 @@
 @include('components.shopping-steps', ['current' => 3])
 <div class="catalog-heading"><p class="eyebrow">{{ __('Your Warbun order') }}</p><h1>{{ $order->status === 'pending' ? __('Order received') : __('Order details') }}</h1><p>{{ __('Follow the status of this order from your account.') }}</p></div>
 <div class="order-detail-layout">
-    <section class="panel"><p class="eyebrow">{{ __('Reference') }}</p><h2 class="order-reference">{{ $order->order_number }}</h2><div class="order-status-row"><span>{{ __('Status') }}: <strong>{{ __('status.'.$order->status) }}</strong></span><span>{{ __('Payment') }}: <strong>{{ __('status.'.$order->payment_status) }}</strong></span></div>
+    <section class="panel"><p class="eyebrow">{{ __('Reference') }}</p><h2 class="order-reference">{{ $order->order_number }}</h2><div class="order-status-row"><span>{{ __('Status') }}: <x-transaction-status :status="$order->status" /></span><span>{{ __('Payment') }}: <x-transaction-status :status="$order->payment_status" /></span></div>
         <ul class="order-item-list">@foreach($order->items as $item)<li><div><strong>{{ $item->product->name }}</strong><span>{{ __('Quantity') }}: {{ $item->quantity }}</span></div><span>{{ \App\Support\Money::format($item->subtotal) }}</span></li>@endforeach</ul>
         <dl class="checkout-totals"><div><dt>{{ __('Subtotal') }}</dt><dd>{{ \App\Support\Money::format($order->subtotal) }}</dd></div><div><dt>{{ __('Shipping fee') }}</dt><dd>{{ \App\Support\Money::format($order->shipping_cost) }}</dd></div><div class="checkout-total"><dt>{{ __('Total') }}</dt><dd>{{ \App\Support\Money::format($order->total) }}</dd></div></dl>
     </section>

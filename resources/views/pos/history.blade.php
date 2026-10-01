@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-4">
     <div class="bg-white rounded-xl p-4 border border-gray-100">
-        <form method="GET" class="flex gap-2">
+        <form method="GET" class="flex flex-wrap gap-2">
             <input type="date" name="date_from" value="{{ request('date_from') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm">
             <span class="self-center text-gray-500">to</span>
             <input type="date" name="date_to" value="{{ request('date_to') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm">
@@ -34,11 +34,9 @@
                     <td class="px-4 py-3">{{ $sale->customer?->name ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $sale->user->name }}</td>
                     <td class="px-4 py-3 text-right font-medium">{{ \App\Support\Money::format($sale->total) }}</td>
-                    <td class="px-4 py-3">{{ __('status.'.$sale->payment_method) }}</td>
+                    <td class="px-4 py-3"><span class="block mb-2">{{ __('status.'.$sale->payment_method) }}</span><x-transaction-status :status="$sale->status === 'refunded' ? 'refunded' : ($sale->debt_amount > 0 ? 'debt' : 'paid')" /></td>
                     <td class="px-4 py-3">
-                        <span class="px-2 py-1 text-xs rounded-full {{ $sale->status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' }}">
-                            {{ __('status.'.$sale->status) }}
-                        </span>
+                        <x-transaction-status :status="$sale->status" />
                     </td>
                     <td class="px-4 py-3 text-gray-500">{{ $sale->created_at->translatedFormat('d M Y H:i') }}</td>
                     <td class="px-4 py-3 text-right">

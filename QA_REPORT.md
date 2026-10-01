@@ -1,6 +1,8 @@
 # Warbun — QA development
 
-Latest order monitoring, cashier delivery and debt verification: [ORDER_MONITOR_QA.md](ORDER_MONITOR_QA.md). 90 tests / 741 assertions, production build, seven browser scenarios, responsive checks and additive local MySQL migration rehearsal pass. Pint changes pass; unrelated existing formatting findings are recorded in the report.
+Latest status-color update: [STATUS_COLOR_QA.md](STATUS_COLOR_QA.md). Shared semantic badges, monitoring accents, 16 targeted tests / 222 assertions, production build, AA contrast and five-width browser checks pass.
+
+Order monitoring, cashier delivery and debt verification: [ORDER_MONITOR_QA.md](ORDER_MONITOR_QA.md). 90 tests / 741 assertions, production build, seven browser scenarios, responsive checks and additive local MySQL migration rehearsal pass. Pint changes pass; unrelated existing formatting findings are recorded in the report.
 
 Earlier cashier category filter: [POS_CATEGORY_QA.md](POS_CATEGORY_QA.md). 80 tests / 634 assertions, build and category/browser checks pass; category buttons remain a single horizontal scrolling row.
 

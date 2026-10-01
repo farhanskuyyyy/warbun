@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "results": [
+    "/orders/monitor: actual status badges and five responsive widths PASS",
+    "/orders: actual status badges and five responsive widths PASS",
+    "/pos/history: actual status badges and five responsive widths PASS",
+    "Order detail displays separate colored fulfillment and payment statuses",
+    "Keyboard status filter and selected semantic color work",
+    "All ten status variants render distinct semantic palette groups (temporary DOM swatches only)"
+  ],
+  "errors": []
+}
