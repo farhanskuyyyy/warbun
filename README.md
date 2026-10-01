@@ -70,6 +70,8 @@ Provider live memerlukan adapter sesuai dokumentasi provider, pembuatan payment 
 
 ## QA
 
+Ikon navigasi: Font Awesome Free 6.7.2 Solid, disimpan lokal sebagai SVG. Sumber: [Font Awesome](https://github.com/FortAwesome/Font-Awesome/tree/6.x/svgs/solid). Ikon berlisensi [CC BY 4.0](https://fontawesome.com/license/free); atribusi dan lisensi lengkap di `public/icons/LICENSE-fontawesome.txt`. Path asli dibungkus dalam symbol untuk dipakai ulang. QA: [ICON_QA_REPORT.md](ICON_QA_REPORT.md).
+
 ```sh
 php vendor/bin/phpunit --no-progress
 npm run build

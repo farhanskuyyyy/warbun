@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest navigation-icon change: [ICON_QA_REPORT.md](ICON_QA_REPORT.md), local SVG rendering, responsive layout, destinations, locale and logout verified.
+
 Latest mobile catalog display change: [CATALOG_VIEW_QA.md](CATALOG_VIEW_QA.md), grid/list behavior checked on the existing server at ten viewport widths.
 
 Tanggal: 1 Oktober 2026. Hasil: **PASS untuk implementasi development yang diuji**. Pengujian memakai database sementara; `.env` dan database operasional existing tidak diubah. Tidak ada deployment.

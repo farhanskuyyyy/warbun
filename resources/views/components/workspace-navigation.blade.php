@@ -9,6 +9,15 @@
         'Management' => [['users.index','Users & Roles','users.view'],['reports.index','Reports','reports.view'],['settings.index','Settings','settings.view'],['audit.index','Audit Log','audit.view']],
     ];
     $masters = [['categories.index','Categories'],['product-types.index','Product Types'],['brands.index','Brands'],['units.index','Units'],['suppliers.index','Suppliers']];
+    $icons = [
+        'dashboard' => 'gauge-high', 'pos.index' => 'cash-register', 'pos.history' => 'receipt',
+        'orders.index' => 'bag-shopping', 'payments.index' => 'credit-card', 'refunds.index' => 'rotate-left',
+        'shifts.index' => 'clock', 'products.index' => 'box', 'inventory.index' => 'boxes-stacked',
+        'opnames.index' => 'clipboard-check', 'customers.index' => 'users', 'debt.index' => 'file-invoice-dollar',
+        'users.index' => 'user-shield', 'reports.index' => 'chart-column', 'settings.index' => 'gear',
+        'audit.index' => 'clipboard-list', 'categories.index' => 'tags', 'product-types.index' => 'shapes',
+        'brands.index' => 'tag', 'units.index' => 'ruler', 'suppliers.index' => 'truck',
+    ];
 @endphp
 @foreach($groups as $group => $links)
 @if(collect($links)->contains(fn($link) => auth()->user()->can($link[2])))
@@ -16,11 +25,11 @@
 @foreach($links as [$destination,$label,$permission])
 @can($permission)
 @php($active = $destination === 'pos.index' ? request()->routeIs('pos.index','pos.checkout') : ($destination === 'pos.history' ? request()->routeIs('pos.history','pos.receipt') : request()->routeIs(explode('.', $destination)[0].'.*', $destination)))
-<a class="nav-link {{ $active ? 'is-active' : '' }}" href="{{ route($destination) }}" @if($active) aria-current="page" @endif><span class="nav-marker" aria-hidden="true"></span>{{ __($label) }}</a>
+<a class="nav-link {{ $active ? 'is-active' : '' }}" href="{{ route($destination) }}" @if($active) aria-current="page" @endif><x-icon :name="$icons[$destination]" /><span>{{ __($label) }}</span></a>
 @endcan
 @endforeach
 @if($group === 'Catalog & stock')@can('products.view')
-<details class="master-navigation" @if(request()->routeIs('categories.*','product-types.*','brands.*','units.*','suppliers.*')) open @endif><summary>{{ __('Master data') }}</summary><div>@foreach($masters as [$destination,$label])<a class="nav-link {{ request()->routeIs(explode('.', $destination)[0].'.*') ? 'is-active' : '' }}" href="{{ route($destination) }}" @if(request()->routeIs(explode('.', $destination)[0].'.*')) aria-current="page" @endif>{{ __($label) }}</a>@endforeach</div></details>
+<details class="master-navigation" @if(request()->routeIs('categories.*','product-types.*','brands.*','units.*','suppliers.*')) open @endif><summary><x-icon name="layer-group" /><span>{{ __('Master data') }}</span><x-icon name="chevron-down" class="disclosure-icon" /></summary><div>@foreach($masters as [$destination,$label])<a class="nav-link {{ request()->routeIs(explode('.', $destination)[0].'.*') ? 'is-active' : '' }}" href="{{ route($destination) }}" @if(request()->routeIs(explode('.', $destination)[0].'.*')) aria-current="page" @endif><x-icon :name="$icons[$destination]" /><span>{{ __($label) }}</span></a>@endforeach</div></details>
 @endcan @endif
 </section>@endif
 @endforeach

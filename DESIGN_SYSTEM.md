@@ -17,8 +17,8 @@ Applied skills: [anti-slop](https://github.com/miqdadbadjuber/anti-slop) and [UI
 | 44px control targets, 24–32px workspace padding, larger storefront gaps | Staff can operate compact tables while shopping content gets more reading space. |
 | Subtle panel radius and plain category edges | Group related records while avoiding pill-shaped controls everywhere. |
 | Shelf offset shadow; account-menu elevation | Shelf treatment echoes a paper stock list; the popover shadow indicates overlap. |
-| Small navigation dots, count badge and directional arrows | Dots align menu labels; the badge reports actual browser-cart quantity; arrows identify navigable rows and destinations, never standalone decoration. |
-| Existing wordmark and initials | No fabricated logos, product photos or profile photos are introduced. Missing product images use the real product name as a text placeholder. |
+| Semantic navigation icons, count badge and directional arrows | Icons identify CMS tasks and common controls; the badge reports actual cart quantity, while editorial arrows mark destinations. |
+| Existing wordmark and neutral account icon | No fabricated logos, product photos or profile photos introduced; missing product images use honest category/unit placeholders. |
 | Hover and focus only | Routine retail operations do not benefit from entrance animations or scroll choreography; reduced-motion settings remain respected. |
 
 The recurring motif is a retail ledger: shelf rows, real prices, tabular totals, fine dividers and numbered items. Landing data comes from active online products and active categories with available products. Empty catalog, empty search and empty cart remain explicit. Feedback uses the existing server component; cart additions use a live status region and update the real count. No dark-mode toggle or theme dependency was added.
@@ -45,3 +45,7 @@ The existing direction and dials also apply to authentication, checkout and orde
 | Optional store contact and payment instructions | Gives customers actual shop guidance when configured; no bank details or contact information are fabricated. |
 
 The order page clears the cart only for the matching checkout request. Opening a previous order preserves the customer's current cart. Demo catalog assumptions are disclosed in [SEED_DATA.md](SEED_DATA.md); UI evidence is in [SHOPPING_QA_REPORT.md](SHOPPING_QA_REPORT.md).
+
+## Navigation icons
+
+Font Awesome Free 6.7.2 Solid icons are served from a local SVG sprite. The shared Blade component inherits text color and hides decorative SVGs from assistive technology. CMS labels remain beside 18px icons because symbols alone do not clearly distinguish debt, payments, refunds and stock tasks. Cart uses a 22px icon with a screen-reader label and visible quantity. Language retains a native select with a language icon and labeled 44px apply control. Drawer/account controls use the same family. Original paths are wrapped in symbols for reuse, with attribution and license in public/icons. No font package, CDN or dependency added. Evidence: [ICON_QA_REPORT.md](ICON_QA_REPORT.md).
