@@ -19,6 +19,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ShelfController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Middleware\BackofficePermission;
@@ -46,6 +47,8 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
     Route::resource('units', UnitController::class)->except(['show']);
     Route::resource('suppliers', SupplierController::class)->except(['show']);
     Route::resource('products', ProductController::class);
+    Route::resource('shelves', ShelfController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::put('/shelves/products/{product}/location', [ShelfController::class, 'place'])->withTrashed()->name('shelves.place');
 
     // Inventory
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');

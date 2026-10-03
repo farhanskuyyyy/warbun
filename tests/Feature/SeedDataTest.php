@@ -18,7 +18,7 @@ class SeedDataTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const TABLES = ['users', 'roles', 'permissions', 'model_has_roles', 'role_has_permissions', 'model_has_permissions', 'categories', 'product_types', 'brands', 'units', 'suppliers', 'products', 'inventory_transactions', 'customers', 'cashier_shifts', 'sales', 'sale_items', 'orders', 'order_items', 'payments', 'debt_accounts', 'debt_transactions', 'debt_allocations', 'refunds', 'refund_items', 'refund_payments', 'stock_opnames', 'stock_opname_items', 'store_settings', 'notifications', 'audit_logs'];
+    private const TABLES = ['users', 'roles', 'permissions', 'model_has_roles', 'role_has_permissions', 'model_has_permissions', 'categories', 'product_types', 'brands', 'units', 'suppliers', 'products', 'inventory_transactions', 'customers', 'cashier_shifts', 'sales', 'sale_items', 'orders', 'order_items', 'payments', 'debt_accounts', 'debt_transactions', 'debt_allocations', 'refunds', 'refund_items', 'refund_payments', 'stock_opnames', 'stock_opname_items', 'store_settings', 'notifications', 'audit_logs', 'shelves'];
 
     public function test_demo_fills_every_business_table_and_preserves_ledger_invariants(): void
     {
@@ -27,6 +27,8 @@ class SeedDataTest extends TestCase
             $this->assertGreaterThan(0, DB::table($table)->count(), $table);
         }
         $this->assertSame(53, Product::count());
+        $this->assertSame(9, DB::table('shelves')->count());
+        $this->assertSame(0, Product::whereNull('shelf_id')->count());
         $this->assertSame(9, DB::table('categories')->count());
         foreach (Product::all() as $product) {
             $this->assertSame($product->current_stock, (int) DB::table('inventory_transactions')->where('product_id', $product->id)->sum('quantity'), $product->sku);

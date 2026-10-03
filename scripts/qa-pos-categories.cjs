@@ -48,6 +48,7 @@ const base = 'http://127.0.0.1:8765';
         await choose('');
         assert.deepEqual(await names(), [first.products[0].name]);
         await page.locator('#productList button').click();
+        await page.locator('#addProductBtn').click();
         await choose(other.id);
         assert.equal(await page.locator('[data-pos-quantity]').textContent(), '1');
         results.push('Category and search combine; All retains search; empty feedback and cart survive category changes');

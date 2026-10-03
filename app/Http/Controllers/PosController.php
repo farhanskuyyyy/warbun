@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\Shelf;
 use App\Models\User;
 use App\Services\SaleService;
 use App\Services\ShiftService;
@@ -24,7 +25,9 @@ class PosController extends Controller
         $categories = Category::where('is_active', true)->orderBy('name')->get(['id', 'name']);
         $customers = Customer::with('user', 'debtAccount')->where('is_active', true)->orderBy('name')->get();
 
-        return view('pos.index', compact('activeShift', 'recentSales', 'categories', 'customers'));
+        $shelves = Shelf::withCount(['products' => fn ($q) => $q->where('is_active', true)->where('current_stock', '>', 0)])->orderBy('number')->get();
+
+        return view('pos.index', compact('activeShift', 'recentSales', 'categories', 'customers', 'shelves'));
     }
 
     public function createCustomer(Request $request)
@@ -54,8 +57,13 @@ class PosController extends Controller
 
     public function products(Request $request)
     {
-        $request->validate(['search' => 'nullable|string|max:255', 'category_id' => 'nullable|integer|exists:categories,id']);
-        $query = Product::where('is_active', true)->where('current_stock', '>', 0);
+        $request->validate(['search' => 'nullable|string|max:255', 'category_id' => 'nullable|integer|exists:categories,id', 'shelf_id' => 'nullable|integer|exists:shelves,id', 'unassigned' => 'sometimes|boolean', 'page' => 'sometimes|integer|min:1']);
+        $query = Product::with('shelf', 'category', 'unit')->where('is_active', true)->where('current_stock', '>', 0);
+        if ($request->filled('shelf_id')) {
+            $query->where('shelf_id', $request->shelf_id);
+        } elseif ($request->boolean('unassigned')) {
+            $query->whereNull('shelf_id');
+        }
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -69,9 +77,9 @@ class PosController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        $products = $query->orderBy('name')->limit(60)->get();
+        $products = $query->orderBy('name')->orderBy('id')->paginate(60);
 
-        return response()->json($products->map(fn ($p) => $p->only(['id', 'name', 'sku', 'barcode', 'selling_price', 'current_stock'])));
+        return response()->json($products->getCollection()->map(fn ($p) => array_merge($p->only(['id', 'name', 'sku', 'barcode', 'selling_price', 'current_stock', 'description']), ['location' => $p->location_label, 'category' => $p->category?->name, 'unit' => $p->unit?->name])))->header('X-Has-More', $products->hasMorePages() ? '1' : '0');
     }
 
     public function processSale(Request $request)

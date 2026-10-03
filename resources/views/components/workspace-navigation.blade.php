@@ -4,12 +4,13 @@
     $groups = [
         'Overview' => [['dashboard','Dashboard','dashboard.view']],
         'Operations' => [['pos.index','POS / Cashier','pos.access'],['pos.history','Sales History','sales.view'],['orders.monitor','Order monitoring','orders.view'],['orders.index','Orders','orders.view'],['payments.index','Payments','payments.view'],['refunds.index','Returns / Refunds','payments.view'],['shifts.index','Cashier Shifts','pos.access']],
-        'Catalog & stock' => [['products.index','Products','products.view'],['inventory.index','Inventory','inventory.view'],['opnames.index','Stock Opname','inventory.opname']],
+        'Catalog & stock' => [['products.index','Products','products.view'],['shelves.index','Product placement','products.view'],['inventory.index','Inventory','inventory.view'],['opnames.index','Stock Opname','inventory.opname']],
         'Customers' => [['customers.index','Customers','customers.view'],['debt.index','Debt','debt.view']],
         'Management' => [['users.index','Users & Roles','users.view'],['reports.index','Reports','reports.view'],['settings.index','Settings','settings.view'],['audit.index','Audit Log','audit.view']],
     ];
     $masters = [['categories.index','Categories'],['product-types.index','Product Types'],['brands.index','Brands'],['units.index','Units'],['suppliers.index','Suppliers']];
     $icons = [
+        'shelves.index' => 'layer-group',
         'orders.monitor' => 'clipboard-list',
         'dashboard' => 'gauge-high', 'pos.index' => 'cash-register', 'pos.history' => 'receipt',
         'orders.index' => 'bag-shopping', 'payments.index' => 'credit-card', 'refunds.index' => 'rotate-left',

@@ -12,6 +12,9 @@ if (configElement) {
     let productsController;
     let searchTimer;
     let selectedCategory = '';
+    let selectedShelf = '';
+    let productsPage = 1;
+    let dialogProduct;
     const customers = new Map(config.customers.map(customer => [String(customer.id), customer]));
     const isDelivery = () => field('saleForm').querySelector('[name="fulfillment_type"]:checked').value === 'delivery';
     let savingCustomer = false;
@@ -106,33 +109,71 @@ if (configElement) {
         field('saleForm').querySelectorAll('input, select').forEach(input => { input.disabled = loading; });
     }
 
-    async function loadProducts(search = field('productSearch').value) {
+    function showProduct(product) {
+        if (loading) return;
+        dialogProduct = product;
+        field('productDialogTitle').textContent = product.name;
+        field('productDialogPrice').textContent = money(product.selling_price);
+        field('productDialogDescription').textContent = product.description || '';
+        for (const [suffix, value] of Object.entries({Sku: product.sku, Barcode: product.barcode, Category: product.category, Stock: product.current_stock + (product.unit ? ' ' + product.unit : ''), Location: product.location || labels.unassigned})) {
+            field('productDialog' + suffix).textContent = value || labels.unavailable;
+        }
+        field('productDialogError').textContent = config.activeShift ? '' : labels.shift;
+        field('addProductBtn').disabled = !config.activeShift;
+        field('productDialog').showModal();
+    }
+
+    field('closeProductBtn').addEventListener('click', () => field('productDialog').close());
+    field('addProductBtn').addEventListener('click', () => {
+        if (dialogProduct && add(dialogProduct)) field('productDialog').close();
+        else field('productDialogError').textContent = field('scanState').textContent;
+    });
+
+    async function loadProducts(search = field('productSearch').value, append = false) {
         productsController?.abort();
         const controller = new AbortController();
         productsController = controller;
         field('productState').textContent = labels.loading;
         field('productList').setAttribute('aria-busy', 'true');
+        field('moreProductsBtn').disabled = true;
+        if (!append) { productsPage = 1; field('productList').replaceChildren(); field('moreProductsBtn').hidden = true; }
         try {
-            const query = new URLSearchParams({search, category_id: selectedCategory});
+            const query = new URLSearchParams({search, category_id: selectedCategory, page: append ? productsPage + 1 : 1});
+            if (selectedShelf === 'unassigned') query.set('unassigned', '1');
+            else if (selectedShelf) query.set('shelf_id', selectedShelf);
             const response = await fetch(config.productsUrl + '?' + query, {signal: controller.signal, headers: {Accept: 'application/json'}});
             if (!response.ok) throw new Error();
             const products = await response.json();
             const list = field('productList');
-            list.replaceChildren();
+            if (controller !== productsController) return;
+            if (append) productsPage++;
             for (const product of products) {
                 const button = text('button', '', 'panel text-left hover:border-primary');
                 button.type = 'button';
                 button.append(text('strong', product.name, 'block'), text('span', product.sku, 'block text-sm'), text('span', money(product.selling_price), 'block font-semibold'), text('span', labels.stock + ': ' + product.current_stock, 'block text-sm'));
-                button.addEventListener('click', () => add(product));
+                button.append(text('span', product.location || labels.unassigned, 'product-location'), text('span', labels.viewDetails, 'product-detail-link'));
+                button.addEventListener('click', () => showProduct(product));
                 list.append(button);
             }
-            field('productState').textContent = products.length ? '' : labels.empty;
+            field('productState').textContent = list.children.length ? '' : labels.empty;
+            field('moreProductsBtn').hidden = response.headers.get('X-Has-More') !== '1';
         } catch (error) {
-            if (error.name !== 'AbortError') field('productState').textContent = labels.error;
+            if (error.name !== 'AbortError' && controller === productsController) field('productState').textContent = labels.error;
         } finally {
-            if (controller === productsController) field('productList').setAttribute('aria-busy', 'false');
+            if (controller === productsController) { field('productList').setAttribute('aria-busy', 'false'); field('moreProductsBtn').disabled = false; }
         }
     }
+
+    field('moreProductsBtn').addEventListener('click', () => loadProducts(field('productSearch').value, true));
+    document.querySelectorAll('[data-pos-shelf]').forEach(button => button.addEventListener('click', () => {
+        clearTimeout(searchTimer);
+        selectedShelf = button.dataset.posShelf;
+        field('productSearch').value = '';
+        selectedCategory = '';
+        document.querySelectorAll('[data-pos-category]').forEach(control => control.setAttribute('aria-pressed', String(control.dataset.posCategory === '')));
+        document.querySelectorAll('[data-pos-shelf]').forEach(control => control.setAttribute('aria-pressed', String(control === button)));
+        loadProducts();
+    }));
 
     document.querySelectorAll('[data-pos-category]').forEach(button => button.addEventListener('click', () => {
         clearTimeout(searchTimer);

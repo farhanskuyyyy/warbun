@@ -86,6 +86,7 @@ const base = 'http://127.0.0.1:8765';
         await page.locator('#productSearch').fill('Indomie Goreng');
         await page.waitForFunction(() => document.querySelectorAll('#productList button').length === 1);
         await page.locator('#productList').getByRole('button', {name: /Indomie Goreng/}).click();
+        await page.locator('#addProductBtn').click();
         await quantity(7);
         results.push('Stock limit and network failure preserve cart; next scan and manual search recover');
         for (const width of [320,375,768,1440]) {

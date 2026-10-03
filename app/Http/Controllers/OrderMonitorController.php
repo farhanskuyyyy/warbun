@@ -33,8 +33,8 @@ class OrderMonitorController extends Controller
         $queue = DB::query()->fromSub($online->unionAll($deliveries)->toBase(), 'queue');
         $status === 'active' ? $queue->whereIn('stage', ['pending', 'confirmed', 'preparing', 'ready']) : $queue->where('stage', $status);
         $entries = $queue->orderBy('created_at', $status === 'active' ? 'asc' : 'desc')->orderBy('source')->orderBy('id')->paginate(12)->withQueryString();
-        $orders = Order::with('customer', 'items.product')->whereIn('id', $entries->where('source', 'online')->pluck('id'))->get()->keyBy('id');
-        $sales = Sale::with('customer', 'items.product')->whereIn('id', $entries->where('source', 'pos')->pluck('id'))->get()->keyBy('id');
+        $orders = Order::with('customer', 'items.product.shelf')->whereIn('id', $entries->where('source', 'online')->pluck('id'))->get()->keyBy('id');
+        $sales = Sale::with('customer', 'items.product.shelf')->whereIn('id', $entries->where('source', 'pos')->pluck('id'))->get()->keyBy('id');
 
         return view('orders.monitor', compact('entries', 'orders', 'sales', 'counts', 'status', 'search'));
     }

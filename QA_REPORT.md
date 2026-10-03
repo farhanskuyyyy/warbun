@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest shelf minimap, product detail/add dialog, placement management and sample seeder: [SHELF_QA.md](SHELF_QA.md), [workflow](SHELF_WORKFLOW.md). Full 97 tests / 799 assertions, build, scoped Pint, feature/category/barcode browser checks and five-width layout PASS on isolated SQLite. Existing MySQL migration/seeder not applied: local MySQL fails to start.
+
 Latest MCP development setup: [MCP_SETUP.md](MCP_SETUP.md). Context7/GitHub/Boost read calls, Playwright tool discovery, project scoping, Composer validation and full 90 tests / 741 assertions pass. Five development dependencies added without changing existing versions.
 
 Status-color update: [STATUS_COLOR_QA.md](STATUS_COLOR_QA.md). Shared semantic badges, monitoring accents, 16 targeted tests / 222 assertions, production build, AA contrast and five-width browser checks pass.

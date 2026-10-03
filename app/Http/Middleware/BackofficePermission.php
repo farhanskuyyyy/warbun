@@ -12,6 +12,7 @@ class BackofficePermission
         abort_unless($request->user()?->is_active, 403);
         $name = $request->route()->getName();
         $map = [
+            'shelves.index' => 'products.view', 'shelves.store' => 'products.update', 'shelves.update' => 'products.update', 'shelves.destroy' => 'products.update', 'shelves.place' => 'products.update',
             'pos.customers' => 'customers.create', 'orders.monitor' => 'orders.view', 'orders.delivery-status' => 'orders.update',
             'opnames.index' => 'inventory.opname', 'opnames.store' => 'inventory.opname', 'opnames.approve' => 'inventory.approve-adjustment', 'refunds.index' => 'payments.view', 'refunds.store' => 'sales.refund', 'shifts.index' => 'pos.access', 'debt.correction' => 'debt.view',
             'dashboard' => 'dashboard.view', 'pos.index' => 'pos.access', 'pos.products' => 'pos.access', 'pos.barcode' => 'pos.access', 'pos.process-sale' => 'sales.create',

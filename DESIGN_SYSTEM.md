@@ -1,5 +1,11 @@
 # Warbun UI direction
 
+## Etalase POS dan penataan produk
+
+Direction retail existing: ENERGY 2 / RHYTHM 3 / MOTION 1. Minimap bernomor membantu petugas menghubungkan produk dengan etalase fisik; urutan nomor tidak mengklaim koordinat denah. Tile berkaki garis rak mengulang motif ledger Warbun. Burgundy dan outline menandai pilihan, sementara nomor/nama tetap terbaca tanpa warna. Minimap dua kolom pada ponsel dengan scroll internal mencegah banyak etalase memperpanjang halaman tanpa batas. Heading, minimap, filter, daftar produk dan panel transaksi mempunyai fungsi dan ritme berbeda.
+
+Dialog info memakai harga sebagai fokus, fakta produk berbaris dan tombol tambah selebar panel. Native dialog menyediakan Escape dan pengembalian fokus; penempatan produk memakai disclosure agar catatan posisi tidak membuat daftar menjadi form panjang. Padding 16–24px, target 44px, radius 5px dan dividers dipakai untuk pemindaian operasional. Icon layer-group menunjukkan lokasi, box menunjukkan belum ditata; semuanya berasal dari sprite Font Awesome existing. Lokasi pengambilan ada tepat di bawah nama barang pada pesanan. Contoh seeder diberi label Contoh, bukan klaim posisi aktual toko. Bukti: [SHELF_QA.md](SHELF_QA.md).
+
 Reading this as a daily retail storefront and operations workspace for customers and shop staff, in a warm editorial retail style. ENERGY 2 / RHYTHM 3 / MOTION 1. Direction retains the existing burgundy identity and replaces the flat navigation and single-block landing.
 
 Applied skills: [anti-slop](https://github.com/miqdadbadjuber/anti-slop) and [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill). Pro Max research was adapted to this existing Blade product: navigation hierarchy, progressive disclosure, responsive controls and accessibility. Its generic green palette, video hero and social-proof recommendations were not adopted because they have no basis in Warbun's identity or content.

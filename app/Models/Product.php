@@ -14,7 +14,7 @@ class Product extends Model
         'name', 'sku', 'barcode', 'category_id', 'product_type_id',
         'brand_id', 'unit_id', 'supplier_id', 'description',
         'cost_price', 'selling_price', 'minimum_stock', 'current_stock',
-        'is_active', 'is_available_online', 'is_featured', 'image', 'weight',
+        'is_active', 'is_available_online', 'is_featured', 'image', 'weight', 'shelf_id', 'shelf_position',
     ];
 
     protected $casts = [
@@ -25,6 +25,16 @@ class Product extends Model
         'is_available_online' => 'boolean',
         'is_featured' => 'boolean',
     ];
+
+    public function shelf()
+    {
+        return $this->belongsTo(Shelf::class);
+    }
+
+    public function getLocationLabelAttribute(): string
+    {
+        return $this->shelf ? $this->shelf->label.($this->shelf_position ? ' / '.$this->shelf_position : '') : __('Location not assigned');
+    }
 
     public function category()
     {

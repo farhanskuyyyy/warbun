@@ -21,6 +21,7 @@ const base = 'http://127.0.0.1:8765';
         if(await page.locator('[name=opening_cash]').count()) {await page.locator('[name=opening_cash]').fill('0');await page.locator('form[action$="/pos/open-shift"] button').click();}
         await page.waitForFunction(()=>document.querySelector('#productList button'));
         await page.locator('#productList button').first().click();
+        await page.locator('#addProductBtn').click();
         await page.locator('[name=fulfillment_type][value=delivery]').check();
         assert.equal(await page.locator('#deliveryFields').isVisible(),true);
         await page.locator('#newCustomerBtn').click();
@@ -111,6 +112,7 @@ const base = 'http://127.0.0.1:8765';
         assert.ok(registered);
         await page.waitForFunction(()=>document.querySelector('#productList button'));
         await page.locator('#productList button').first().click();
+        await page.locator('#addProductBtn').click();
         await page.locator('#customerId').selectOption(registered.id);
         await page.locator('#paymentMethod').selectOption('debt');
         assert.match(await page.locator('#creditInfo').textContent(),/Available credit/);

@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "results": [
+    "Owner creates a shelf and assigns a product with position; search and redirect retain the product",
+    "Rename saves the shelf without losing placement; management shelf filter shows its assigned product",
+    "Shelf selection resets old filters; product dialog displays location, Escape restores focus and Add changes cart once",
+    "Failed product lookup clears stale product tiles and preserves cart; next shelf selection recovers",
+    "Mocked two-page response appends products and hides Load more when complete; backend pagination tested separately",
+    "POS, product dialog and placement at 320/375/768/1024/1440px: no overflow, usable controls, mobile and desktop screenshots",
+    "Clearing placement removes the old position and product appears in Unassigned; keyboard shelf filter works",
+    "Online monitoring item list and order detail display actual seeded shelf locations for picking",
+    "Empty shelf can be deleted after its product is moved; assigned-shelf protection is covered in backend tests"
+  ],
+  "errors": []
+}

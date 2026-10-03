@@ -15,6 +15,16 @@
             <p id="scannerHelp">{{ __('Use a USB or Bluetooth keyboard scanner with an Enter suffix. Click this field before scanning.') }}</p>
         </form>
         <p id="scanState" class="pos-scan-state" role="status" aria-live="polite"></p>
+        <section class="shelf-overview" aria-labelledby="posShelvesHeading">
+            <div class="shelf-heading"><h2 id="posShelvesHeading">{{ __('Shelf minimap') }}</h2>@can('products.view')<a href="{{ route('shelves.index') }}">{{ __('Product placement') }}</a>@endcan</div>
+            <p>{{ __('Choose a shelf, then a product to see details and add it. Numbers identify shelves, not floor positions.') }}</p>
+            <div class="shelf-map" role="group" aria-label="{{ __('Filter by shelf') }}">
+                <button type="button" class="shelf-tile" data-pos-shelf="" aria-pressed="true" aria-controls="productList"><x-icon name="boxes-stacked" /><strong>{{ __('All shelves') }}</strong><span>{{ __('Browse all') }}</span></button>
+                @foreach($shelves as $shelf)<button type="button" class="shelf-tile" data-pos-shelf="{{ $shelf->id }}" aria-pressed="false" aria-controls="productList"><span class="shelf-number">{{ $shelf->number }}</span><strong>{{ $shelf->name }}</strong><span>{{ $shelf->products_count }} {{ __('available products') }}</span></button>@endforeach
+                <button type="button" class="shelf-tile" data-pos-shelf="unassigned" aria-pressed="false" aria-controls="productList"><x-icon name="box" /><strong>{{ __('Unassigned') }}</strong><span>{{ __('Without location') }}</span></button>
+            </div>
+            @if($shelves->isEmpty())<p class="mt-3">{{ __('No shelves yet. Create shelves in Product placement; products remain available below.') }}</p>@endif
+        </section>
         <label class="field">{{ __('Search product or barcode') }}<input id="productSearch" type="search" autocomplete="off"></label>
         <div class="pos-category-filter">
             <p>{{ __('Category') }}</p>
@@ -25,6 +35,7 @@
         </div>
         <p id="productState" role="status" class="my-3"></p>
         <div id="productList" class="max-h-[60vh] overflow-y-auto grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3"></div>
+        <button id="moreProductsBtn" type="button" class="button-secondary mt-3" hidden>{{ __('Load more products') }}</button>
     </section>
     <section class="panel">
         <h2 class="text-xl font-semibold mb-3">{{ __('Cart') }}</h2><div id="cartItems" class="space-y-3"></div>
@@ -63,6 +74,12 @@
     </form>
 </dialog>
 @endcan
+<dialog id="productDialog" class="pos-customer-dialog pos-product-dialog" aria-labelledby="productDialogTitle">
+    <div class="pos-customer-heading"><h2 id="productDialogTitle"></h2><button id="closeProductBtn" type="button" class="button-secondary" aria-label="{{ __('Close') }}"><x-icon name="xmark" /></button></div>
+    <p id="productDialogPrice" class="product-dialog-price"></p><p id="productDialogDescription"></p>
+    <dl class="product-dialog-facts"><div><dt>{{ __('SKU') }}</dt><dd id="productDialogSku"></dd></div><div><dt>{{ __('Barcode') }}</dt><dd id="productDialogBarcode"></dd></div><div><dt>{{ __('Category') }}</dt><dd id="productDialogCategory"></dd></div><div><dt>{{ __('Stock') }}</dt><dd id="productDialogStock"></dd></div><div><dt>{{ __('Location') }}</dt><dd id="productDialogLocation"></dd></div></dl>
+    <p id="productDialogError" role="alert" class="text-red-700"></p><button id="addProductBtn" type="button" class="button-primary w-full">{{ __('Add to cart') }}</button>
+</dialog>
 <script id="pos-config" type="application/json">{!! json_encode([
     'customerUrl' => route('pos.customers'), 'shippingCost' => \Illuminate\Support\Facades\DB::table('store_settings')->where('key','shipping_cost')->value('value') ?? '10000',
     'customers' => $customers->map(fn($c) => ['id'=>$c->id,'name'=>$c->name,'phone'=>$c->phone,'address'=>$c->address,'eligible'=>(bool)($c->user?->is_active && $c->can_use_debt && $c->debt_status === 'eligible' && (!$c->debtAccount || $c->debtAccount->status === 'active')), 'available'=>\App\Support\Money::decimal(max(0,\App\Support\Money::cents($c->credit_limit)-\App\Support\Money::cents($c->debtAccount?->outstanding_balance ?? $c->outstanding_balance)))]),
@@ -70,7 +87,7 @@
     'csrf' => csrf_token(), 'activeShift' => (bool) $activeShift, 'locale' => app()->getLocale() === 'id' ? 'id-ID' : 'en-US',
     'text' => ['loading' => __('Loading products...'), 'empty' => __('No products found'), 'error' => __('Unable to load products. Try searching again.'),
         'availableCredit'=>__('Available credit'), 'notEligible'=>__('Credit is unavailable. Select a registered customer with approved credit.'), 'debtRemaining'=>__('Debt remaining'), 'creditExceeded'=>__('Debt exceeds available credit.'), 'savedCustomer'=>__('Customer saved and selected.'), 'saveCustomer'=>__('Save and select customer'), 'customerFailed'=>__('Unable to save customer. Check the details and retry.'),
-        'deposit'=>__('Cash deposit'), 'paidAmount'=>__('Paid amount'),
+        'deposit'=>__('Cash deposit'), 'paidAmount'=>__('Paid amount'), 'unassigned'=>__('Location not assigned'), 'viewDetails'=>__('View product details'), 'unavailable'=>__('Not provided'),
         'emptyCart' => __('No items in cart'), 'stock' => __('Stock'), 'remove' => __('Remove'), 'processing' => __('Processing...'),
         'pay' => __('Complete sale'), 'failed' => __('Unable to process sale. Retry with the same cart.'),
         'increase' => __('Increase quantity'), 'decrease' => __('Decrease quantity'), 'scanReady' => __('Ready to scan.'),

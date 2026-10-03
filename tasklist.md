@@ -54,6 +54,15 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 - [x] 90 tests / 741 assertions, build, scoped Pint, seven browser scenarios and responsive QA
 - [x] Rehearse additive migration on temporary MySQL copy, apply locally and record ORDER_MONITOR_QA.md
 
+## Etalase dan penataan produk
+
+- [x] Migrasi tambahan, relasi lokasi utama, permission, locking dan audit
+- [x] Minimap etalase, modal info/tambah produk, pagination POS
+- [x] Menu penataan dan lokasi pengambilan pada monitoring/detail pesanan
+- [x] Seeder contoh etalase, lokasi kategori, idempotence dan perlindungan penataan manual
+- [x] Regression backend, QA browser mobile/desktop, build, Pint dan delivery gate
+- [ ] Terapkan migrasi/seeder khusus di MySQL existing setelah service lokal dapat berjalan; bukti keterbatasan ada di SHELF_WORKFLOW.md
+
 ## Integration scope
 
 Development QA is complete for the implemented scope; evidence is in [QA_REPORT.md](QA_REPORT.md). Live payment-provider session/refund integration and real email delivery require the selected provider/configuration. Deployment and DevOps are outside this task. Existing operational data must be rehearsed and reconciled on a copy before applying the new migration.

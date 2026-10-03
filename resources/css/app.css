@@ -15,6 +15,42 @@
     .button-primary { @apply inline-flex items-center justify-center bg-primary text-white rounded-md px-4 py-3 font-semibold hover:bg-primary-dark; }
     .field { @apply flex flex-col gap-1 min-w-0; }
 }
+.shelf-overview { margin-block: 20px; }
+.shelf-overview .shelf-heading { padding: 0 0 12px; border: 0; flex-wrap: wrap; }
+.shelf-overview .shelf-heading h2 { font-size: 18px; font-weight: 600; }
+.shelf-overview .shelf-heading a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--wine); }
+.shelf-overview > p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.shelf-map { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 10px; max-height: 320px; overflow-y: auto; padding: 4px; }
+.shelf-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; text-align: left; border: 1px solid var(--line); border-bottom: 4px solid #b9ad97; border-radius: 5px; background: #f6f3ed; color: var(--ink); min-width: 0; min-height: 112px; overflow-wrap: anywhere; }
+.shelf-tile:hover { border-color: var(--wine); }
+.shelf-tile[aria-pressed="true"], .shelf-tile[aria-current="page"] { background: #f4e8e9; border-color: var(--wine); outline: 1px solid var(--wine); }
+.shelf-tile strong { font-size: 14px; font-weight: 600; }
+.shelf-tile > span:last-child { font-size: 12px; color: var(--muted); }
+.shelf-tile .shelf-number { font-size: 22px; line-height: 1; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--wine); }
+#moreProductsBtn[hidden] { display: none; }
+.shelf-settings { padding-block: 12px; border-top: 1px solid var(--line); margin-top: 12px; }
+.shelf-settings summary, .shelf-product-list summary { display: flex; align-items: center; cursor: pointer; color: var(--wine); font-weight: 600; }
+.shelf-settings summary::before, .shelf-product-list summary::before { content: '+'; margin-right: 10px; }
+.shelf-settings[open] > summary::before, .shelf-product-list details[open] > summary::before { content: '−'; }
+.shelf-editor { display: grid; grid-template-columns: 100px minmax(0,1fr) auto; gap: 12px; align-items: end; }
+.shelf-search { display: flex; align-items: end; gap: 12px; margin-block: 24px; flex-wrap: wrap; }
+.shelf-search .field { flex: 1 1 220px; }
+.shelf-product-list { display: grid; gap: 12px; }
+.shelf-product-list .shelf-product { display: grid; grid-template-columns: minmax(0,1fr) minmax(200px,.8fr); gap: 20px; align-items: start; border: 1px solid var(--line); padding: 20px; }
+.shelf-product-list .shelf-product:hover { background: white; }
+.shelf-product-list h3 { font-size: 16px; font-weight: 600; }
+.shelf-product-list p { font-size: 13px; color: var(--muted); margin-top: 8px; overflow-wrap: anywhere; }
+.shelf-placement-form { display: grid; gap: 12px; padding-top: 12px; }
+.product-location { display: flex; align-items: start; gap: 8px; font-size: 12px; color: #5e5649; overflow-wrap: anywhere; margin-top: 10px; }
+.product-location .ui-icon { flex: 0 0 auto; margin-top: 2px; }
+.product-detail-link { display: block; color: var(--wine); font-size: 12px; font-weight: 600; margin-top: 12px; }
+.pos-product-dialog .product-dialog-price { color: var(--wine); font-size: 24px; font-weight: 600; }
+.pos-product-dialog #productDialogDescription { white-space: pre-wrap; overflow-wrap: anywhere; }
+.product-dialog-facts { margin-block: 24px; }
+.product-dialog-facts > div { display: grid; grid-template-columns: 100px minmax(0,1fr); gap: 12px; padding-block: 10px; border-bottom: 1px solid var(--line); }
+.product-dialog-facts dt { color: var(--muted); font-size: 13px; }
+.product-dialog-facts dd, .pos-product-dialog h2 { overflow-wrap: anywhere; }
+@media(max-width:767px) { .shelf-editor { grid-template-columns: 1fr; } .shelf-product-list .shelf-product { grid-template-columns: 1fr; gap: 10px; padding: 16px; } .shelf-map { grid-template-columns: repeat(2,minmax(0,1fr)); } .shelf-editor button, .shelf-search button { width: 100%; } }
 .text-gray-400, .text-gray-500 { color: #4b5563; }
 .text-red-500 { color: #b91c1c; }
 .text-green-500, .text-green-600 { color: #15803d; }

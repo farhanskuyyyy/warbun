@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         if (app()->environment(['local', 'testing'])) {
             $this->call(DemoOperationsSeeder::class);
+            $this->call(ShelfSeeder::class);
 
             return;
         }
