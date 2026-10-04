@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest scan recovery update: 15 synthetic-camera scenarios PASS, including blue off-center barcode and ongoing-scan guidance after six seconds. Conditional focus request uses mocked camera capabilities. Build, JS syntax, scoped Pint and responsive checks PASS. The user's still screenshot remains undecodable with both production configurations; live device resolution/focus is not verified. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).
+
 Latest mirror preview update: 13 camera browser scenarios PASS with keyboard toggle, persisted preference, camera switching and real Code 128/EAN-13 decoding while mirrored. Five-width layouts, build, JS syntax, scoped Pint and diff check PASS. Backend/checkout results below remain the previous baseline; no backend logic changed. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).
 
 Latest camera/hardware scan: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md), [usage/preview](CAMERA_BARCODE.md). Full 97 tests / 799 assertions, 12 synthetic-camera browser scenarios, build and pinned dependency install PASS. Real Code 128/EAN-13 video decoding, product validation, one-scan POS, permission/stream teardown and five-width layouts verified. Physical device testing remains outside this evidence.

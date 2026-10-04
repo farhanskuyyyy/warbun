@@ -67,6 +67,7 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 
 - [x] Pilihan hardware/kamera pada POS dan form tambah/edit produk
 - [x] Toggle mirror preview tersimpan, keyboard/device/retry/navigation dan deteksi otomatis saat mirror diuji
+- [x] Pencarian baris diperluas, request fokus kondisional dan guidance scan belum berhasil; 15 skenario kamera dan screenshot pengguna diuji dengan batas hasil terdokumentasi
 - [x] Decoder lokal, pemilihan kamera, satu hasil, cleanup permission/modal/visibility
 - [x] Antrean scan kasir existing, barcode input tanpa auto-save dan validation unique
 - [x] 12 skenario kamera simulasi, real decoding Code 128/EAN-13, responsive dan regression backend

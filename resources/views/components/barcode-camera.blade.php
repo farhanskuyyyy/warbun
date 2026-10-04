@@ -8,7 +8,8 @@
     <div class="barcode-camera-footer"><button id="retryBarcodeCamera" type="button" class="button-secondary">{{ __('Retry camera') }}</button><button id="cancelBarcodeCamera" type="button" class="button-primary">{{ __('Return to scanner field') }}</button></div>
 </dialog>
 <script id="barcode-camera-config" type="application/json">{!! json_encode([
-    'permission'=>__('Waiting for camera permission...'), 'scanning'=>__('Keep the barcode steady and fully visible.'),
+    'permission'=>__('Waiting for camera permission...'), 'scanning'=>__('Scanning automatically. Keep the entire barcode sharp and visible.'),
+    'guidance'=>__('Not read yet. Move the package slightly farther away until the bars look sharp, keep it flat, and avoid glare. Try the back camera or enter the barcode manually.'),
     'insecure'=>__('Camera scanning needs HTTPS or localhost. Use the hardware scanner or type the barcode on this connection.'),
     'unsupported'=>__('This browser cannot access a camera. Use the hardware scanner or type the barcode.'),
     'denied'=>__('Camera permission was denied. Allow camera access in browser settings, then retry.'),

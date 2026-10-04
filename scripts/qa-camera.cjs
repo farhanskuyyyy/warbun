@@ -25,19 +25,21 @@ function ean13(value) {
     const errors=[]; const results=[];
     page.on('pageerror',e=>errors.push(e.message));
     await page.addInitScript(({codeWidths,eanWidths})=>{
-        window.__cameraMode='blank'; window.__cameraTracks=[]; window.__cameraRequests=[];
+        window.__cameraMode='blank'; window.__cameraTracks=[]; window.__cameraRequests=[];window.__focusRequests=[];
         function streamFor(constraints) {
             const canvas=document.createElement('canvas');canvas.width=1280;canvas.height=720;
             const ctx=canvas.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,1280,720);
             const widths=window.__cameraMode==='ean'?eanWidths:codeWidths;
-            if(window.__cameraMode==='code'||window.__cameraMode==='ean') {
+            if(['code','ean','offset'].includes(window.__cameraMode)) {
                 let x=(1280-widths.reduce((a,b)=>a+b,0)*4)/2;
-                widths.forEach((width,index)=>{ if(index%2===0){ctx.fillStyle='black';ctx.fillRect(x,220,width*4,260);}x+=width*4; });
+                widths.forEach((width,index)=>{ if(index%2===0){ctx.fillStyle=window.__cameraMode==='offset'?'#2873a1':'black';ctx.fillRect(x,window.__cameraMode==='offset'?60:220,width*4,window.__cameraMode==='offset'?40:260);}x+=width*4; });
             }
             const stream=canvas.captureStream(15);
             setInterval(()=>{ctx.fillStyle='white';ctx.fillRect(0,0,1,1);},80);
             const track=stream.getVideoTracks()[0];
             track.getSettings=()=>({deviceId:constraints.video.deviceId?.exact||'back'});
+            track.getCapabilities=()=>({focusMode:['manual','continuous']});
+            track.applyConstraints=async value=>{window.__focusRequests.push(value);};
             window.__cameraTracks.push(track);
             return stream;
         }
@@ -65,6 +67,7 @@ function ean13(value) {
         await mode('blank');await open();
         await page.waitForFunction(()=>!document.getElementById('barcodeCameraDevice').disabled);
         const mirror = page.locator('#barcodeCameraMirror');
+        assert.equal(await page.evaluate(()=>window.__focusRequests.at(-1).advanced[0].focusMode),'continuous');
         assert.equal(await mirror.isChecked(),false);
         const requestsBeforeMirror=await page.evaluate(()=>window.__cameraRequests.length);
         await mirror.focus();await page.keyboard.press('Space');
@@ -93,6 +96,12 @@ function ean13(value) {
         results.push('Keyboard mirror toggle flips live preview without restarting camera; preference survives retry/navigation and real Code 128/EAN-13 decoding remains correct while mirrored');
         results.push('Real EAN-13 canvas/video decodes into create form without submitting or creating a product');
 
+        await page.locator('#field-barcode').fill('');await mode('offset');await open();
+        await page.waitForFunction(value=>document.getElementById('field-barcode').value===value,code);
+        await ended();
+        results.push('Blue Code 128 near the top edge of a real video frame decodes automatically with expanded row search');
+        await page.locator('#field-barcode').fill(ean);
+
         for(const [scenario,expected] of [['denied','permission was denied'],['missing','No camera was found'],['busy','Camera is unavailable']]) {
             await mode(scenario);await open();await page.waitForFunction(()=>document.getElementById('barcodeCameraError').textContent.length>0);
             assert.match(await page.locator('#barcodeCameraError').textContent(),new RegExp(expected));
@@ -105,6 +114,8 @@ function ean13(value) {
         results.push('Denied/missing/busy camera messages preserve input; granting permission then Retry recovers');
 
         await mode('blank');await open();await page.waitForFunction(()=>!document.getElementById('barcodeCameraDevice').disabled);
+        await page.waitForFunction(()=>document.getElementById('barcodeCameraStatus').textContent.startsWith('Not read yet'),{},{timeout:10000});
+        results.push('Unsuccessful scanning gives focus/distance/glare guidance while the camera continues scanning');
         assert.equal(await page.evaluate(()=>window.__cameraRequests.at(-1).audio),false);
         assert.equal(await page.evaluate(()=>window.__cameraRequests.at(-1).video.facingMode.ideal),'environment');
         const before=await page.evaluate(()=>window.__cameraTracks.length);

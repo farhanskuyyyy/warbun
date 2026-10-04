@@ -18,6 +18,8 @@ Browser memerlukan secure context untuk kamera: **HTTPS**, atau **localhost/127.
 
 ## Preview yang dijalankan
 
+Scanner meminta resolusi ideal 1920×1080 dan mencoba continuous autofocus hanya jika track menyatakan dukungan. Ini permintaan, bukan jaminan kualitas kamera. Decoder menggunakan `TRY_HARDER` untuk mencari lebih banyak baris daripada area tengah bawaan ([kode ZXing](https://github.com/zxing-js/library/blob/master/src/core/oned/OneDReader.ts)). Jika belum terbaca setelah enam detik, status memberi petunjuk fokus/jarak/pantulan; scan tetap berjalan. Barcode buram, berkerut, tertutup atau terpotong masih dapat gagal. Jauhkan kemasan sedikit hingga garis tajam, ratakan dan pilih kamera belakang bila tersedia; hardware/manual tetap dapat dipakai.
+
 Preview saat pengerjaan berjalan di `http://127.0.0.1:8080`, memakai SQLite demo terpisah di directory sementara `warbun-qa-preview-*`. Login `admin@warbun.local` atau `owner@warbun.local`, password `password`. `.env` dan MySQL operasional tidak diubah; MySQL lokal masih tidak tersedia. Preview sudah mempunyai dataset produk dan etalase contoh. Database/browser test memakai port 8765 dan database lain, sehingga transaksi QA tidak masuk preview pengguna.
 
 Preview ini merupakan proses development yang sedang berjalan, bukan deployment. [QA kamera](CAMERA_BARCODE_QA.md) menjelaskan uji decoding dan batas pengujian perangkat fisik.

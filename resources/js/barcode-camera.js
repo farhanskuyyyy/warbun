@@ -18,11 +18,13 @@ if (dialog) {
     let version = 0;
     let stream;
     let controls;
+    let guidanceTimer;
     let opener;
     let returnFocus;
 
     function stop() {
         version++;
+        clearTimeout(guidanceTimer);
         controls?.stop();
         controls = null;
         stream?.getTracks().forEach(track => track.stop());
@@ -59,12 +61,22 @@ if (dialog) {
         try {
             if (!window.isSecureContext) throw Object.assign(new Error(), {cameraMessage:labels.insecure});
             if (!navigator.mediaDevices?.getUserMedia) throw Object.assign(new Error(), {cameraMessage:labels.unsupported});
-            const acquired = await navigator.mediaDevices.getUserMedia({audio:false, video:{...(deviceId ? {deviceId:{exact:deviceId}} : {facingMode:{ideal:'environment'}}), width:{ideal:1280}, height:{ideal:720}}});
+            const acquired = await navigator.mediaDevices.getUserMedia({audio:false, video:{...(deviceId ? {deviceId:{exact:deviceId}} : {facingMode:{ideal:'environment'}}), width:{ideal:1920}, height:{ideal:1080}}});
             if (attempt !== version || !dialog.open) { acquired.getTracks().forEach(track=>track.stop()); return; }
             stream = acquired;
-            const {BrowserMultiFormatOneDReader} = await import('@zxing/browser');
+            const track = acquired.getVideoTracks()[0];
+            try {
+                if (track.getCapabilities?.().focusMode?.includes('continuous')) {
+                    await track.applyConstraints({advanced:[{focusMode:'continuous'}]});
+                }
+            } catch {}
             if (attempt !== version || !dialog.open) return;
-            const reader = new BrowserMultiFormatOneDReader(undefined, {delayBetweenScanAttempts:200, delayBetweenScanSuccess:500});
+            const [{BrowserMultiFormatOneDReader}, {default:DecodeHintType}] = await Promise.all([
+                import('@zxing/browser'), import('@zxing/library/esm/core/DecodeHintType'),
+            ]);
+            if (attempt !== version || !dialog.open) return;
+            const hints = new Map([[DecodeHintType.TRY_HARDER, true]]);
+            const reader = new BrowserMultiFormatOneDReader(hints, {delayBetweenScanAttempts:300, delayBetweenScanSuccess:500});
             const scanning = await reader.decodeFromStream(acquired, preview, (result, failure, scanner) => {
                 if (!result || detected || attempt !== version || !dialog.open) return;
                 const barcode = result.getText().trim();
@@ -88,6 +100,9 @@ if (dialog) {
             if (attempt !== version || !dialog.open) { scanning.stop(); return; }
             controls = scanning;
             status.textContent = labels.scanning;
+            guidanceTimer = setTimeout(() => {
+                if (attempt === version && dialog.open && !detected) status.textContent = labels.guidance;
+            }, 6000);
             const cameras = navigator.mediaDevices.enumerateDevices ? await navigator.mediaDevices.enumerateDevices().catch(()=>[]) : [];
             if (attempt !== version || !dialog.open) return;
             const current = acquired.getVideoTracks()[0]?.getSettings().deviceId;
