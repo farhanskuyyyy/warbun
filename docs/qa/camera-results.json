@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "results": [
+    "Real Code 128 canvas/video decodes with leading zeroes, fills edit without auto-save, releases camera and saves through normal product validation",
+    "Real EAN-13 canvas/video decodes into create form without submitting or creating a product",
+    "Denied/missing/busy camera messages preserve input; granting permission then Retry recovers",
+    "Rear-camera preference, no audio, device switch stops old stream and Escape stops all streams with focus restoration",
+    "Closing during pending permission stops the stream when permission resolves late",
+    "Closing/reopening during delayed video initialization isolates decoder previews and keeps the new camera stream alive",
+    "Backgrounding the page closes the dialog and releases camera tracks",
+    "Hardware Enter keeps the form open; duplicate scanned barcode is rejected; create succeeds with a unique EAN barcode",
+    "POS shift guard, one camera read adds once, reopening adds another unit, and hardware scan shares the same lookup/cart queue",
+    "Unknown camera barcode shows server feedback and preserves existing cart",
+    "POS/create/edit and camera dialog fit 320/375/768/1024/1440px, with mobile/desktop screenshots",
+    "Insecure or unsupported browser has actionable fallback without camera requests; decoder is lazy-loaded only after opening camera"
+  ],
+  "errors": [],
+  "scope": "Synthetic MediaStream with real Code 128/EAN-13 decoding; physical camera not tested"
+}

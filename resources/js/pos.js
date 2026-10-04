@@ -106,6 +106,7 @@ if (configElement) {
         if (field('newCustomerBtn')) field('newCustomerBtn').disabled = loading || savingCustomer;
         field('barcodeInput').disabled = loading || !config.activeShift;
         field('scanBtn').disabled = loading || !config.activeShift;
+        document.querySelectorAll('[data-camera-target="barcodeInput"], [data-barcode-focus="barcodeInput"]').forEach(button => { button.disabled = loading || !config.activeShift; });
         field('saleForm').querySelectorAll('input, select').forEach(input => { input.disabled = loading; });
     }
 

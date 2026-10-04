@@ -63,6 +63,15 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 - [x] Regression backend, QA browser mobile/desktop, build, Pint dan delivery gate
 - [ ] Terapkan migrasi/seeder khusus di MySQL existing setelah service lokal dapat berjalan; bukti keterbatasan ada di SHELF_WORKFLOW.md
 
+## Kamera barcode
+
+- [x] Pilihan hardware/kamera pada POS dan form tambah/edit produk
+- [x] Decoder lokal, pemilihan kamera, satu hasil, cleanup permission/modal/visibility
+- [x] Antrean scan kasir existing, barcode input tanpa auto-save dan validation unique
+- [x] 12 skenario kamera simulasi, real decoding Code 128/EAN-13, responsive dan regression backend
+- [x] Preview 8080 dengan SQLite demo terpisah dari database QA dan MySQL existing
+- [x] Panduan secure context, batas device testing dan delivery gate
+
 ## Integration scope
 
 Development QA is complete for the implemented scope; evidence is in [QA_REPORT.md](QA_REPORT.md). Live payment-provider session/refund integration and real email delivery require the selected provider/configuration. Deployment and DevOps are outside this task. Existing operational data must be rehearsed and reconciled on a copy before applying the new migration.

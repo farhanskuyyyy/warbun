@@ -4,7 +4,8 @@
 @section('header', __('Edit Product'))
 
 @section('content')
-<div class="max-w-2xl">
+<x-barcode-camera />
+<div class="max-w-2xl product-editor">
     <div class="bg-white rounded-xl p-6 border border-gray-100">
         <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -29,6 +30,8 @@
                     <label for="field-barcode" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Barcode') }}</label>
                     <input id="field-barcode" type="text" name="barcode" value="{{ old('barcode', $product->barcode) }}" maxlength="50" autocomplete="off" data-barcode-field aria-describedby="barcode-help" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
                     <p id="barcode-help" class="text-sm text-gray-500 mt-2">{{ __('Scan the packaging barcode into this field or type it exactly, including leading zeroes. Each barcode belongs to one product.') }}</p>
+                    <x-barcode-scan-actions target="field-barcode" />
+                    <p id="barcodeCameraFeedback" role="status" aria-live="polite" class="text-sm mt-2"></p>
                     @error('barcode') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 

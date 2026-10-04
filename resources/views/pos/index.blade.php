@@ -2,6 +2,7 @@
 @section('title', __('POS / Cashier'))
 @section('header', __('Point of Sale'))
 @section('content')
+<x-barcode-camera />
 @if(!$activeShift)
 <div class="panel mb-4"><p>{{ __('Open a shift before making sales.') }}</p><form action="{{ route('pos.open-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Opening cash') }}<input name="opening_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Open Shift') }}</button></form></div>
 @else
@@ -15,6 +16,7 @@
             <p id="scannerHelp">{{ __('Use a USB or Bluetooth keyboard scanner with an Enter suffix. Click this field before scanning.') }}</p>
         </form>
         <p id="scanState" class="pos-scan-state" role="status" aria-live="polite"></p>
+        <x-barcode-scan-actions target="barcodeInput" submit="barcodeForm" :disabled="!$activeShift" />
         <section class="shelf-overview" aria-labelledby="posShelvesHeading">
             <div class="shelf-heading"><h2 id="posShelvesHeading">{{ __('Shelf minimap') }}</h2>@can('products.view')<a href="{{ route('shelves.index') }}">{{ __('Product placement') }}</a>@endcan</div>
             <p>{{ __('Choose a shelf, then a product to see details and add it. Numbers identify shelves, not floor positions.') }}</p>

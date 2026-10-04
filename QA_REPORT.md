@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest camera/hardware scan: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md), [usage/preview](CAMERA_BARCODE.md). Full 97 tests / 799 assertions, 12 synthetic-camera browser scenarios, build and pinned dependency install PASS. Real Code 128/EAN-13 video decoding, product validation, one-scan POS, permission/stream teardown and five-width layouts verified. Physical device testing remains outside this evidence.
+
 Latest shelf minimap, product detail/add dialog, placement management and sample seeder: [SHELF_QA.md](SHELF_QA.md), [workflow](SHELF_WORKFLOW.md). Full 97 tests / 799 assertions, build, scoped Pint, feature/category/barcode browser checks and five-width layout PASS on isolated SQLite. Existing MySQL migration/seeder not applied: local MySQL fails to start.
 
 Latest MCP development setup: [MCP_SETUP.md](MCP_SETUP.md). Context7/GitHub/Boost read calls, Playwright tool discovery, project scoping, Composer validation and full 90 tests / 741 assertions pass. Five development dependencies added without changing existing versions.
