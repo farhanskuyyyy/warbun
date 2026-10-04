@@ -6,6 +6,15 @@ if (dialog) {
     const error = document.getElementById('barcodeCameraError');
     const devices = document.getElementById('barcodeCameraDevice');
     const retry = document.getElementById('retryBarcodeCamera');
+    const mirror = document.getElementById('barcodeCameraMirror');
+    const previewContainer = dialog.querySelector('.barcode-camera-preview');
+    const mirrorKey = 'warbun.camera.mirror';
+    try { mirror.checked = localStorage.getItem(mirrorKey) === 'true'; } catch {}
+    previewContainer.classList.toggle('is-mirrored', mirror.checked);
+    mirror.addEventListener('change', () => {
+        previewContainer.classList.toggle('is-mirrored', mirror.checked);
+        try { localStorage.setItem(mirrorKey, String(mirror.checked)); } catch {}
+    });
     let version = 0;
     let stream;
     let controls;

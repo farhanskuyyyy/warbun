@@ -6,6 +6,9 @@
 .pos-customer-dialog.barcode-camera-dialog { width: min(560px,calc(100% - 32px)); }
 .barcode-camera-preview { position: relative; margin-block: 20px 12px; background: #282724; border-radius: 5px; overflow: hidden; aspect-ratio: 16/9; }
 .barcode-camera-preview video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.barcode-camera-preview.is-mirrored video { transform: scaleX(-1); }
+.barcode-camera-mirror { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 12px; font-size: 14px; cursor: pointer; }
+.barcode-camera-mirror input { width: 18px; height: 18px; min-height: 18px; flex-shrink: 0; accent-color: #8b1e2d; }
 .barcode-camera-guide { position: absolute; inset: 32% 8%; border: 2px solid white; outline: 1px solid #282724; pointer-events: none; }
 .barcode-camera-dialog #barcodeCameraStatus, .barcode-camera-dialog #barcodeCameraError { margin-block: 10px; font-size: 14px; }
 .barcode-camera-footer { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }

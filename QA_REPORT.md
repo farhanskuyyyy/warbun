@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest mirror preview update: 13 camera browser scenarios PASS with keyboard toggle, persisted preference, camera switching and real Code 128/EAN-13 decoding while mirrored. Five-width layouts, build, JS syntax, scoped Pint and diff check PASS. Backend/checkout results below remain the previous baseline; no backend logic changed. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).
+
 Latest camera/hardware scan: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md), [usage/preview](CAMERA_BARCODE.md). Full 97 tests / 799 assertions, 12 synthetic-camera browser scenarios, build and pinned dependency install PASS. Real Code 128/EAN-13 video decoding, product validation, one-scan POS, permission/stream teardown and five-width layouts verified. Physical device testing remains outside this evidence.
 
 Latest shelf minimap, product detail/add dialog, placement management and sample seeder: [SHELF_QA.md](SHELF_QA.md), [workflow](SHELF_WORKFLOW.md). Full 97 tests / 799 assertions, build, scoped Pint, feature/category/barcode browser checks and five-width layout PASS on isolated SQLite. Existing MySQL migration/seeder not applied: local MySQL fails to start.

@@ -1,9 +1,10 @@
 <dialog id="barcodeCameraDialog" class="pos-customer-dialog barcode-camera-dialog" aria-labelledby="barcodeCameraTitle" aria-describedby="barcodeCameraHelp">
     <div class="pos-customer-heading"><h2 id="barcodeCameraTitle">{{ __('Scan with camera') }}</h2><button id="closeBarcodeCamera" type="button" class="button-secondary" aria-label="{{ __('Close camera') }}"><x-icon name="xmark" /></button></div>
-    <p id="barcodeCameraHelp">{{ __('Allow camera access, then point the camera at the packaging barcode. One scan per opening.') }}</p>
+    <p id="barcodeCameraHelp">{{ __('Allow camera access, then point at the packaging barcode. Scanning is automatic; no capture button needed. One scan per opening.') }}</p>
     <div class="barcode-camera-preview"><video id="barcodeCameraVideo" autoplay muted playsinline aria-label="{{ __('Camera preview') }}"></video><span class="barcode-camera-guide" aria-hidden="true"></span></div>
     <p id="barcodeCameraStatus" role="status" aria-live="polite"></p><p id="barcodeCameraError" role="alert" class="text-red-700"></p>
     <label class="field">{{ __('Camera') }}<select id="barcodeCameraDevice" disabled><option value="">{{ __('Back camera preferred') }}</option></select></label>
+    <label class="barcode-camera-mirror"><input id="barcodeCameraMirror" type="checkbox">{{ __('Mirror camera preview') }}</label>
     <div class="barcode-camera-footer"><button id="retryBarcodeCamera" type="button" class="button-secondary">{{ __('Retry camera') }}</button><button id="cancelBarcodeCamera" type="button" class="button-primary">{{ __('Return to scanner field') }}</button></div>
 </dialog>
 <script id="barcode-camera-config" type="application/json">{!! json_encode([

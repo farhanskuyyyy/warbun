@@ -4,7 +4,9 @@
 
 ## Bukti
 
-- [Runner kamera](scripts/qa-camera.cjs), [hasil](docs/qa/camera-results.json): **12 skenario PASS**. Chrome menerima synthetic `MediaStream` dari canvas, dengan barcode Code 128/EAN-13 valid. Decoder ZXing production sungguhan memproses frame video; hasil decode tidak dimock. Kasus ini tidak menguji webcam fisik.
+Update mirror: **13 skenario kamera PASS** dijalankan ulang setelah perubahan, termasuk keyboard Space pada checkbox, preview horizontal terbalik tanpa request kamera baru, camera switch, pilihan tersimpan saat Retry/navigation, toggle off dan decoding Code 128/EAN-13 ketika mirror aktif. Lima lebar tetap tanpa overflow; build production, syntax JS, scoped Pint dan diff check PASS. Full backend suite 97/799 dan tujuh skenario checkout/receipt di bawah adalah baseline fitur kamera sebelumnya, tidak diulang untuk perubahan preview ini. Storage-blocked browser dan kamera fisik tidak diuji pada update ini.
+
+- [Runner kamera](scripts/qa-camera.cjs), [hasil](docs/qa/camera-results.json): **13 skenario PASS**. Chrome menerima synthetic `MediaStream` dari canvas, dengan barcode Code 128/EAN-13 valid. Decoder ZXing production sungguhan memproses frame video; hasil decode tidak dimock. Kasus ini tidak menguji webcam fisik.
 - Edit membaca Code 128 `0012345678905`, mempertahankan nol, tidak auto-save, menghentikan track lalu menyimpan lewat controller existing. Create membaca EAN-13 `5901234123457`; duplicate barcode ditolak server, barcode unique dapat disimpan. Hardware Enter pada form tidak submit.
 - Izin ditolak, kamera tidak ditemukan, kamera sibuk, Retry, preferensi belakang/no audio, pilihan device, Escape, izin yang selesai setelah Close, reopen saat inisialisasi video tertunda, dan backgrounding diuji dengan mock API kamera. Semua track yang diperoleh berakhir `ended` setelah penutupan/success.
 - POS memblokir kamera tanpa shift, memasukkan satu unit per pembukaan, mendukung pembukaan ulang dan scan keyboard pada lookup/keranjang yang sama. Barcode 404 menjaga quantity lama. Kamera tidak otomatis dibuka saat halaman dimuat; chunk decoder baru dimuat setelah permintaan kamera.
@@ -26,10 +28,10 @@ Scope dua pilihan scan, dialog kamera, responsivitas editor produk dan tambahan 
 - R-23 PASS: opsi kamera/hardware eksplisit diminta; icon kamera/barcode berasal dari Font Awesome existing family, fixture video QA dijelaskan.
 - R-24 PASS: tidak menambah route/navigation baru; POS/create/edit nyata dibuka browser.
 - R-25 PASS: memakai pasangan CTA/teks existing dari DESIGN_SYSTEM.md; tidak menambah warna teks baru. Guide video memiliki garis putih dan outline charcoal untuk posisi barcode, bukan label teks.
-- R-26 PASS: hardware focus, open, device change, Retry, Return, X/Escape, fill field, save/update dan POS lookup dicoba; bukan kontrol dummy.
+- R-26 PASS: hardware focus, open, device change, mirror on/off, Retry, Return, X/Escape, fill field, save/update dan POS lookup dicoba; bukan kontrol dummy.
 - R-27 PASS: permission wait/scanning, denied/missing/busy, insecure/unsupported dan barcode error punya feedback. Field/cart tetap dipertahankan.
 - R-28 PASS: tidak menambah FAQ.
-- R-32 PASS: native dialog/buttons/select, label, status/alert, focus-visible existing; Escape dan focus restoration diuji.
+- R-32 PASS: native dialog/buttons/select/checkbox, label, status/alert, focus-visible existing; mirror dengan Space, Escape dan focus restoration diuji.
 - R-33 PASS: source aplikasi ditulis melalui apply_patch; runner hanya membuat fixtures/test results.
 - R-34 PASS: light theme existing; warna gelap sebatas permukaan video sebelum frame tersedia.
 - R-35 PASS: full suite, build, decoder nyata melalui synthetic video, browser create/edit/POS, validation dan responsive checks dijalankan.

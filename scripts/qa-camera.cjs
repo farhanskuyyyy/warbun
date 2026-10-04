@@ -62,7 +62,17 @@ function ean13(value) {
         await go('/products/1/edit');
         assert.equal(await page.evaluate(()=>window.__cameraRequests.length),0);
         assert.equal(await page.evaluate(()=>performance.getEntriesByType('resource').some(e=>/\/esm-.*\.js/.test(e.name))),false);
-        await mode('code');await open();
+        await mode('blank');await open();
+        await page.waitForFunction(()=>!document.getElementById('barcodeCameraDevice').disabled);
+        const mirror = page.locator('#barcodeCameraMirror');
+        assert.equal(await mirror.isChecked(),false);
+        const requestsBeforeMirror=await page.evaluate(()=>window.__cameraRequests.length);
+        await mirror.focus();await page.keyboard.press('Space');
+        assert.equal(await mirror.isChecked(),true);
+        assert.equal(await page.locator('#barcodeCameraVideo').evaluate(e=>new DOMMatrix(getComputedStyle(e).transform).a),-1);
+        assert.equal(await page.evaluate(()=>window.__cameraRequests.length),requestsBeforeMirror);
+        assert.equal(await page.locator('#barcodeCameraVideo').evaluate(e=>e.srcObject.getVideoTracks()[0].readyState),'live');
+        await mode('code');await page.locator('#retryBarcodeCamera').click();
         await page.waitForFunction(value=>document.getElementById('field-barcode').value===value,code);
         assert.equal(await page.locator('#barcodeCameraDialog').evaluate(e=>e.open),false);
         await ended();
@@ -72,9 +82,15 @@ function ean13(value) {
         await go('/products/1');assert.match(await page.locator('main').innerText(),new RegExp(code));
         results.push('Real Code 128 canvas/video decodes with leading zeroes, fills edit without auto-save, releases camera and saves through normal product validation');
 
-        await go('/products/create');await mode('ean');await open();
+        await go('/products/create');await mode('blank');await open();
+        await page.waitForFunction(()=>!document.getElementById('barcodeCameraDevice').disabled);
+        assert.equal(await mirror.isChecked(),true);
+        assert.equal(await page.locator('#barcodeCameraVideo').evaluate(e=>new DOMMatrix(getComputedStyle(e).transform).a),-1);
+        await mode('ean');await page.locator('#retryBarcodeCamera').click();
         await page.waitForFunction(value=>document.getElementById('field-barcode').value===value,ean);
         await ended();assert.ok(page.url().endsWith('/products/create'));
+        assert.equal(await mirror.isChecked(),true);
+        results.push('Keyboard mirror toggle flips live preview without restarting camera; preference survives retry/navigation and real Code 128/EAN-13 decoding remains correct while mirrored');
         results.push('Real EAN-13 canvas/video decodes into create form without submitting or creating a product');
 
         for(const [scenario,expected] of [['denied','permission was denied'],['missing','No camera was found'],['busy','Camera is unavailable']]) {
@@ -96,6 +112,10 @@ function ean13(value) {
         await page.waitForFunction(n=>window.__cameraTracks.length>n,before);
         assert.equal(await page.evaluate(()=>window.__cameraTracks[0].readyState),'ended');
         assert.equal(await page.evaluate(()=>window.__cameraRequests.at(-1).video.deviceId.exact),'front');
+        assert.equal(await mirror.isChecked(),true);
+        assert.equal(await page.locator('#barcodeCameraVideo').evaluate(e=>new DOMMatrix(getComputedStyle(e).transform).a),-1);
+        await mirror.uncheck();
+        assert.equal(await page.locator('#barcodeCameraVideo').evaluate(e=>getComputedStyle(e).transform),'none');
         await page.keyboard.press('Escape');await ended();
         assert.equal(await page.locator('[data-camera-target]').evaluate(e=>e===document.activeElement),true);
         results.push('Rear-camera preference, no audio, device switch stops old stream and Escape stops all streams with focus restoration');

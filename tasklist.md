@@ -66,6 +66,7 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 ## Kamera barcode
 
 - [x] Pilihan hardware/kamera pada POS dan form tambah/edit produk
+- [x] Toggle mirror preview tersimpan, keyboard/device/retry/navigation dan deteksi otomatis saat mirror diuji
 - [x] Decoder lokal, pemilihan kamera, satu hasil, cleanup permission/modal/visibility
 - [x] Antrean scan kasir existing, barcode input tanpa auto-save dan validation unique
 - [x] 12 skenario kamera simulasi, real decoding Code 128/EAN-13, responsive dan regression backend

@@ -2,7 +2,9 @@
 
 POS dan form tambah/edit produk memiliki dua tombol: **Scanner hardware** memfokuskan kolom barcode, **Scan dengan kamera** membuka modal kamera. Scanner USB/Bluetooth tetap menggunakan mode keyboard dengan akhiran Enter. Barcode juga dapat diketik manual.
 
-Kamera dipilih setelah pengguna menekan tombol dan memberi izin browser. Kamera belakang diprioritaskan bila tersedia; pilihan Kamera memungkinkan berpindah perangkat. Bingkai membantu menempatkan seluruh barcode kemasan di area video. Tahan perangkat dan hindari pantulan cahaya.
+Kamera dipilih setelah pengguna menekan tombol dan memberi izin browser. Setelah itu barcode terdeteksi otomatis, tanpa tombol foto atau konfirmasi scan. Kamera belakang diprioritaskan bila tersedia; pilihan Kamera memungkinkan berpindah perangkat. Bingkai membantu menempatkan seluruh barcode kemasan di area video. Tahan perangkat dan hindari pantulan cahaya.
+
+Centang **Cerminkan tampilan kamera** untuk membalik preview secara horizontal. Default tidak dicerminkan; pilihan disimpan pada browser yang sama dan berlaku pada kasir maupun form produk. Ganti kamera, Retry atau membuka scanner lagi mempertahankan pilihan. Toggle tidak memulai ulang kamera atau mengubah frame yang dibaca decoder. Bila browser memblokir storage, toggle tetap bekerja pada halaman saat ini.
 
 Satu barcode dibaca setiap kali modal dibuka. Kamera berhenti setelah berhasil, saat X/Kembali/Escape, saat halaman tersembunyi atau saat navigasi. Kamera yang baru mendapat izin setelah modal ditutup juga langsung dihentikan. Pengambilan video tidak meminta audio, dan frame diproses lokal di browser tanpa upload ke server.
 

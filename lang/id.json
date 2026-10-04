@@ -692,6 +692,8 @@
     "Barcode scan method": "Metode scan barcode",
     "Hardware scanner": "Scanner hardware",
     "Scan with camera": "Scan dengan kamera",
+    "Mirror camera preview": "Cerminkan tampilan kamera",
+    "Allow camera access, then point at the packaging barcode. Scanning is automatic; no capture button needed. One scan per opening.": "Izinkan akses kamera, lalu arahkan ke barcode kemasan. Scan berjalan otomatis tanpa tombol foto. Satu kali scan setiap membuka kamera.",
     "Close camera": "Tutup kamera",
     "Allow camera access, then point the camera at the packaging barcode. One scan per opening.": "Izinkan akses kamera, lalu arahkan ke barcode kemasan. Satu kali scan setiap membuka kamera.",
     "Camera preview": "Tampilan kamera",

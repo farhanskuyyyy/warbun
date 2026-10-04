@@ -2,6 +2,7 @@
   "status": "PASS",
   "results": [
     "Real Code 128 canvas/video decodes with leading zeroes, fills edit without auto-save, releases camera and saves through normal product validation",
+    "Keyboard mirror toggle flips live preview without restarting camera; preference survives retry/navigation and real Code 128/EAN-13 decoding remains correct while mirrored",
     "Real EAN-13 canvas/video decodes into create form without submitting or creating a product",
     "Denied/missing/busy camera messages preserve input; granting permission then Retry recovers",
     "Rear-camera preference, no audio, device switch stops old stream and Escape stops all streams with focus restoration",
