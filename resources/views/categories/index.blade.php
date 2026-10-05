@@ -51,11 +51,11 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('categories.edit', $category) }}" class="text-primary hover:text-primary-dark">{{ __('Edit') }}</a>
+                            <x-crud-action action="edit" :href="route('categories.edit', $category)" />
                             <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm(@js(__('Are you sure?')))">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
+                                <x-crud-action action="delete" />
                             </form>
                         </div>
                     </td>

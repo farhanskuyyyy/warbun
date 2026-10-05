@@ -54,7 +54,7 @@
                     </td>
                     <td class="px-4 py-3 text-gray-500">{{ $order->created_at->translatedFormat('d M Y H:i') }}</td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('orders.show', $order) }}" class="text-primary hover:text-primary-dark">{{ __('View') }}</a>
+                        <x-crud-action action="view" :href="route('orders.show', $order)" />
                     </td>
                 </tr>
                 @empty

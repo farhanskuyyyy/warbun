@@ -53,11 +53,11 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('customers.show', $customer) }}" class="text-blue-500 hover:text-blue-700 mr-2">{{ __('View') }}</a>
-                        <a href="{{ route('customers.edit', $customer) }}" class="text-primary hover:text-primary-dark mr-2">{{ __('Edit') }}</a>
+                        <x-crud-action action="view" :href="route('customers.show', $customer)" />
+                        <x-crud-action action="edit" :href="route('customers.edit', $customer)" />
                         <form action="{{ route('customers.destroy', $customer) }}" method="POST" class="inline" onsubmit="return confirm(@js(__('Delete?')))">
                             @csrf @method('DELETE')
-                            <button class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
+                            <x-crud-action action="delete" />
                         </form>
                     </td>
                 </tr>

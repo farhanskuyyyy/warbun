@@ -160,6 +160,14 @@ thead { background: #f6f4ef; font-size: 11px; color: var(--muted); text-transfor
 td { font-size: 14px; font-variant-numeric: tabular-nums; }
 tbody tr:hover { background: #faf9f6; }
 td a { color: var(--wine); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.crud-action, td a.crud-action { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; width: 44px; height: 44px; min-height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 5px; background: white; color: var(--ink); text-decoration: none; }
+.crud-action + .crud-action { margin-left: 4px; }
+.crud-action .ui-icon { width: 18px; height: 18px; }
+.crud-action:hover { background: var(--paper); }
+.crud-action-edit, td a.crud-action-edit { color: var(--wine); }
+.crud-action-delete { color: #b91c1c; }
+.crud-action-delete:hover:not(:disabled) { background: #fef2f2; border-color: #b91c1c; }
+.crud-action:focus-visible { outline: 2px solid var(--wine); outline-offset: 3px; }
 .button-primary { gap: 18px; border-radius: 5px; }
 button:disabled { opacity: .55; cursor: not-allowed; }
 .account-menu { position: relative; }

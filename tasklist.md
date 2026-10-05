@@ -15,6 +15,8 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 
 ## UI refinement
 
+- [x] Replace CRUD View/Edit/Delete text with local Font Awesome controls across indexes/detail pages/shelf deletion; labels, keyboard, confirmations and five-width QA complete
+
 - [x] Apply anti-slop and UI UX Pro Max to the existing Warbun identity
 - [x] Group CMS navigation and add master-data disclosure, active routes and mobile drawer
 - [x] Redesign customer navbar, account menu, footer and actual-catalog landing

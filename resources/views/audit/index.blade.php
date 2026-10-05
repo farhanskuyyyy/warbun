@@ -53,7 +53,7 @@
                     <td class="px-4 py-3 text-gray-500">{{ class_basename($log->entity_type ?? '-') }}</td>
                     <td class="px-4 py-3">{{ $log->entity_id ?? '-' }}</td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('audit.show', $log) }}" class="text-primary hover:text-primary-dark">{{ __('View') }}</a>
+                        <x-crud-action action="view" :href="route('audit.show', $log)" />
                     </td>
                 </tr>
                 @empty

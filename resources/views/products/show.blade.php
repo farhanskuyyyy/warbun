@@ -13,7 +13,7 @@
                 <p class="text-gray-500">{{ __('Barcode') }}: {{ $product->barcode ?? __('Not set') }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('products.edit', $product) }}" class="px-3 py-1 bg-primary text-white rounded text-sm">{{ __('Edit') }}</a>
+                <x-crud-action action="edit" :href="route('products.edit', $product)" />
                 <a href="{{ route('products.index') }}" class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">{{ __('Back') }}</a>
             </div>
         </div>

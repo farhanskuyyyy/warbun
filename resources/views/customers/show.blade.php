@@ -12,7 +12,7 @@
                 <p class="text-gray-500">{{ $customer->phone }} {{ $customer->email ? '| ' . $customer->email : '' }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('customers.edit', $customer) }}" class="px-3 py-1 bg-primary text-white rounded text-sm">{{ __('Edit') }}</a>
+                <x-crud-action action="edit" :href="route('customers.edit', $customer)" />
                 <a href="{{ route('customers.index') }}" class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">{{ __('Back') }}</a>
             </div>
         </div>

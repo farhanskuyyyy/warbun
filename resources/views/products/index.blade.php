@@ -73,12 +73,12 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('products.show', $product) }}" class="text-blue-500 hover:text-blue-700">{{ __('View') }}</a>
-                            <a href="{{ route('products.edit', $product) }}" class="text-primary hover:text-primary-dark">{{ __('Edit') }}</a>
+                            <x-crud-action action="view" :href="route('products.show', $product)" />
+                            <x-crud-action action="edit" :href="route('products.edit', $product)" />
                             <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm(@js(__('Archive this product?')))">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
+                                <x-crud-action action="delete" />
                             </form>
                         </div>
                     </td>

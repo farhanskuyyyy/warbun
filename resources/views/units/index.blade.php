@@ -30,10 +30,10 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('units.edit', $unit) }}" class="text-primary hover:text-primary-dark mr-2">{{ __('Edit') }}</a>
+                        <x-crud-action action="edit" :href="route('units.edit', $unit)" />
                         <form action="{{ route('units.destroy', $unit) }}" method="POST" class="inline" onsubmit="return confirm(@js(__('Delete?')))">
                             @csrf @method('DELETE')
-                            <button class="text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
+                            <x-crud-action action="delete" />
                         </form>
                     </td>
                 </tr>

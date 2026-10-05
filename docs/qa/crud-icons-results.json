@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "Read-only preview checks; delete confirmations dismissed, no records mutated",
+  "results": [
+    "/products: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/categories: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/brands: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/product-types: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/units: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/suppliers: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/customers: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/orders: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/payments: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/audit: local icons, labels/tooltips, 44px targets, keyboard destinations and applicable delete cancellation PASS",
+    "/products/1: detail-page edit icon navigates PASS",
+    "/customers/1: detail-page edit icon navigates PASS",
+    "Shelves: local delete icon retains populated-shelf disabled guard PASS",
+    "All ten indexes fit five viewports with scroll confined to tables PASS",
+    "Indonesian labels/tooltips PASS"
+  ],
+  "errors": []
+}

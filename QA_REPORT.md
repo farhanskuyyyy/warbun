@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+Latest CRUD action icons: [CRUD_ACTION_QA.md](CRUD_ACTION_QA.md). 15 browser scenarios PASS across ten indexes, two detail pages and shelf deletion, with rendered Font Awesome glyphs, translated accessible labels/tooltips, keyboard navigation, preserved confirmations and five viewport widths. Build, Blade compilation, scoped Pint, SVG validity and diff check PASS; backend tests not repeated for presentation-only changes.
+
 Latest scan recovery update: 15 synthetic-camera scenarios PASS, including blue off-center barcode and ongoing-scan guidance after six seconds. Conditional focus request uses mocked camera capabilities. Build, JS syntax, scoped Pint and responsive checks PASS. The user's still screenshot remains undecodable with both production configurations; live device resolution/focus is not verified. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).
 
 Latest mirror preview update: 13 camera browser scenarios PASS with keyboard toggle, persisted preference, camera switching and real Code 128/EAN-13 decoding while mirrored. Five-width layouts, build, JS syntax, scoped Pint and diff check PASS. Backend/checkout results below remain the previous baseline; no backend logic changed. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).

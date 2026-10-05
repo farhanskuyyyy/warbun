@@ -67,7 +67,7 @@
                     </td>
                     <td class="px-4 py-3 text-gray-500">{{ $payment->created_at->translatedFormat('d M Y') }}</td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('payments.show', $payment) }}" class="text-primary hover:text-primary-dark">{{ __('View') }}</a>
+                        <x-crud-action action="view" :href="route('payments.show', $payment)" />
                     </td>
                 </tr>
                 @empty
