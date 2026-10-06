@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\Customer;
 use App\Models\DebtAccount;
 use App\Models\User;
+use App\Services\AddressBookService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -70,6 +71,7 @@ class CustomerController extends Controller
                 }
             }
             $customer = Customer::create($validated);
+            app(AddressBookService::class)->importLegacy($customer);
 
             if ($request->boolean('can_use_debt')) {
                 DebtAccount::firstOrCreate([
@@ -129,6 +131,18 @@ class CustomerController extends Controller
                 throw ValidationException::withMessages(['user_id' => __('Registered eligible customer required.')]);
             }
             $customer->update($validated);
+            if (array_key_exists('address', $validated) && $validated['address'] !== ($oldValues['address'] ?? null)) {
+                $default = $customer->addresses()->where('is_default', true)->first();
+                if (trim($customer->address ?? '') !== '') {
+                    app(AddressBookService::class)->save($customer, [
+                        'label' => $default?->label ?? __('Main address'), 'recipient_name' => $default?->recipient_name ?? $customer->name,
+                        'phone' => $default?->phone ?? $customer->phone, 'address' => $customer->address,
+                        'latitude' => null, 'longitude' => null, 'is_default' => true,
+                    ], $default?->id);
+                } elseif ($default) {
+                    app(AddressBookService::class)->delete($customer, $default->id);
+                }
+            }
 
             if ($customer->can_use_debt && ! $customer->debtAccount) {
                 DebtAccount::create(['customer_id' => $customer->id, 'credit_limit' => $customer->credit_limit]);

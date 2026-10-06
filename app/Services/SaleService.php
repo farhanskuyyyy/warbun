@@ -33,7 +33,13 @@ class SaleService
             }
             $customer = ! empty($data['customer_id']) ? Customer::lockForUpdate()->findOrFail($data['customer_id']) : null;
             $delivery = ($data['fulfillment_type'] ?? 'in_store') === 'delivery';
-            if (($customer && ! $customer->is_active) || ($delivery && (! $customer || ! $customer->phone || empty(trim($data['shipping_address'] ?? ''))))) {
+            if ($delivery && ! empty($data['address_id'])) {
+                if (! $customer) {
+                    $this->invalid('Delivery requires an active customer, phone number, and address.');
+                }
+                $data = array_merge($data, app(AddressBookService::class)->shipping($customer, $data['address_id']));
+            }
+            if (($customer && ! $customer->is_active) || ($delivery && (! $customer || (! $customer->phone && empty($data['delivery_phone'])) || empty(trim($data['shipping_address'] ?? ''))))) {
                 $this->invalid('Delivery requires an active customer, phone number, and address.');
             }
             $grouped = collect($data['items'])->groupBy('product_id')->sortKeys();

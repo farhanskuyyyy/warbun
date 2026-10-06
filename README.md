@@ -4,6 +4,8 @@ Aplikasi operasional warung: katalog pelanggan, POS, pesanan online, stok, piuta
 
 ## Dokumen project
 
+- [ADDRESS_BOOK.md](ADDRESS_BOOK.md): beberapa alamat pelanggan, pilihan checkout/POS dan [QA](ADDRESS_BOOK_QA.md).
+
 - [DELIVERY_MAPS.md](DELIVERY_MAPS.md): titik alamat cart/kasir, konfigurasi provider dan [QA](DELIVERY_MAPS_QA.md).
 
 - [MCP_SETUP.md](MCP_SETUP.md): konfigurasi Context7, GitHub, Playwright dan Laravel Boost beserta QA.

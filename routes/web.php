@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerAddressController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerFrontController;
 use App\Http\Controllers\DashboardController;
@@ -36,6 +37,14 @@ Route::get('/checkout/continue', fn () => redirect()->route('customer.cart')->wi
 Route::post('/checkout', [CustomerFrontController::class, 'checkout'])->middleware(['auth', 'throttle:30,1'])->name('customer.checkout');
 Route::get('/order-success/{order}', [CustomerFrontController::class, 'orderSuccess'])->middleware('auth')->name('customer.order.success');
 
+Route::middleware(['auth', 'throttle:60,1'])->group(function () {
+    Route::get('/my-addresses', [CustomerAddressController::class, 'page'])->name('customer.addresses');
+    Route::get('/my-addresses/data', [CustomerAddressController::class, 'index'])->name('customer.addresses.index');
+    Route::post('/my-addresses', [CustomerAddressController::class, 'store'])->name('customer.addresses.store');
+    Route::put('/my-addresses/{address}', [CustomerAddressController::class, 'update'])->whereNumber('address')->name('customer.addresses.update');
+    Route::delete('/my-addresses/{address}', [CustomerAddressController::class, 'destroy'])->whereNumber('address')->name('customer.addresses.destroy');
+});
+
 // CMS (admin/staff)
 Route::middleware(['auth', BackofficePermission::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -65,6 +74,8 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
     Route::get('/pos/barcode', [PosController::class, 'barcode'])->name('pos.barcode');
     Route::post('/pos/process-sale', [PosController::class, 'processSale'])->name('pos.process-sale');
     Route::post('/pos/customers', [PosController::class, 'createCustomer'])->name('pos.customers');
+    Route::get('/pos/customers/{customer}/addresses', [CustomerAddressController::class, 'index'])->name('pos.addresses.index');
+    Route::post('/pos/customers/{customer}/addresses', [CustomerAddressController::class, 'store'])->middleware('throttle:30,1')->name('pos.addresses.store');
     Route::get('/pos/receipt/{sale}', [PosController::class, 'receipt'])->name('pos.receipt');
     Route::get('/pos/history', [PosController::class, 'history'])->name('pos.history');
     Route::post('/pos/open-shift', [PosController::class, 'openShift'])->name('pos.open-shift');

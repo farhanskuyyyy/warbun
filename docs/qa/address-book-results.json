@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "results": [
+    "Guest is invited to sign in; cart and delivery choice survive. Empty address book blocks delivery checkout.",
+    "Add-modal/map nesting works; two destinations select their own recipient/address/pin, draft restores selection and pickup/delivery retains it.",
+    "Online order snapshots survive address edits/deletion; management supports edit/remove/default, default promotion and empty-after-delete.",
+    "POS requires a customer and saved destination, supports modal add for empty/multiple books and clears stale coordinates when choosing an unpinned address.",
+    "A delayed address response after switching customers cannot replace the current customer destination.",
+    "Save failure keeps entered fields; pending save disables repeated submission/close and retry saves/selects the address.",
+    "Failed POS address load cannot retain the old customer destination; retry recovers and sale receipt records the chosen address/pin.",
+    "Creating a POS customer imports their first address and selects it; switching customers reloads only that customer book.",
+    "Server validation errors retain the modal fields and allow cancel/retry.",
+    "Cart/POS/address management and modal controls fit six narrow/wide/short viewports; Escape and focus restoration work."
+  ],
+  "errors": [],
+  "scope": "Isolated SQLite, Chrome; synthetic OSM tiles and mocked GPS, no physical-device verification."
+}

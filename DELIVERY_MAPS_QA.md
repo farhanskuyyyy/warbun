@@ -1,5 +1,7 @@
 # QA titik pengiriman
 
+Update buku alamat: runner peta disesuaikan untuk modal alamat pada POS/Alamat saya dan menghasilkan **8 kelompok PASS**. Bukti terbaru full113/929 +10 address +8 map: [ADDRESS_BOOK_QA.md](ADDRESS_BOOK_QA.md). Screenshot maps-cart di laporan lama merupakan baseline sebelum pemilih buku alamat.
+
 6 Oktober 2026: PASS pada lingkungan yang diuji.
 
 Backend **103 tests / 849 assertions PASS**, SQLite in-memory. Enam test fitur mencakup pasangan/range, snapshot, retry/stok, pickup, 0/0, pelanggan/stale address dan otorisasi.

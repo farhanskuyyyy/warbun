@@ -40,6 +40,11 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function addresses()
+    {
+        return $this->hasMany(CustomerAddress::class)->orderByDesc('is_default')->orderBy('id');
+    }
+
     public function debtAccount()
     {
         return $this->hasOne(DebtAccount::class);

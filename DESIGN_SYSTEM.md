@@ -1,5 +1,9 @@
 # Warbun UI direction
 
+## Buku alamat
+
+ENERGY 2 / RHYTHM 3 / MOTION 1 mengikuti direction yang diterima. Label tujuan dan penerima menjadi fokus kartu; pilihan checkout menampilkan ringkasan agar pengguna memeriksa tujuan sebelum bayar. Burgundy pada CTA/default/garis ringkasan membedakan tindakan utama, sementara fakta tetap berupa teks. Modal memakai heading Georgia, controls sans 16px untuk HP, padding20px dan gaps12–20px. Dua kolom untuk penerima/telepon menjadi satu pada mobile; body scroll menjaga X dan Batal/Simpan terlihat pada landscape pendek. Pen/trash mengulang icon CRUD Font Awesome; truck pada menu menunjukkan pengiriman. Kartu berisi record alamat, bukan pengisi marketing. [QA](ADDRESS_BOOK_QA.md).
+
 ## Titik pengiriman
 
 ENERGY 2 / RHYTHM 3 / MOTION 1 mempertahankan direction retail yang diterima. Peta menjadi fokus memilih tujuan; alamat tertulis tetap di form. Pin burgundy 44px menunjukkan tujuan dan bisa digeser; CTA memakai accent yang sama. Heading Georgia, controls sans, padding20px dan gap8–12px mengikuti modal existing. Body scroll dengan footer konfirmasi/attribution tetap terlihat menjaga akses pada HP portrait/landscape. Outline neutral membatasi media, tanpa dekorasi atau icon library baru. [QA](DELIVERY_MAPS_QA.md).

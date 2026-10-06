@@ -1,5 +1,7 @@
 # Titik pengiriman
 
+Update buku alamat: /cart dan POS memilih alamat tersimpan. Peta sekarang berada di modal tambah/ubah alamat; simpan alamat untuk memilihnya sebagai tujuan. [Buku alamat](ADDRESS_BOOK.md) dan [QA terbaru](ADDRESS_BOOK_QA.md). Penjelasan kontrol peta di bawah tetap berlaku di modal tersebut.
+
 Pilih Diantar di /cart atau kasir, isi alamat lengkap, lalu Pilih di peta. Ketuk/geser pin atau Gunakan lokasi saya. Keyboard: tombol arah lalu pilih pusat peta. Konfirmasi menyimpan; Batal menjaga titik sebelumnya; Hapus mengembalikan alamat tanpa pin. Alamat tertulis wajib, pin opsional. Modal pelanggan baru kasir juga mendukung pin.
 
 Draft cart menyimpan titik saat login. Pickup tidak menyimpan koordinat pengiriman. Pelanggan menyimpan default; order/sale menyimpan snapshot mandiri. Mengubah alamat melalui CRUD menghapus default lama. Link muncul di sukses pesanan, detail/monitoring dan halaman struk kasir, tidak dicetak. Ongkir tetap tarif toko.

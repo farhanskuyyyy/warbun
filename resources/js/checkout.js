@@ -18,13 +18,15 @@ if (configElement) {
             if ([...form.payment_method.options].some(option => option.value === draft.payment_method)) form.payment_method.value = draft.payment_method;
             for (const name of ['address','notes']) if (typeof draft[name] === 'string') form.elements[name].value = draft[name].slice(0,2000);
             for (const name of ['shipping_latitude','shipping_longitude']) if (typeof draft[name] === 'string') form.elements[name].value = draft[name];
+            if (draft.customerId === config.customerId && typeof draft.address_id === 'string') form.address_id.dataset.draft = draft.address_id;
         } catch { /* A damaged draft should not block checkout. */ }
     }
-    const saveDraft = () => sessionStorage.setItem('warbun_checkout_draft', JSON.stringify({delivery_type:form.delivery_type.value, payment_method:form.payment_method.value, address:form.address.value, notes:form.notes.value, shipping_latitude:form.shipping_latitude.value, shipping_longitude:form.shipping_longitude.value}));
+    const saveDraft = () => sessionStorage.setItem('warbun_checkout_draft', JSON.stringify({customerId:config.customerId, address_id:form.address_id.value, delivery_type:form.delivery_type.value, payment_method:form.payment_method.value, address:form.address.value, notes:form.notes.value, shipping_latitude:form.shipping_latitude.value, shipping_longitude:form.shipping_longitude.value}));
     form.addEventListener('input', saveDraft);
     form.addEventListener('change', saveDraft);
     const element = (tag, className, value) => {const node = document.createElement(tag); node.className = className; if (value !== undefined) node.textContent = value; return node;};
-    function canSubmit(value) {ready = value; if (submit) submit.disabled = !value; guestAction?.setAttribute('aria-disabled', String(!value));}
+    function addressReady() { return form.delivery_type.value !== 'delivery' || Boolean(form.address_id.value); }
+    function canSubmit(value) {ready = value; if (submit) submit.disabled = !value || !addressReady() || form.address_id.dataset.busy === 'true'; guestAction?.setAttribute('aria-disabled', String(!value));}
     function render(focus) {
         list.replaceChildren(); form.hidden = items.length === 0;
         if (!items.length) {
@@ -53,6 +55,8 @@ if (configElement) {
         document.getElementById('shipping-address-field').hidden = !delivery;
         form.address.required = delivery; form.address.disabled = !delivery;
         form.shipping_latitude.disabled = !delivery; form.shipping_longitude.disabled = !delivery;
+        form.address_id.disabled = !delivery;
+        form.address_id.required = delivery && Boolean(submit);
         document.getElementById('fulfillment-help').textContent = delivery ? text.delivery : text.pickup;
         document.getElementById('payment-help').textContent = form.payment_method.value === 'cash' ? text.cash : (form.payment_method.value === 'online' ? text.online : text.manual);
     }
@@ -82,7 +86,7 @@ if (configElement) {
     form.addEventListener('change', () => localStorage.setItem('warbun_checkout_key', crypto.randomUUID()));
     guestAction?.addEventListener('click', event => {if (!ready) event.preventDefault();});
     form.addEventListener('submit', event => {
-        if (!ready || !items.length) {event.preventDefault(); return;}
+        if (!ready || !items.length || !addressReady() || form.address_id.dataset.busy === 'true') {event.preventDefault(); return;}
         form.querySelectorAll('[data-cart]').forEach(input => input.remove());
         const hidden = (name, value) => {const input = element('input',''); input.type='hidden'; input.name=name; input.value=value; input.dataset.cart='true'; form.append(input);};
         const key = localStorage.getItem('warbun_checkout_key') || crypto.randomUUID(); localStorage.setItem('warbun_checkout_key', key); hidden('request_key', key);
@@ -90,5 +94,6 @@ if (configElement) {
         canSubmit(false); if (submit) submit.textContent = text.placing;
     });
     window.addEventListener('storage', event => {if (event.key === 'warbun_cart') {items = read(); render(); check();}});
+    window.addEventListener('addressbook:change', () => {canSubmit(ready); saveDraft();});
     fulfillment(); render(); check(); saveDraft();
 }

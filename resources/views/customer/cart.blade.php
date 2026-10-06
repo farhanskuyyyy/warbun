@@ -10,7 +10,7 @@
         <h2 id="checkout">{{ __('Order summary') }}</h2>
         <div class="field"><label for="delivery-type">{{ __('How would you like to receive your order?') }}</label><select id="delivery-type" name="delivery_type"><option value="pickup" @selected(old('delivery_type') === 'pickup')>{{ __('Pickup') }}</option><option value="delivery" @selected(old('delivery_type') === 'delivery')>{{ __('Delivery') }}</option></select></div>
         <p id="fulfillment-help" class="checkout-help">{{ __('Collect your order at the store. No shipping fee.') }}</p>
-        <div id="shipping-address-field" class="field" hidden><label for="shipping-address">{{ __('Shipping address') }}</label><textarea id="shipping-address" name="address" maxlength="2000" rows="3" autocomplete="street-address">{{ old('address', auth()->user()?->customer?->address) }}</textarea><p class="checkout-help">{{ __('Include the street, house number and a nearby landmark.') }}</p><x-delivery-point id="cartDelivery" :latitude="auth()->user()?->customer?->latitude" :longitude="auth()->user()?->customer?->longitude" /></div>
+        <div id="shipping-address-field" class="field" hidden><x-address-selector address-id="shipping-address" address-name="address" point-id="cartDelivery" />@if(auth()->user()?->customer)<a class="continue-shopping" href="{{ route('customer.addresses') }}">{{ __('Manage addresses') }}</a>@endif</div>
         <div class="field"><label for="payment-method">{{ __('Payment Method') }}</label><select id="payment-method" name="payment_method">@foreach(['cash','transfer','ewallet','qr'] as $method)<option value="{{ $method }}" @selected(old('payment_method') === $method)>{{ __('status.'.$method) }}</option>@endforeach @if(config('payments.gateway') === 'signed-webhook')<option value="online">{{ __('status.online') }}</option>@endif</select><p id="payment-help" class="checkout-help"></p></div>
         @if($storeContact)<p class="checkout-help">{{ __('Store contact') }}: {{ $storeContact }}</p>@endif
         <details class="checkout-notes"><summary>{{ __('Add a note (optional)') }}</summary><label class="field mt-2" for="order-notes">{{ __('Notes') }}<textarea id="order-notes" name="notes" maxlength="2000" rows="2">{{ old('notes') }}</textarea></label></details>
@@ -24,6 +24,7 @@
 <script id="checkout-config" type="application/json">{!! json_encode([
     'quoteUrl' => route('customer.cart.quote'),
     'hasOldInput' => session()->hasOldInput(),
+    'customerId' => auth()->user()?->customer?->id,
     'csrf' => csrf_token(),
     'messages' => [
         'empty' => __('Your cart is empty'), 'emptyHelp' => __('Choose your everyday essentials from the catalog.'), 'shop' => __('Browse products'), 'shopUrl' => route('customer.shop'),
@@ -35,4 +36,5 @@
     ],
 ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
 @include('components.delivery-map-dialog')
+@include('components.address-book')
 @endsection

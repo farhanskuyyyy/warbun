@@ -8,6 +8,7 @@ import './pos';
 import './receipt';
 import './barcode-camera';
 import './delivery-map';
+import './address-book';
 
 document.querySelectorAll('[data-barcode-field]').forEach(input => input.addEventListener('keydown', event => {
     if (event.key === 'Enter') event.preventDefault();

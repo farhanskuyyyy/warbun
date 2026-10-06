@@ -29,6 +29,9 @@ class OrderService
                 return $old;
             }
             $items = [];
+            if ($data['delivery_type'] === 'delivery' && ! empty($data['address_id'])) {
+                $data = array_merge($data, app(AddressBookService::class)->shipping($customer, $data['address_id']));
+            }
             $subtotal = 0;
             if (($data['payment_method'] ?? '') === 'online' && config('payments.gateway') !== 'signed-webhook') {
                 $this->invalid('Online gateway is not configured.');

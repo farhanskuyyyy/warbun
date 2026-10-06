@@ -11,12 +11,14 @@ class DatabaseSeeder extends Seeder
         if (app()->environment(['local', 'testing'])) {
             $this->call(DemoOperationsSeeder::class);
             $this->call(ShelfSeeder::class);
+            $this->call(CustomerAddressSeeder::class);
 
             return;
         }
         $this->call([
             RolesAndPermissionsSeeder::class,
             MasterDataSeeder::class,
+            CustomerAddressSeeder::class,
         ]);
     }
 }

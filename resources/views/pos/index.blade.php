@@ -45,7 +45,7 @@
             <fieldset class="pos-fulfillment"><legend>{{ __('Order type') }}</legend><label><input type="radio" name="fulfillment_type" value="in_store" checked><span>{{ __('Direct sale') }}</span></label><label><input type="radio" name="fulfillment_type" value="delivery"><span><x-icon name="truck" />{{ __('Delivery') }}</span></label></fieldset>
             <div class="pos-customer-heading"><label for="customerId">{{ __('Customer') }}</label>@can('customers.create')<button id="newCustomerBtn" type="button" class="button-secondary"><x-icon name="user-plus" />{{ __('Add customer') }}</button>@endcan</div>
             <label class="field"><span class="sr-only">{{ __('Customer') }}</span><select id="customerId"><option value="">{{ __('Walk-in customer') }}</option>@foreach($customers as $c)<option value="{{ $c->id }}">{{ $c->name }}{{ $c->phone ? ' · '.$c->phone : '' }}</option>@endforeach</select></label>
-            <div id="deliveryFields" class="pos-delivery-fields" hidden><label class="field">{{ __('Delivery address') }}<textarea id="shippingAddress" rows="3" maxlength="2000"></textarea></label><x-delivery-point id="posDelivery" /><p>{{ __('Shipping fee') }}: <strong id="shippingFee"></strong></p><p>{{ __('Choose a customer with a phone number. Verify the address before payment.') }}</p></div>
+            <div id="deliveryFields" class="pos-delivery-fields" hidden><x-address-selector address-id="shippingAddress" address-name="shipping_address" point-id="posDelivery" /><p>{{ __('Shipping fee') }}: <strong id="shippingFee"></strong></p><p>{{ __('Choose a customer and verify the recipient address and phone number.') }}</p></div>
             <label class="field">{{ __('Order notes') }}<input id="saleNotes" maxlength="2000"></label>
             <label class="field">{{ __('Payment Method') }}<select id="paymentMethod">@foreach(['cash','transfer','ewallet','qr','debt'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach</select></label>
             <p id="creditInfo" class="pos-credit-info" role="status"></p>
@@ -98,4 +98,5 @@
         'tooMany' => __('The cart can contain up to 100 different products.'), 'shift' => __('Open a shift before making sales.')],
 ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
 @include('components.delivery-map-dialog')
+@include('components.address-book', ['mode' => 'pos'])
 @endsection

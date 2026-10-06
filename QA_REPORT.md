@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+6 October address book: **113 tests / 929 assertions**, 10 address-book and 8 map browser scenario groups PASS. Multiple destinations, add/edit/delete/default, cart/POS selection and immutable snapshots verified, including delayed/failed network responses and six viewport sizes. GPS and tiles are mocked; MySQL operational migration and physical Safari/GPS untested. [Evidence](ADDRESS_BOOK_QA.md).
+
 6 October delivery maps: **103 tests / 849 assertions**, nine browser groups and six viewport sizes PASS. Cart/cashier pins persist through login/checkout and appear in monitoring. Build/scoped checks pass. GPS/tiles are simulated; physical iPhone/Safari and this migration on MySQL remain untested. [Evidence](DELIVERY_MAPS_QA.md).
 
 6 October focus/portrait update: 18 camera browser scenarios PASS. Selected-device reset ends previous tracks, tolerates unavailable/rejected focus controls and preserves mirror/input. Portrait video retains intrinsic ratio; close/reset/retry/return stay visible at narrow and short landscape viewports. Build, Blade compilation, scoped Pint and syntax checks PASS. iPhone hardware/Safari not tested. Preview 8080 restarted with a new isolated demo DB after old temporary files disappeared. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).

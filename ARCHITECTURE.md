@@ -1,5 +1,7 @@
 # Warbun: implementation plan
 
+Address book (6 October): customer_addresses owns label/recipient/phone/address/optional point and one default, serialized by customer locks. Additive migration imports legacy addresses; seeder imports only empty books. Default sync maintains customer legacy fields. Authorized own-user CRUD and POS list/create resolve customer scope before mutation. Selected IDs are resolved inside checkout transactions; order/sale snapshot formatted shipping text/coordinates independent of later edits/deletion. UI gates delivery until selection; legacy manual API payloads remain compatible. [Workflow](ADDRESS_BOOK.md).
+
 Delivery points (6 October): nullable decimal(10,7) customer latitude/longitude and order/sale shipping snapshots. DeliveryPoint validates pair/range; pickup discards coordinates. Existing transactional/idempotent checkout remains. Customer address edits clear defaults. Lazy Leaflet uses configured OSM tiles and explicit browser GPS without geocoding. Fixed-provider links appear in monitoring/order success. [Details](DELIVERY_MAPS.md).
 
 ## Baseline

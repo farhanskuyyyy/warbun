@@ -102,13 +102,16 @@ if (configElement) {
         field('debtPreview').textContent = labels.debtRemaining + ': ' + money(remaining / 100) + (customer?.eligible && remaining > Math.round(Number(customer.available) * 100) ? ' · ' + labels.creditExceeded : '');
         field('total').textContent = money(total / 100);
         field('changeTotal').textContent = money(field('paymentMethod').value === 'debt' ? 0 : Math.max(0, Math.round(Number(field('paidAmount').value || 0) * 100) - total) / 100);
-        field('payBtn').disabled = loading || savingCustomer || pendingScans > 0 || !cart.length || !config.activeShift || (debt && (!customer?.eligible || remaining <= 0 || remaining > Math.round(Number(customer.available) * 100)));
+        field('payBtn').disabled = loading || savingCustomer || pendingScans > 0 || !cart.length || !config.activeShift || (isDelivery() && (!field('shippingAddressId').value || field('shippingAddressId').dataset.busy === 'true')) || (debt && (!customer?.eligible || remaining <= 0 || remaining > Math.round(Number(customer.available) * 100)));
         if (field('newCustomerBtn')) field('newCustomerBtn').disabled = loading || savingCustomer;
         field('barcodeInput').disabled = loading || !config.activeShift;
         field('scanBtn').disabled = loading || !config.activeShift;
         document.querySelectorAll('[data-camera-target="barcodeInput"], [data-barcode-focus="barcodeInput"]').forEach(button => { button.disabled = loading || !config.activeShift; });
         field('saleForm').querySelectorAll('input, select').forEach(input => { input.disabled = loading; });
         field('saleForm').querySelectorAll('[data-location-open], [data-location-clear]').forEach(button => { button.disabled = loading || savingCustomer; });
+        field('shippingAddressId').disabled = loading || field('shippingAddressId').dataset.busy === 'true' || !isDelivery();
+        field('shippingAddressId').required = isDelivery();
+        field('saleForm').querySelectorAll('[data-address-add]').forEach(button => { button.disabled = loading || savingCustomer || !field('customerId').value; });
     }
 
     function showProduct(product) {
@@ -209,8 +212,9 @@ if (configElement) {
 
     field('saleForm').addEventListener('submit', async event => {
         event.preventDefault();
-        if (loading || pendingScans || !cart.length || !config.activeShift) return;
+        if (loading || pendingScans || !cart.length || !config.activeShift || (isDelivery() && (!field('shippingAddressId').value || field('shippingAddressId').dataset.busy === 'true'))) return;
         const payload = {
+            address_id: isDelivery() ? field('shippingAddressId').value || null : null,
             shipping_latitude: isDelivery() ? field('posDelivery-latitude').value || null : null,
             shipping_longitude: isDelivery() ? field('posDelivery-longitude').value || null : null,
             fulfillment_type: isDelivery() ? 'delivery' : 'in_store', shipping_address: isDelivery() ? field('shippingAddress').value : null, notes: field('saleNotes').value,
@@ -244,10 +248,6 @@ if (configElement) {
         field(id)?.addEventListener('input', () => { if (!loading) { requestKey = crypto.randomUUID(); render(); } });
     }
     field('customerId').addEventListener('change', () => {
-        field('shippingAddress').value = customers.get(field('customerId').value)?.address || '';
-        field('posDelivery-latitude').value = customers.get(field('customerId').value)?.latitude ?? '';
-        field('posDelivery-longitude').value = customers.get(field('customerId').value)?.longitude ?? '';
-        field('posDelivery-latitude').dispatchEvent(new Event('change', {bubbles:true}));
         requestKey = crypto.randomUUID();
         render();
     });
@@ -284,12 +284,10 @@ if (configElement) {
                     return;
                 }
                 customers.set(String(customer.id), {...customer, eligible:false, available:0});
+                window.dispatchEvent(new CustomEvent('pos:customer-created', {detail:customer}));
                 field('customerId').append(new Option(customer.name + ' · ' + customer.phone, customer.id));
                 field('customerId').value = String(customer.id);
-                field('shippingAddress').value = customer.address;
-                field('posDelivery-latitude').value = customer.latitude ?? '';
-                field('posDelivery-longitude').value = customer.longitude ?? '';
-                field('posDelivery-latitude').dispatchEvent(new Event('change', {bubbles:true}));
+                field('customerId').dispatchEvent(new Event('change', {bubbles:true}));
                 requestKey = crypto.randomUUID();
                 dialog.close();
                 event.target.reset();
@@ -313,5 +311,6 @@ if (configElement) {
     });
     scanStatus(config.activeShift ? labels.scanReady : labels.shift);
     render();
+    window.addEventListener('addressbook:change', () => { if (!loading) {requestKey = crypto.randomUUID(); render();} });
     loadProducts();
 }
