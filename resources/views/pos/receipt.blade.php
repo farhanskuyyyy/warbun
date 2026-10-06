@@ -22,7 +22,7 @@
             <div><dt>{{ __('Date') }}</dt><dd>{{ $sale->created_at->translatedFormat('d M Y H:i') }}</dd></div>
             <div><dt>{{ __('Cashier') }}</dt><dd>{{ $sale->user->name }}</dd></div>
             @if($sale->customer)<div><dt>{{ __('Customer') }}</dt><dd>{{ $sale->customer->name }}</dd></div>@endif
-            @if($sale->fulfillment_type === 'delivery')<div><dt>{{ __('Delivery') }}</dt><dd>{{ __('status.'.$sale->fulfillment_status) }}</dd></div><div><dt>{{ __('Address') }}</dt><dd>{{ $sale->shipping_address }}</dd></div><div><dt>{{ __('Phone') }}</dt><dd>{{ $sale->customer?->phone }}</dd></div>@endif
+            @if($sale->fulfillment_type === 'delivery')<div><dt>{{ __('Delivery') }}</dt><dd>{{ __('status.'.$sale->fulfillment_status) }}</dd></div><div><dt>{{ __('Address') }}</dt><dd>{{ $sale->shipping_address }}<x-delivery-map-link :latitude="$sale->shipping_latitude" :longitude="$sale->shipping_longitude" /></dd></div><div><dt>{{ __('Phone') }}</dt><dd>{{ $sale->customer?->phone }}</dd></div>@endif
         </dl>
         <div class="receipt-items">
             @foreach($sale->items as $item)

@@ -119,6 +119,10 @@ class CustomerController extends Controller
             $validated['is_active'] = $request->boolean('is_active');
             $validated['can_use_debt'] = $request->boolean('can_use_debt');
             $oldValues = $customer->toArray();
+            if (array_key_exists('address', $validated) && $validated['address'] !== $customer->address) {
+                $validated['latitude'] = null;
+                $validated['longitude'] = null;
+            }
             $validated['debt_status'] = $request->debt_status ?? $customer->debt_status;
 
             if ($request->boolean('can_use_debt') && ! $customer->user_id) {

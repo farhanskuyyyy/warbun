@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@zxing/browser": "0.1.5",
-        "@zxing/library": "0.21.3"
+        "@zxing/library": "0.21.3",
+        "leaflet": "1.9.4"
     }
 }

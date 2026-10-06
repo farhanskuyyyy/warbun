@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "results": [
+    "Lazy map loading and explicit geolocation; selected pin fills coordinates without overwriting the written address",
+    "Map tap/cancel preserve saved point, close restores focus, keyboard pan plus Select center works, drag changes point and Remove clears both fields",
+    "Denied/timeout/unavailable/insecure location has manual fallback; late GPS response after close cannot mutate saved fields",
+    "Picking manually while GPS is pending prevents a delayed GPS result from overwriting the chosen destination",
+    "Tile failure reports retry/manual fallback; Retry recovers using synthetic tiles without calling the real OSM service",
+    "Nested map dialog creates a customer with a pin, restores customer modal and carries saved point into delivery; changing customers clears/replaces stale point",
+    "Cashier delivery checkout persists snapshot into receipt and monitoring with a provider-fixed map link",
+    "Guest cart retains address/pin through sign-in; pickup disables coordinates, delivery checkout stores them and order success/admin monitoring show the snapshot",
+    "POS/cart map dialogs fit six narrow/wide/short viewports; close/cancel/confirm and attribution stay visible with responsive screenshots"
+  ],
+  "errors": [],
+  "scope": "Isolated SQLite; real Leaflet with synthetic tiles and mocked browser GPS. No real OSM tile traffic or physical-device GPS testing."
+}

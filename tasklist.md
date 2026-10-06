@@ -1,5 +1,7 @@
 # Warbun development
 
+- [x] Cart/kasir/new-customer delivery maps, nullable snapshot migration, validation and monitoring links; 103/849 backend and nine browser groups PASS. [QA](DELIVERY_MAPS_QA.md). Physical GPS/Safari and operational MySQL migration remain outside this development verification.
+
 Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md](ARCHITECTURE.md). Legacy unchecked completion claims preserved in tasklist-legacy.md.
 
 - [x] Inspect existing implementation and run baseline QA

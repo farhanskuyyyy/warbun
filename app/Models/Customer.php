@@ -11,12 +11,14 @@ class Customer extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'name', 'phone', 'email', 'address', 
-        'is_active', 'can_use_debt', 'credit_limit', 
-        'outstanding_balance', 'debt_status'
+        'user_id', 'name', 'phone', 'email', 'address', 'latitude', 'longitude',
+        'is_active', 'can_use_debt', 'credit_limit',
+        'outstanding_balance', 'debt_status',
     ];
 
     protected $casts = [
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
         'credit_limit' => 'decimal:2',
         'outstanding_balance' => 'decimal:2',
         'is_active' => 'boolean',
@@ -55,7 +57,10 @@ class Customer extends Model
 
     public function canUseCredit($amount)
     {
-        if (!$this->can_use_debt) return false;
+        if (! $this->can_use_debt) {
+            return false;
+        }
+
         return ($this->outstanding_balance + $amount) <= $this->credit_limit;
     }
 }

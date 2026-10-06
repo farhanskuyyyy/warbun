@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\User;
+use App\Support\DeliveryPoint;
 use App\Support\Money;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -71,6 +72,7 @@ class SaleService
                 $this->invalid('Invalid payment or customer.');
             }
             $sale = Sale::create([
+                ...DeliveryPoint::snapshot($data, $delivery),
                 'fulfillment_type' => $delivery ? 'delivery' : 'in_store', 'fulfillment_status' => $delivery ? 'confirmed' : null,
                 'shipping_address' => $delivery ? trim($data['shipping_address']) : null, 'shipping_cost' => Money::decimal($shipping), 'notes' => $data['notes'] ?? null,
                 'sale_number' => 'SAL-'.Str::uuid(), 'request_key' => $data['request_key'], 'user_id' => auth()->id(), 'cashier_shift_id' => $shift->id,

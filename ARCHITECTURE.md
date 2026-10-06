@@ -1,5 +1,7 @@
 # Warbun: implementation plan
 
+Delivery points (6 October): nullable decimal(10,7) customer latitude/longitude and order/sale shipping snapshots. DeliveryPoint validates pair/range; pickup discards coordinates. Existing transactional/idempotent checkout remains. Customer address edits clear defaults. Lazy Leaflet uses configured OSM tiles and explicit browser GPS without geocoding. Fixed-provider links appear in monitoring/order success. [Details](DELIVERY_MAPS.md).
+
 ## Baseline
 Existing Laravel/Blade POS with Spatie roles, master data, sales, stock movements, orders, payments, debt and shifts. Baseline: 25 tests, 6 pass, 17 fail, 2 error. Auth routes missing; sensitive routes only require auth; POS/payment/order/debt writes are inconsistent. No localization, opname, staff/settings management or verified gateway boundary yet.
 

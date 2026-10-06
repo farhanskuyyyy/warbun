@@ -1,5 +1,9 @@
 # Warbun UI direction
 
+## Titik pengiriman
+
+ENERGY 2 / RHYTHM 3 / MOTION 1 mempertahankan direction retail yang diterima. Peta menjadi fokus memilih tujuan; alamat tertulis tetap di form. Pin burgundy 44px menunjukkan tujuan dan bisa digeser; CTA memakai accent yang sama. Heading Georgia, controls sans, padding20px dan gap8–12px mengikuti modal existing. Body scroll dengan footer konfirmasi/attribution tetap terlihat menjaga akses pada HP portrait/landscape. Outline neutral membatasi media, tanpa dekorasi atau icon library baru. [QA](DELIVERY_MAPS_QA.md).
+
 ## Etalase POS dan penataan produk
 
 Direction retail existing: ENERGY 2 / RHYTHM 3 / MOTION 1. Minimap bernomor membantu petugas menghubungkan produk dengan etalase fisik; urutan nomor tidak mengklaim koordinat denah. Tile berkaki garis rak mengulang motif ledger Warbun. Burgundy dan outline menandai pilihan, sementara nomor/nama tetap terbaca tanpa warna. Minimap dua kolom pada ponsel dengan scroll internal mencegah banyak etalase memperpanjang halaman tanpa batas. Heading, minimap, filter, daftar produk dan panel transaksi mempunyai fungsi dan ritme berbeda.

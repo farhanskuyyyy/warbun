@@ -15,9 +15,12 @@ class Order extends Model
         'order_number', 'customer_id', 'subtotal', 'discount', 'tax',
         'shipping_cost', 'total', 'status', 'payment_status',
         'fulfillment_type', 'shipping_address', 'notes',
+        'shipping_latitude', 'shipping_longitude',
     ];
 
     protected $casts = [
+        'shipping_latitude' => 'decimal:7',
+        'shipping_longitude' => 'decimal:7',
         'subtotal' => 'decimal:2',
         'discount' => 'decimal:2',
         'tax' => 'decimal:2',

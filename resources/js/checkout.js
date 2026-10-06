@@ -17,9 +17,10 @@ if (configElement) {
             if (['pickup','delivery'].includes(draft.delivery_type)) form.delivery_type.value = draft.delivery_type;
             if ([...form.payment_method.options].some(option => option.value === draft.payment_method)) form.payment_method.value = draft.payment_method;
             for (const name of ['address','notes']) if (typeof draft[name] === 'string') form.elements[name].value = draft[name].slice(0,2000);
+            for (const name of ['shipping_latitude','shipping_longitude']) if (typeof draft[name] === 'string') form.elements[name].value = draft[name];
         } catch { /* A damaged draft should not block checkout. */ }
     }
-    const saveDraft = () => sessionStorage.setItem('warbun_checkout_draft', JSON.stringify({delivery_type:form.delivery_type.value, payment_method:form.payment_method.value, address:form.address.value, notes:form.notes.value}));
+    const saveDraft = () => sessionStorage.setItem('warbun_checkout_draft', JSON.stringify({delivery_type:form.delivery_type.value, payment_method:form.payment_method.value, address:form.address.value, notes:form.notes.value, shipping_latitude:form.shipping_latitude.value, shipping_longitude:form.shipping_longitude.value}));
     form.addEventListener('input', saveDraft);
     form.addEventListener('change', saveDraft);
     const element = (tag, className, value) => {const node = document.createElement(tag); node.className = className; if (value !== undefined) node.textContent = value; return node;};
@@ -51,6 +52,7 @@ if (configElement) {
         const delivery = form.delivery_type.value === 'delivery';
         document.getElementById('shipping-address-field').hidden = !delivery;
         form.address.required = delivery; form.address.disabled = !delivery;
+        form.shipping_latitude.disabled = !delivery; form.shipping_longitude.disabled = !delivery;
         document.getElementById('fulfillment-help').textContent = delivery ? text.delivery : text.pickup;
         document.getElementById('payment-help').textContent = form.payment_method.value === 'cash' ? text.cash : (form.payment_method.value === 'online' ? text.online : text.manual);
     }

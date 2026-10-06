@@ -13,12 +13,15 @@ class Sale extends Model
     protected $fillable = [
         'request_key',
         'fulfillment_type', 'fulfillment_status', 'shipping_address', 'shipping_cost',
+        'shipping_latitude', 'shipping_longitude',
         'sale_number', 'user_id', 'customer_id', 'cashier_shift_id',
         'subtotal', 'discount', 'tax', 'total', 'paid_amount',
         'change_amount', 'debt_amount', 'payment_method', 'status', 'notes',
     ];
 
     protected $casts = [
+        'shipping_latitude' => 'decimal:7',
+        'shipping_longitude' => 'decimal:7',
         'shipping_cost' => 'decimal:2',
         'subtotal' => 'decimal:2',
         'discount' => 'decimal:2',

@@ -108,6 +108,7 @@ if (configElement) {
         field('scanBtn').disabled = loading || !config.activeShift;
         document.querySelectorAll('[data-camera-target="barcodeInput"], [data-barcode-focus="barcodeInput"]').forEach(button => { button.disabled = loading || !config.activeShift; });
         field('saleForm').querySelectorAll('input, select').forEach(input => { input.disabled = loading; });
+        field('saleForm').querySelectorAll('[data-location-open], [data-location-clear]').forEach(button => { button.disabled = loading || savingCustomer; });
     }
 
     function showProduct(product) {
@@ -210,6 +211,8 @@ if (configElement) {
         event.preventDefault();
         if (loading || pendingScans || !cart.length || !config.activeShift) return;
         const payload = {
+            shipping_latitude: isDelivery() ? field('posDelivery-latitude').value || null : null,
+            shipping_longitude: isDelivery() ? field('posDelivery-longitude').value || null : null,
             fulfillment_type: isDelivery() ? 'delivery' : 'in_store', shipping_address: isDelivery() ? field('shippingAddress').value : null, notes: field('saleNotes').value,
             request_key: requestKey, items: cart.map(({product_id, quantity}) => ({product_id, quantity})),
             customer_id: field('customerId').value || null, payment_method: field('paymentMethod').value,
@@ -237,11 +240,14 @@ if (configElement) {
         productsController?.abort();
         searchTimer = setTimeout(() => loadProducts(event.target.value), 200);
     });
-    for (const id of ['discount', 'customerId', 'paymentMethod', 'paidAmount', 'shippingAddress', 'saleNotes']) {
+    for (const id of ['discount', 'customerId', 'paymentMethod', 'paidAmount', 'shippingAddress', 'saleNotes', 'posDelivery-latitude', 'posDelivery-longitude']) {
         field(id)?.addEventListener('input', () => { if (!loading) { requestKey = crypto.randomUUID(); render(); } });
     }
     field('customerId').addEventListener('change', () => {
         field('shippingAddress').value = customers.get(field('customerId').value)?.address || '';
+        field('posDelivery-latitude').value = customers.get(field('customerId').value)?.latitude ?? '';
+        field('posDelivery-longitude').value = customers.get(field('customerId').value)?.longitude ?? '';
+        field('posDelivery-latitude').dispatchEvent(new Event('change', {bubbles:true}));
         requestKey = crypto.randomUUID();
         render();
     });
@@ -281,9 +287,13 @@ if (configElement) {
                 field('customerId').append(new Option(customer.name + ' · ' + customer.phone, customer.id));
                 field('customerId').value = String(customer.id);
                 field('shippingAddress').value = customer.address;
+                field('posDelivery-latitude').value = customer.latitude ?? '';
+                field('posDelivery-longitude').value = customer.longitude ?? '';
+                field('posDelivery-latitude').dispatchEvent(new Event('change', {bubbles:true}));
                 requestKey = crypto.randomUUID();
                 dialog.close();
                 event.target.reset();
+                field('newCustomerDelivery-latitude').dispatchEvent(new Event('change', {bubbles:true}));
                 field('customerAccountFields').hidden = true;
                 scanStatus(labels.savedCustomer);
             } catch { field('customerError').textContent = labels.customerFailed; }

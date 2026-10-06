@@ -45,7 +45,7 @@
             <fieldset class="pos-fulfillment"><legend>{{ __('Order type') }}</legend><label><input type="radio" name="fulfillment_type" value="in_store" checked><span>{{ __('Direct sale') }}</span></label><label><input type="radio" name="fulfillment_type" value="delivery"><span><x-icon name="truck" />{{ __('Delivery') }}</span></label></fieldset>
             <div class="pos-customer-heading"><label for="customerId">{{ __('Customer') }}</label>@can('customers.create')<button id="newCustomerBtn" type="button" class="button-secondary"><x-icon name="user-plus" />{{ __('Add customer') }}</button>@endcan</div>
             <label class="field"><span class="sr-only">{{ __('Customer') }}</span><select id="customerId"><option value="">{{ __('Walk-in customer') }}</option>@foreach($customers as $c)<option value="{{ $c->id }}">{{ $c->name }}{{ $c->phone ? ' · '.$c->phone : '' }}</option>@endforeach</select></label>
-            <div id="deliveryFields" class="pos-delivery-fields" hidden><label class="field">{{ __('Delivery address') }}<textarea id="shippingAddress" rows="3" maxlength="2000"></textarea></label><p>{{ __('Shipping fee') }}: <strong id="shippingFee"></strong></p><p>{{ __('Choose a customer with a phone number. Verify the address before payment.') }}</p></div>
+            <div id="deliveryFields" class="pos-delivery-fields" hidden><label class="field">{{ __('Delivery address') }}<textarea id="shippingAddress" rows="3" maxlength="2000"></textarea></label><x-delivery-point id="posDelivery" /><p>{{ __('Shipping fee') }}: <strong id="shippingFee"></strong></p><p>{{ __('Choose a customer with a phone number. Verify the address before payment.') }}</p></div>
             <label class="field">{{ __('Order notes') }}<input id="saleNotes" maxlength="2000"></label>
             <label class="field">{{ __('Payment Method') }}<select id="paymentMethod">@foreach(['cash','transfer','ewallet','qr','debt'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach</select></label>
             <p id="creditInfo" class="pos-credit-info" role="status"></p>
@@ -69,7 +69,7 @@
     <form id="customerForm" class="space-y-4 mt-5">
         <label class="field">{{ __('Name') }}<input name="name" required maxlength="255" autocomplete="name"></label>
         <label class="field">{{ __('Phone') }}<input name="phone" type="tel" required maxlength="20" autocomplete="tel"></label>
-        <label class="field">{{ __('Address') }}<textarea name="address" required maxlength="2000" rows="3" autocomplete="street-address"></textarea></label>
+        <label class="field">{{ __('Address') }}<textarea name="address" required maxlength="2000" rows="3" autocomplete="street-address"></textarea></label><x-delivery-point id="newCustomerDelivery" latitude-name="latitude" longitude-name="longitude" />
         <label class="pos-print-choice"><input id="createCustomerAccount" type="checkbox" name="create_account"><span>{{ __('Create customer login account') }}</span></label>
         <div id="customerAccountFields" class="space-y-4" hidden><label class="field">{{ __('Email') }}<input name="email" type="email" maxlength="255" autocomplete="email"></label><label class="field">{{ __('Password') }}<input name="password" type="password" minlength="8" maxlength="255" autocomplete="new-password"></label><label class="field">{{ __('Confirm Password') }}<input name="password_confirmation" type="password" minlength="8" maxlength="255" autocomplete="new-password"></label></div>
         <p id="customerError" role="alert" class="text-red-700"></p><button id="saveCustomerBtn" class="button-primary w-full">{{ __('Save and select customer') }}</button>
@@ -84,7 +84,7 @@
 </dialog>
 <script id="pos-config" type="application/json">{!! json_encode([
     'customerUrl' => route('pos.customers'), 'shippingCost' => \Illuminate\Support\Facades\DB::table('store_settings')->where('key','shipping_cost')->value('value') ?? '10000',
-    'customers' => $customers->map(fn($c) => ['id'=>$c->id,'name'=>$c->name,'phone'=>$c->phone,'address'=>$c->address,'eligible'=>(bool)($c->user?->is_active && $c->can_use_debt && $c->debt_status === 'eligible' && (!$c->debtAccount || $c->debtAccount->status === 'active')), 'available'=>\App\Support\Money::decimal(max(0,\App\Support\Money::cents($c->credit_limit)-\App\Support\Money::cents($c->debtAccount?->outstanding_balance ?? $c->outstanding_balance)))]),
+    'customers' => $customers->map(fn($c) => ['id'=>$c->id,'name'=>$c->name,'phone'=>$c->phone,'address'=>$c->address,'latitude'=>$c->latitude,'longitude'=>$c->longitude,'eligible'=>(bool)($c->user?->is_active && $c->can_use_debt && $c->debt_status === 'eligible' && (!$c->debtAccount || $c->debtAccount->status === 'active')), 'available'=>\App\Support\Money::decimal(max(0,\App\Support\Money::cents($c->credit_limit)-\App\Support\Money::cents($c->debtAccount?->outstanding_balance ?? $c->outstanding_balance)))]),
     'productsUrl' => route('pos.products'), 'barcodeUrl' => route('pos.barcode'), 'saleUrl' => route('pos.process-sale'),
     'csrf' => csrf_token(), 'activeShift' => (bool) $activeShift, 'locale' => app()->getLocale() === 'id' ? 'id-ID' : 'en-US',
     'text' => ['loading' => __('Loading products...'), 'empty' => __('No products found'), 'error' => __('Unable to load products. Try searching again.'),
@@ -97,4 +97,5 @@
         'added' => __('Added to cart'), 'stockLimit' => __('Quantity exceeds available stock.'),
         'tooMany' => __('The cart can contain up to 100 different products.'), 'shift' => __('Open a shift before making sales.')],
 ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
+@include('components.delivery-map-dialog')
 @endsection

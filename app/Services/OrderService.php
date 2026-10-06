@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Notifications\OperationalNotification;
+use App\Support\DeliveryPoint;
 use App\Support\Money;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -43,7 +44,8 @@ class OrderService
                 $items[] = ['product_id' => (int) $id, 'quantity' => $qty, 'unit_price' => $product->selling_price, 'subtotal' => Money::decimal($line)];
             }
             $shipping = $data['delivery_type'] === 'delivery' ? Money::cents(DB::table('store_settings')->where('key', 'shipping_cost')->value('value') ?? '10000') : 0;
-            $order = Order::create(['order_number' => 'ORD-'.Str::uuid(), 'request_key' => $data['request_key'], 'customer_id' => $customer->id, 'subtotal' => Money::decimal($subtotal), 'shipping_cost' => Money::decimal($shipping), 'total' => Money::decimal($subtotal + $shipping), 'fulfillment_type' => $data['delivery_type'], 'shipping_address' => $data['address'] ?? null, 'notes' => $data['notes'] ?? null, 'status' => 'pending', 'payment_status' => 'pending']);
+            $data = array_merge($data, DeliveryPoint::snapshot($data, $data['delivery_type'] === 'delivery'));
+            $order = Order::create(['shipping_latitude' => $data['shipping_latitude'], 'shipping_longitude' => $data['shipping_longitude'], 'order_number' => 'ORD-'.Str::uuid(), 'request_key' => $data['request_key'], 'customer_id' => $customer->id, 'subtotal' => Money::decimal($subtotal), 'shipping_cost' => Money::decimal($shipping), 'total' => Money::decimal($subtotal + $shipping), 'fulfillment_type' => $data['delivery_type'], 'shipping_address' => $data['address'] ?? null, 'notes' => $data['notes'] ?? null, 'status' => 'pending', 'payment_status' => 'pending']);
             foreach ($items as $item) {
                 $order->items()->create($item);
                 app(StockService::class)->change($item['product_id'], -$item['quantity'], 'Online order reservation', 'order', $order->id);

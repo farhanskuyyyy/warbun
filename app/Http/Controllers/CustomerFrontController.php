@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\OrderService;
+use App\Support\DeliveryPoint;
 use App\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -85,8 +86,9 @@ class CustomerFrontController extends Controller
 
     public function checkout(Request $request)
     {
+        $point = $request->validate(DeliveryPoint::rules());
         $v = $request->validate(['request_key' => 'required|string|max:80', 'items' => 'required|array|min:1|max:100', 'items.*.product_id' => 'required|integer|exists:products,id', 'items.*.quantity' => 'required|integer|min:1|max:100000', 'delivery_type' => 'required|in:pickup,delivery', 'address' => 'required_if:delivery_type,delivery|nullable|string|max:2000', 'notes' => 'nullable|string|max:2000', 'payment_method' => 'required|in:cash,transfer,ewallet,qr,online']);
-        $order = app(OrderService::class)->checkout($v);
+        $order = app(OrderService::class)->checkout(array_merge($v, $point));
 
         return redirect()->route('customer.order.success', $order);
     }
