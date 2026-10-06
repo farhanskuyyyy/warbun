@@ -1,5 +1,7 @@
 # Warbun — QA development
 
+6 October focus/portrait update: 18 camera browser scenarios PASS. Selected-device reset ends previous tracks, tolerates unavailable/rejected focus controls and preserves mirror/input. Portrait video retains intrinsic ratio; close/reset/retry/return stay visible at narrow and short landscape viewports. Build, Blade compilation, scoped Pint and syntax checks PASS. iPhone hardware/Safari not tested. Preview 8080 restarted with a new isolated demo DB after old temporary files disappeared. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).
+
 Latest CRUD action icons: [CRUD_ACTION_QA.md](CRUD_ACTION_QA.md). 15 browser scenarios PASS across ten indexes, two detail pages and shelf deletion, with rendered Font Awesome glyphs, translated accessible labels/tooltips, keyboard navigation, preserved confirmations and five viewport widths. Build, Blade compilation, scoped Pint, SVG validity and diff check PASS; backend tests not repeated for presentation-only changes.
 
 Latest scan recovery update: 15 synthetic-camera scenarios PASS, including blue off-center barcode and ongoing-scan guidance after six seconds. Conditional focus request uses mocked camera capabilities. Build, JS syntax, scoped Pint and responsive checks PASS. The user's still screenshot remains undecodable with both production configurations; live device resolution/focus is not verified. Evidence: [CAMERA_BARCODE_QA.md](CAMERA_BARCODE_QA.md).

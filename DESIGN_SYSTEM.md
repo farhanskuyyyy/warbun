@@ -70,6 +70,8 @@ Font Awesome Free 6.7.2 Solid icons are served from a local SVG sprite. The shar
 
 ## Camera and hardware barcode scanning
 
+Portrait camera preview follows intrinsic video aspect ratio, with a viewport height cap and contain sizing to retain the full frame. The guide is inside that frame. A scrolling body separates camera/settings from a fixed dialog heading and action footer, keeping recovery/return reachable on short phone viewports. Reset focus is a labeled secondary action that reacquires the selected device; Retry remains permission/error recovery. Existing palette, 44px controls and ENERGY 2 / RHYTHM 3 / MOTION 1 continue without additional icons or animation.
+
 Scan recovery uses the existing live status instead of adding a capture button. After six seconds without a read, short distance/focus/glare advice replaces the initial message while video scanning continues. This makes a waiting scanner actionable without implying a blurry frame can always be decoded; no extra decorative controls or colors are introduced.
 
 The mirror checkbox lets operators choose a familiar preview orientation, especially on front-facing cameras. A native labeled 44px target supports touch and keyboard; it sits beside device controls, outside the video guide. Horizontal reflection applies only to the video preview, with no decorative animation or camera restart. The saved browser preference survives device changes and page navigation; help states that scanning is automatic so operators do not search for a capture button.

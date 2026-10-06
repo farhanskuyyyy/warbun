@@ -67,6 +67,8 @@ Source requirement: [PRD.md](PRD.md). Implementation decisions: [ARCHITECTURE.md
 
 ## Kamera barcode
 
+- [x] Fokus ulang melalui restart device terpilih; rasio portrait asli, isi modal scroll dan heading/footer tetap terlihat; recovery serta responsive video QA
+
 - [x] Pilihan hardware/kamera pada POS dan form tambah/edit produk
 - [x] Toggle mirror preview tersimpan, keyboard/device/retry/navigation dan deteksi otomatis saat mirror diuji
 - [x] Pencarian baris diperluas, request fokus kondisional dan guidance scan belum berhasil; 15 skenario kamera dan screenshot pengguna diuji dengan batas hasil terdokumentasi

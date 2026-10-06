@@ -6,6 +6,7 @@ if (dialog) {
     const error = document.getElementById('barcodeCameraError');
     const devices = document.getElementById('barcodeCameraDevice');
     const retry = document.getElementById('retryBarcodeCamera');
+    const refocus = document.getElementById('refocusBarcodeCamera');
     const mirror = document.getElementById('barcodeCameraMirror');
     const previewContainer = dialog.querySelector('.barcode-camera-preview');
     const mirrorKey = 'warbun.camera.mirror';
@@ -24,6 +25,7 @@ if (dialog) {
 
     function stop() {
         version++;
+        refocus.disabled = true;
         clearTimeout(guidanceTimer);
         controls?.stop();
         controls = null;
@@ -45,16 +47,23 @@ if (dialog) {
         return labels.failed;
     }
 
-    async function start(deviceId = '') {
+    async function start(deviceId = '', refocusing = false) {
         stop();
         const attempt = version;
         // A delayed decoder must not clear the preview of a newer scan.
         const preview = video.cloneNode(false);
         preview.muted = true;
+        const fitPreview = () => {
+            if (attempt === version && preview.videoWidth && preview.videoHeight) {
+                previewContainer.style.setProperty('--camera-ratio', preview.videoWidth / preview.videoHeight);
+            }
+        };
+        preview.addEventListener('loadedmetadata', fitPreview);
+        preview.addEventListener('resize', fitPreview);
         video.replaceWith(preview);
         video = preview;
         let detected = false;
-        status.textContent = labels.permission;
+        status.textContent = refocusing ? labels.refocusing : labels.permission;
         error.textContent = '';
         devices.disabled = true;
         retry.disabled = true;
@@ -99,6 +108,8 @@ if (dialog) {
             });
             if (attempt !== version || !dialog.open) { scanning.stop(); return; }
             controls = scanning;
+            fitPreview();
+            refocus.disabled = false;
             status.textContent = labels.scanning;
             guidanceTimer = setTimeout(() => {
                 if (attempt === version && dialog.open && !detected) status.textContent = labels.guidance;
@@ -130,6 +141,10 @@ if (dialog) {
     }));
     document.querySelectorAll('[data-barcode-focus]').forEach(button=>button.addEventListener('click', ()=>document.getElementById(button.dataset.barcodeFocus)?.focus()));
     retry.addEventListener('click', ()=>start(devices.value));
+    refocus.addEventListener('click', () => {
+        const deviceId = stream?.getVideoTracks()[0]?.getSettings().deviceId || devices.value;
+        start(deviceId, true);
+    });
     devices.addEventListener('change', ()=>start(devices.value));
     document.getElementById('closeBarcodeCamera').addEventListener('click', finish);
     document.getElementById('cancelBarcodeCamera').addEventListener('click', ()=> {

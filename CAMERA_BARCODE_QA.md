@@ -4,13 +4,15 @@
 
 ## Bukti
 
+6 Oktober, update fokus/portrait: **18 skenario kamera PASS**. Fokus ulang memakai Enter, menghentikan track lama, membuka device yang sama, menjaga field/mirror dan membaca Code 128 dari stream portrait 720×1280. Capability fokus yang hilang serta constraint yang ditolak dimock; recovery tetap aktif tanpa error. Rasio elemen preview dibandingkan dengan rasio video asli; X/Fokus ulang/Retry/Kembali tetap di viewport pada 320×568, 375×667 dan 812×375. [Screenshot portrait](docs/qa/screenshots/camera-portrait-375.png) ditinjau; frame putih adalah fixture kosong. Matrix POS/create/edit lima lebar tetap PASS. Build, JS syntax, scoped Pint, Blade compilation dan diff check PASS. Ini Chrome dengan synthetic streams, **bukan uji iPhone/Safari fisik**; ketajaman lensa tidak dijamin. Preview 8080 dimulai ulang dengan database demo baru karena proses dan directory sementara sebelumnya sudah hilang; MySQL existing tidak disentuh.
+
 Update kasus scan tidak terbaca: **15 skenario kamera PASS**, termasuk barcode Code 128 berwarna biru pada bagian atas frame yang dibaca decoder production dan petunjuk setelah enam detik tanpa hasil, sementara kamera tetap berjalan. Request continuous focus diverifikasi dengan mock capability/constraint; tidak membuktikan autofocus webcam fisik. Ideal resolution ditingkatkan, tidak dijamin tersedia pada device. Build, JS syntax, scoped Pint dan diff check PASS; lima viewport tetap diuji. Baseline backend/receipt tidak diulang karena tidak ada perubahan logika server.
 
 Screenshot pengguna 544×415 diuji melalui [runner foto](scripts/qa-camera-photo.cjs), tanpa menyimpan foto ke repository. Decoder production tanpa maupun dengan TRY_HARDER **tidak membaca gambar tersebut**. Diagnosis awal juga mencoba crop, skala dan channel luminance melalui library, tanpa hasil. Blur/perspective/kemasan adalah kemungkinan dari gambar, bukan penyebab yang sudah terbukti. Perubahan ini memperluas pencarian dan memberi bantuan; bukan klaim foto atau webcam pengguna telah berhasil dibaca.
 
 Update mirror: **13 skenario kamera PASS** dijalankan ulang setelah perubahan, termasuk keyboard Space pada checkbox, preview horizontal terbalik tanpa request kamera baru, camera switch, pilihan tersimpan saat Retry/navigation, toggle off dan decoding Code 128/EAN-13 ketika mirror aktif. Lima lebar tetap tanpa overflow; build production, syntax JS, scoped Pint dan diff check PASS. Full backend suite 97/799 dan tujuh skenario checkout/receipt di bawah adalah baseline fitur kamera sebelumnya, tidak diulang untuk perubahan preview ini. Storage-blocked browser dan kamera fisik tidak diuji pada update ini.
 
-- [Runner kamera](scripts/qa-camera.cjs), [hasil](docs/qa/camera-results.json): **15 skenario PASS**. Chrome menerima synthetic `MediaStream` dari canvas, dengan barcode Code 128/EAN-13 valid. Decoder ZXing production sungguhan memproses frame video; hasil decode tidak dimock. Kasus ini tidak menguji webcam fisik.
+- [Runner kamera](scripts/qa-camera.cjs), [hasil](docs/qa/camera-results.json): **18 skenario PASS**. Chrome menerima synthetic `MediaStream` dari canvas, dengan barcode Code 128/EAN-13 valid. Decoder ZXing production sungguhan memproses frame video; hasil decode tidak dimock. Kasus ini tidak menguji webcam fisik.
 - Edit membaca Code 128 `0012345678905`, mempertahankan nol, tidak auto-save, menghentikan track lalu menyimpan lewat controller existing. Create membaca EAN-13 `5901234123457`; duplicate barcode ditolak server, barcode unique dapat disimpan. Hardware Enter pada form tidak submit.
 - Izin ditolak, kamera tidak ditemukan, kamera sibuk, Retry, preferensi belakang/no audio, pilihan device, Escape, izin yang selesai setelah Close, reopen saat inisialisasi video tertunda, dan backgrounding diuji dengan mock API kamera. Semua track yang diperoleh berakhir `ended` setelah penutupan/success.
 - POS memblokir kamera tanpa shift, memasukkan satu unit per pembukaan, mendukung pembukaan ulang dan scan keyboard pada lookup/keranjang yang sama. Barcode 404 menjaga quantity lama. Kamera tidak otomatis dibuka saat halaman dimuat; chunk decoder baru dimuat setelah permintaan kamera.
@@ -23,16 +25,16 @@ Update mirror: **13 skenario kamera PASS** dijalankan ulang setelah perubahan, t
 
 ## Anti-slop delivery gate
 
-Scope dua pilihan scan, dialog kamera, responsivitas editor produk dan tambahan icons. Direction retail Warbun existing, ENERGY 2 / RHYTHM 3 / MOTION 1.
+Scope dua pilihan scan, dialog kamera termasuk Fokus ulang/portrait/scroll-body/footer, responsivitas editor produk dan tambahan icons. Direction retail Warbun existing, ENERGY 2 / RHYTHM 3 / MOTION 1.
 
 - R-02 PASS: copy baru tanpa em dash.
-- R-03 PASS: tiga halaman/dialog pada lima lebar, document overflow false.
+- R-03 PASS: tiga halaman/dialog pada lima lebar, document overflow false; portrait dan viewport pendek/landscape menjaga heading/footer di layar.
 - R-17 PASS: tidak menambah statistik promosi; pilihan camera berasal dari enumerateDevices.
 - R-18 PASS: tidak ada testimonial.
 - R-23 PASS: opsi kamera/hardware eksplisit diminta; icon kamera/barcode berasal dari Font Awesome existing family, fixture video QA dijelaskan.
 - R-24 PASS: tidak menambah route/navigation baru; POS/create/edit nyata dibuka browser.
 - R-25 PASS: memakai pasangan CTA/teks existing dari DESIGN_SYSTEM.md; tidak menambah warna teks baru. Guide video memiliki garis putih dan outline charcoal untuk posisi barcode, bukan label teks.
-- R-26 PASS: hardware focus, open, device change, mirror on/off, Retry, Return, X/Escape, fill field, save/update dan POS lookup dicoba; bukan kontrol dummy.
+- R-26 PASS: hardware focus, open, device change, mirror on/off, Fokus ulang via Enter, Retry, Return, X/Escape, fill field, save/update dan POS lookup dicoba; bukan kontrol dummy.
 - R-27 PASS: permission wait/scanning, denied/missing/busy, insecure/unsupported dan barcode error punya feedback. Field/cart tetap dipertahankan.
 - R-28 PASS: tidak menambah FAQ.
 - R-32 PASS: native dialog/buttons/select/checkbox, label, status/alert, focus-visible existing; mirror dengan Space, Escape dan focus restoration diuji.

@@ -4,15 +4,21 @@
 .barcode-scan-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-block: 12px; }
 .barcode-scan-actions .button-secondary { min-height: 44px; gap: 8px; }
 .pos-customer-dialog.barcode-camera-dialog { width: min(560px,calc(100% - 32px)); }
-.barcode-camera-preview { position: relative; margin-block: 20px 12px; background: #282724; border-radius: 5px; overflow: hidden; aspect-ratio: 16/9; }
+.barcode-camera-dialog[open] { display: flex; flex-direction: column; max-height: calc(100dvh - 24px); overflow: hidden; }
+.barcode-camera-dialog .pos-customer-heading { flex-shrink: 0; padding-bottom: 12px; }
+.barcode-camera-dialog .pos-customer-heading button { flex-shrink: 0; }
+.barcode-camera-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-inline: 4px; margin-inline: -4px; }
+.barcode-camera-body > p { font-size: 14px; color: var(--muted); }
+.barcode-camera-body #barcodeCameraError { color: #b91c1c; }
+.barcode-camera-preview { --camera-ratio: 1.777778; position: relative; margin: 16px auto 12px; background: #282724; border-radius: 5px; overflow: hidden; width: min(100%,calc(min(55dvh,480px) * var(--camera-ratio))); aspect-ratio: var(--camera-ratio); flex-shrink: 0; }
 .barcode-camera-preview video { display: block; width: 100%; height: 100%; object-fit: contain; }
 .barcode-camera-preview.is-mirrored video { transform: scaleX(-1); }
 .barcode-camera-mirror { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 12px; font-size: 14px; cursor: pointer; }
 .barcode-camera-mirror input { width: 18px; height: 18px; min-height: 18px; flex-shrink: 0; accent-color: #8b1e2d; }
 .barcode-camera-guide { position: absolute; inset: 32% 8%; border: 2px solid white; outline: 1px solid #282724; pointer-events: none; }
 .barcode-camera-dialog #barcodeCameraStatus, .barcode-camera-dialog #barcodeCameraError { margin-block: 10px; font-size: 14px; }
-.barcode-camera-footer { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-.barcode-camera-footer button { flex: 1 1 180px; }
+.barcode-camera-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); flex-shrink: 0; }
+.barcode-camera-footer #cancelBarcodeCamera { grid-column: 1/-1; }
 @media(max-width:639px) { .product-editor .grid { grid-template-columns: minmax(0,1fr); } .product-editor .flex { flex-wrap: wrap; } .barcode-scan-actions button { flex: 1 1 160px; } }
 @layer base {
     body { font-family: system-ui, sans-serif; }

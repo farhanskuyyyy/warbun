@@ -27,19 +27,24 @@ function ean13(value) {
     await page.addInitScript(({codeWidths,eanWidths})=>{
         window.__cameraMode='blank'; window.__cameraTracks=[]; window.__cameraRequests=[];window.__focusRequests=[];
         function streamFor(constraints) {
-            const canvas=document.createElement('canvas');canvas.width=1280;canvas.height=720;
-            const ctx=canvas.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,1280,720);
+            const portrait=window.__cameraOrientation==='portrait';
+            const canvas=document.createElement('canvas');canvas.width=portrait?720:1280;canvas.height=portrait?1280:720;
+            const ctx=canvas.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,canvas.width,canvas.height);
             const widths=window.__cameraMode==='ean'?eanWidths:codeWidths;
             if(['code','ean','offset'].includes(window.__cameraMode)) {
-                let x=(1280-widths.reduce((a,b)=>a+b,0)*4)/2;
-                widths.forEach((width,index)=>{ if(index%2===0){ctx.fillStyle=window.__cameraMode==='offset'?'#2873a1':'black';ctx.fillRect(x,window.__cameraMode==='offset'?60:220,width*4,window.__cameraMode==='offset'?40:260);}x+=width*4; });
+                const scale=portrait?3:4;
+                let x=(canvas.width-widths.reduce((a,b)=>a+b,0)*scale)/2;
+                widths.forEach((width,index)=>{ if(index%2===0){ctx.fillStyle=window.__cameraMode==='offset'?'#2873a1':'black';ctx.fillRect(x,window.__cameraMode==='offset'?60:(canvas.height-260)/2,width*scale,window.__cameraMode==='offset'?40:260);}x+=width*scale; });
             }
             const stream=canvas.captureStream(15);
             setInterval(()=>{ctx.fillStyle='white';ctx.fillRect(0,0,1,1);},80);
             const track=stream.getVideoTracks()[0];
             track.getSettings=()=>({deviceId:constraints.video.deviceId?.exact||'back'});
-            track.getCapabilities=()=>({focusMode:['manual','continuous']});
-            track.applyConstraints=async value=>{window.__focusRequests.push(value);};
+            track.getCapabilities=()=>window.__focusSupport===false?{}:{focusMode:['manual','continuous']};
+            track.applyConstraints=async value=>{
+                window.__focusRequests.push(value);
+                if(window.__focusReject) throw new DOMException('QA unsupported focus','OverconstrainedError');
+            };
             window.__cameraTracks.push(track);
             return stream;
         }
@@ -101,6 +106,54 @@ function ean13(value) {
         await ended();
         results.push('Blue Code 128 near the top edge of a real video frame decodes automatically with expanded row search');
         await page.locator('#field-barcode').fill(ean);
+
+        await page.evaluate(()=>window.__cameraOrientation='portrait');
+        await page.setViewportSize({width:375,height:667});
+        await mode('blank');await open();await page.waitForFunction(()=>!document.getElementById('refocusBarcodeCamera').disabled);
+        await page.locator('#barcodeCameraDevice').selectOption('front');
+        await page.waitForFunction(()=>!document.getElementById('refocusBarcodeCamera').disabled);
+        const previousTracks=await page.evaluate(()=>window.__cameraTracks.length);
+        await page.locator('#refocusBarcodeCamera').focus();await page.keyboard.press('Enter');
+        await page.waitForFunction(n=>window.__cameraTracks.length>n&&!document.getElementById('refocusBarcodeCamera').disabled,previousTracks);
+        assert.equal(await page.evaluate(n=>window.__cameraTracks.slice(0,n).every(track=>track.readyState==='ended'),previousTracks),true);
+        assert.equal(await page.evaluate(()=>window.__cameraRequests.at(-1).video.deviceId.exact),'front');
+        assert.equal(await mirror.isChecked(),true);
+        assert.equal(await page.locator('#field-barcode').inputValue(),ean);
+        for(const fallback of ['missing','rejected']) {
+            await page.evaluate(value=>{window.__focusSupport=value!=='missing';window.__focusReject=value==='rejected';},fallback);
+            const count=await page.evaluate(()=>window.__cameraRequests.length);
+            await page.locator('#refocusBarcodeCamera').click();
+            await page.waitForFunction(n=>window.__cameraRequests.length>n&&!document.getElementById('refocusBarcodeCamera').disabled,count);
+            assert.equal(await page.locator('#barcodeCameraVideo').evaluate(video=>video.srcObject.getVideoTracks()[0].readyState),'live');
+            assert.equal(await page.locator('#barcodeCameraError').textContent(),'');
+        }
+        await page.evaluate(()=>{window.__focusSupport=true;window.__focusReject=false;});
+        results.push('Reset focus remains usable when focus capabilities are absent or focus constraints reject; scanning restarts without a camera error');
+        const geometry=await page.locator('.barcode-camera-preview').evaluate(element=>{
+            const box=element.getBoundingClientRect();return {ratio:box.width/box.height,video:element.querySelector('video').videoWidth/element.querySelector('video').videoHeight};
+        });
+        assert.ok(Math.abs(geometry.ratio-geometry.video)<0.01);
+        assert.ok(geometry.ratio<1);
+        await page.screenshot({path:'docs/qa/screenshots/camera-portrait-375.png'});
+        for(const viewport of [{width:320,height:568},{width:375,height:667},{width:812,height:375}]) {
+            await page.setViewportSize(viewport);
+            await page.waitForTimeout(100);
+            for(const id of ['closeBarcodeCamera','refocusBarcodeCamera','retryBarcodeCamera','cancelBarcodeCamera']) {
+                const box=await page.locator('#'+id).boundingBox();
+                assert.ok(box.y>=0&&box.y+box.height<=viewport.height,id+' visible in '+JSON.stringify(viewport));
+            }
+            const videoBox=await page.locator('.barcode-camera-preview').boundingBox();
+            assert.ok(Math.abs(videoBox.width/videoBox.height-geometry.video)<0.01);
+            assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+        }
+        await page.setViewportSize({width:375,height:667});
+        await mode('code');await page.locator('#refocusBarcodeCamera').click();
+        await page.waitForFunction(value=>document.getElementById('field-barcode').value===value,code);await ended();
+        await page.evaluate(()=>window.__cameraOrientation='landscape');
+        await page.locator('#field-barcode').fill(ean);
+        await page.setViewportSize({width:1440,height:1000});
+        results.push('Reset focus restarts the selected camera, ends old tracks, preserves field/mirror and decodes a real portrait Code 128 stream');
+        results.push('Portrait preview matches intrinsic video ratio; close/reset/retry/return remain visible at 320x568, 375x667 and 812x375 with no page overflow');
 
         for(const [scenario,expected] of [['denied','permission was denied'],['missing','No camera was found'],['busy','Camera is unavailable']]) {
             await mode(scenario);await open();await page.waitForFunction(()=>document.getElementById('barcodeCameraError').textContent.length>0);

@@ -18,6 +18,10 @@ Browser memerlukan secure context untuk kamera: **HTTPS**, atau **localhost/127.
 
 ## Preview yang dijalankan
 
+**Fokus ulang** tersedia setelah kamera aktif. Tombol menghentikan stream lama dan membuka kembali device yang sama, mencoba continuous autofocus jika capability tersedia. Mirror dan kolom/keranjang dipertahankan; scan kembali berjalan otomatis. Ini recovery kamera, bukan jaminan lensa akan fokus: browser/perangkat bisa tidak mengekspos kontrol fokus atau memiliki lensa dengan fokus tetap. Constraint yang ditolak tidak menggagalkan scan ([MDN applyConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/applyConstraints)).
+
+Preview memakai rasio dari videoWidth/videoHeight, diperbarui saat metadata atau ukuran video berubah. Seluruh frame ditampilkan dengan object-fit contain, termasuk portrait, tanpa bingkai melebar ke letterbox. Tinggi preview dibatasi viewport; isi dialog dapat digulir dan heading/footer tetap terlihat agar Fokus ulang, Coba lagi, Kembali dan X dapat dijangkau pada HP.
+
 Scanner meminta resolusi ideal 1920×1080 dan mencoba continuous autofocus hanya jika track menyatakan dukungan. Ini permintaan, bukan jaminan kualitas kamera. Decoder menggunakan `TRY_HARDER` untuk mencari lebih banyak baris daripada area tengah bawaan ([kode ZXing](https://github.com/zxing-js/library/blob/master/src/core/oned/OneDReader.ts)). Jika belum terbaca setelah enam detik, status memberi petunjuk fokus/jarak/pantulan; scan tetap berjalan. Barcode buram, berkerut, tertutup atau terpotong masih dapat gagal. Jauhkan kemasan sedikit hingga garis tajam, ratakan dan pilih kamera belakang bila tersedia; hardware/manual tetap dapat dipakai.
 
 Preview saat pengerjaan berjalan di `http://127.0.0.1:8080`, memakai SQLite demo terpisah di directory sementara `warbun-qa-preview-*`. Login `admin@warbun.local` atau `owner@warbun.local`, password `password`. `.env` dan MySQL operasional tidak diubah; MySQL lokal masih tidak tersedia. Preview sudah mempunyai dataset produk dan etalase contoh. Database/browser test memakai port 8765 dan database lain, sehingga transaksi QA tidak masuk preview pengguna.
