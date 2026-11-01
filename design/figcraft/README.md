@@ -5,3 +5,5 @@ Open [final.figcraft](soft-neobrutalism/final.figcraft) in Figcraft. This is the
 See [selected previews](PREVIEWS.md) for a compact visual overview. Detailed decisions, frame IDs, evidence and prototype limits are documented in [the design folder](soft-neobrutalism/README.md).
 
 This is design/prototype work, not a Laravel implementation. Native connections simulate selected flows; actual forms, payments, free-form shelf drag/resize and persistent saves need application implementation. Historical QA notes retain their review findings, but bulk image/PDF exports are no longer stored in the repository.
+
+Implementation handoff for all application pages: [phase tasklists and agent resume instructions](../../docs/implementation/README.md). Implementation status starts TODO; native design QA is not runtime application QA.

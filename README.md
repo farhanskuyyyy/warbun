@@ -1,5 +1,45 @@
 # Warbun
 
+Warbun is a store management application for Indonesian small retailers: a customer storefront plus a staff CMS/POS. Customers browse and order products for pickup or delivery; cashiers handle sales and shifts; managers and owners manage stock, payments, credit, refunds, reports and staff access.
+
+This repository contains an existing Laravel application, a final Figcraft design, and a phased implementation handoff. **The design and its prototype states are not evidence that the new UI or backend behavior has been implemented.**
+
+## Start here for a new agent or developer
+
+| Need | Read |
+| --- | --- |
+| Agent instructions and safety rules | [AGENTS.md](AGENTS.md); [agent.md](agent.md) points to the same instructions |
+| Product requirements and transaction rules | [PRD.md](PRD.md), [ARCHITECTURE.md](ARCHITECTURE.md) |
+| Implement the final design across all pages | [Implementation plan, P00–P11](docs/implementation/README.md) |
+| Resume work across agents/sessions | [Current phase status and handoff](docs/implementation/STATUS.md) |
+| Check every route, child screen and view | [Page coverage](docs/implementation/02-PAGE-COVERAGE.md) |
+| Open the canonical design | [final.figcraft](design/figcraft/soft-neobrutalism/final.figcraft), [frame map](docs/implementation/01-DESIGN-MAP.md), [selected previews](design/figcraft/PREVIEWS.md) |
+| Verify and fix the completed implementation | [QA and repair plan](docs/implementation/07-QA-AND-RELEASE.md) |
+
+At the 1 November 2026 handoff, all phases in the new implementation plan start TODO. Older completed development checklists describe existing work, not completion of this revamp. Check STATUS and actual source before continuing; this dated note is not a substitute for verification.
+
+The implementation covers customer landing/auth/catalog/cart/checkout/orders and all CMS pages, including POS, monitoring and an interactive shelf-layout editor. Dedicated native frames guide major screens; other CRUD pages reuse final components with their existing functionality. Commit per verified phase or feature, then complete functional, visual and responsive QA and fix bugs directly. Full instructions are portable Markdown files and do not require this conversation or a specific coding agent.
+
+## Stack and repository map
+
+Laravel/PHP with Blade server rendering, Alpine.js interactions, Tailwind styling and Vite assets; MySQL is the primary database. Permissions use Spatie. Use manifest and lockfile versions; keep the existing stack rather than rebuilding as a SPA.
+
+| Path | Purpose |
+| --- | --- |
+| `routes/web.php`, `routes/auth.php` | Storefront, CMS, authentication and action endpoints |
+| `app/Http/Controllers/`, `app/Services/` | HTTP boundaries and transactional business workflows |
+| `app/Models/`, `database/migrations/`, `database/seeders/` | Data model, schema changes and development fixtures |
+| `app/Payments/` | Payment adapter contracts |
+| `resources/views/` | Blade pages, shared layouts and components |
+| `resources/js/`, `resources/css/` | Cart/POS/address/scanning behavior and styles |
+| `tests/`, `scripts/qa-*` | Automated regression and browser/concurrency checks |
+| `design/figcraft/` | Native design, handoff notes and curated previews |
+| `docs/implementation/` | Phase tasks, coverage, execution status and final QA |
+
+Main entry routes are `/`, `/shop`, `/cart`, `/my-orders` and `/my-addresses` for customers; `/dashboard`, `/pos`, `/products`, `/shelves` and `/orders/monitor` for staff. Access depends on authentication, ownership and permissions. Use `php artisan route:list` for the complete current list.
+
+The remaining sections document local setup and existing workflows in Indonesian. Read the payment and QA limitations before testing transactions. The final design's fee/radius examples and grid gestures require implementation and verification; they must not be treated as live provider capabilities or persisted application behavior.
+
 Aplikasi operasional warung: katalog pelanggan, POS, pesanan online, stok, piutang, pembayaran, shift kasir, retur, laporan, dan audit. Laravel + Blade + Tailwind + Spatie Permission; database utama MySQL.
 
 ## Dokumen project
