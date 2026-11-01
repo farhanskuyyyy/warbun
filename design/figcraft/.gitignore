@@ -1,0 +1,26 @@
+# Keep only curated previews; regenerate other exports locally from final.figcraft.
+*.png
+*.pdf
+!soft-neobrutalism/landing-desktop-light.png
+!soft-neobrutalism/landing-mobile-light.png
+!soft-neobrutalism/landing-desktop-dark.png
+!soft-neobrutalism/catalog-light.png
+!soft-neobrutalism/payment-mobile-light.png
+!soft-neobrutalism/cart-sheet-light.png
+!soft-neobrutalism/product-picker-mobile-light.png
+!soft-neobrutalism/orders/orders-ml.png
+!soft-neobrutalism/orders/receipt-ml-percent.png
+!soft-neobrutalism/fees-radius/delivery-mlpaid.png
+!soft-neobrutalism/fees-radius/receipt-mobile-false-0-qris.png
+!soft-neobrutalism/cms/desktop-light.png
+!soft-neobrutalism/cms/mobile-light.png
+!soft-neobrutalism/cms-operations/dashboard-dl.png
+!soft-neobrutalism/cms-operations/pos-dl.png
+!soft-neobrutalism/cms-operations/monitor-dl.png
+!soft-neobrutalism/cms-operations/monitor-md.png
+!soft-neobrutalism/cms-operations/status-colors-light.png
+!soft-neobrutalism/shelf-grid/edit-dl.png
+!soft-neobrutalism/shelf-grid/edit-ml.png
+!soft-neobrutalism/shelf-grid/saved-dl.png
+!soft-neobrutalism/payment-logos/*.png
+!soft-neobrutalism/sample-images/*.png

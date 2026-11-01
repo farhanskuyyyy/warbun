@@ -1,5 +1,19 @@
 # Warbun — QA development
 
+## Figcraft shelf grid view/editor · 1 November 2026
+
+Updated six existing Shelf entry frames in the same native file and added page 20 with separate view/edit, example move/resize, matching saved states, rack detail and unsaved confirmation. Preserved the prior numbered-product list for placement. Reviewed 54 main state renders, 24 dialogs and handoff; fixed footer spacing, initial save state, outlines, independent gesture geometry and product-assignment navigation. Text bounds checked across those 79 trees without accidental overflow; 216 example rack rectangles fit the grid without overlaps. Native drag uses predetermined frame transitions; free-form manipulation, editable inputs, persistence, collision detection and runtime keyboard/touch/accessibility remain unimplemented/untested. No Laravel/DB changes. [Frames, previews and implementation contract](design/figcraft/soft-neobrutalism/shelf-grid/README.md).
+
+## Figcraft CMS status colors · 1 November 2026
+
+Applied reusable semantic status badges to 50 CMS frames across Monitor, order dialogs, Dashboard, POS, Products and product details. Source-aligned light colors and corresponding dark variants distinguish order stage, payment, active product/shift, stock and unassigned location; text labels remain. Added 36 native components for 18 states and two reference boards. Reviewed all affected render sheets, fixed reference/waiting-label wrapping, and checked 16 badge color pairs (light 6.15–7.39:1; dark 8.19–10.37:1). Design-only; no Laravel/DB changes or runtime accessibility/compliance claim. [Mappings, evidence and limitations](design/figcraft/soft-neobrutalism/cms-operations/STATUS_COLORS.md).
+
+## Figcraft CMS operational screens · 1 November 2026
+
+Updated the same native document: web-matching navbar with moon/sun and icon account menu across the eight prior shells; Dashboard, POS, numbered product placement and oldest-first order monitor across desktop/tablet/mobile and light/dark (24 main screens). Added 64 operational dialog designs and structural comparisons/handoff. Used product-design-sop, antislop core/UI, Figcraft MCP and local Playwright inspection. Dashboard/Monitor were inspected in the running app; POS/Shelves were checked against source because their runtime pages lacked the expected main content.
+
+Reviewed all main/dialog renders. Corrected independent POS scrolling, active shelf visibility, unit wrapping, excess modal height, delivery field padding/dark surfaces, and a mobile payment-warning title overlap. Text-parent bounds checked across 24 main and 64 dialog trees without accidental overflow at that pass; scroll clipping is intentional. Native links are design connections, not verified presenter playback. Form/filter/qty/scan/payment/shift/status mutations and runtime accessibility remain unimplemented and untested. No Laravel/DB changes or transactions. [Frame IDs, previews, source evidence and handoff limits](design/figcraft/soft-neobrutalism/cms-operations/README.md).
+
 6 October address book: **113 tests / 929 assertions**, 10 address-book and 8 map browser scenario groups PASS. Multiple destinations, add/edit/delete/default, cart/POS selection and immutable snapshots verified, including delayed/failed network responses and six viewport sizes. GPS and tiles are mocked; MySQL operational migration and physical Safari/GPS untested. [Evidence](ADDRESS_BOOK_QA.md).
 
 6 October delivery maps: **103 tests / 849 assertions**, nine browser groups and six viewport sizes PASS. Cart/cashier pins persist through login/checkout and appear in monitoring. Build/scoped checks pass. GPS/tiles are simulated; physical iPhone/Safari and this migration on MySQL remain untested. [Evidence](DELIVERY_MAPS_QA.md).
@@ -88,3 +102,23 @@ Screenshot akhir:
 - Pajak, multi-outlet, promosi bertingkat, dan campuran banyak metode tender dalam satu POS belum diaktifkan. POS mendukung satu metode pembayaran per transaksi serta deposit tunai + sisa utang; pembayaran order dapat dicatat bertahap dengan metode berbeda.
 
 Panduan menjalankan project dan mengulangi QA ada di [README.md](README.md). Daftar implementasi ada di [tasklist.md](tasklist.md).
+
+## Figcraft SOP pilot · 30 October 2026
+
+Applied the product-design SOP to customer checkout/payment/confirmation in the same native design file. Corrected implicit payment selection, category open-state behavior, channel destinations and confirmation metadata; added scoped Auto Layout/paint styles and reviewed renders. [Findings, evidence and limitations](design/figcraft/soft-neobrutalism/SOP_PILOT_QA.md). This is design-only work; no application/database changes or runtime accessibility claims.
+
+## Figcraft typography · 31 October 2026
+
+Aligned customer design typography with the local web: Georgia headings and system UI body, controls and prices. Adjusted hero spacing, emphasized action labels, updated foundation examples and repeated text styles, and saved the same native design file. Reviewed 44 main screen renders and 12 representative overlays across mobile/desktop and light/dark. [Typography decisions, evidence and limits](design/figcraft/soft-neobrutalism/TYPOGRAPHY_QA.md). No Laravel runtime changes.
+
+## Figcraft orders and receipts · 31 October 2026
+
+Reworked customer order history into product cards with per-order receipt actions and completed-order reorder review. Added tablet designs and receipt variants for percentage/fixed payment promotions, with separate product discounts, customer service fee, shipping and final total. Reviewed 30 light/dark mobile/tablet/desktop frame renders; corrected currency alignment, total row sizing and tablet navigation. Final text bounds check found no parent overflow and demo receipt totals reconcile. [Frame IDs, calculations, evidence and implementation limits](design/figcraft/soft-neobrutalism/orders/README.md). Design/prototype changes only; live cart/payment logic and runtime accessibility remain untested.
+
+## Figcraft payment fees and delivery radius · 1 November 2026
+
+Added QRIS 0.7% and e-wallet Rp2.000 example fee information per payment type/channel, synchronized fee totals and new receipt previews, and free/paid/outside/unknown/pickup delivery designs. Radius rules: <5 km free, 5–<20 km Rp10.000, ≥20 km unavailable; pickup free. Mobile/tablet/desktop and light/dark layouts included. Inspected 252 frames and checked all 192 payment-frame destinations and text bounds; no missing target roots or accidental payment text overflow after fixing tablet symbols. Mobile scroll clipping is intentional. Generated 96 PNG examples and refreshed main PDF/payment exports; reviewed distinct fee/radius layouts and corrected dark wordmark contrast. [Rules, examples, scope and runtime limitations](design/figcraft/soft-neobrutalism/fees-radius/README.md). Design/prototype only: actual coordinate lookup, backend fee/shipping computation, provider configuration and runtime accessibility were not implemented or tested.
+
+## Figcraft CMS workspace · 1 November 2026
+
+Revamped the CMS layout in the same native file, with desktop expanded/compact sidebar, tablet drawer/table scroll, mobile product cards, and light/dark variants. Included all 23 source navigation entries plus five report subpages and the Debt Dashboard (29 destinations), with profile in the account menu. Representative product forms, validation, detail/archive/filter/account overlays and reusable control states accompany the shell; other page contents are out of scope. Rendered/exported 45 targets, reviewed the eight main layouts and overlay/component patterns, and corrected icon alignment, pagination wrapping, select/upload affordances, input contrast and semantic feedback. Final text-bounds and native destination checks found no accidental overflow or invalid targets. [Menu inventory, frame IDs, preview files and prototype limitations](design/figcraft/soft-neobrutalism/cms/README.md). Local port 8000 was unavailable, so navigation coverage was checked against source rather than authenticated runtime. No Laravel/database implementation changes; actual forms, CRUD/search/filter and accessibility runtime QA remain pending.
