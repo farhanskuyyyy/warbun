@@ -57,3 +57,7 @@ Branch implementasi dibuat;141 routes/103 views sesuai inventory. Fixture browse
 ### P01 — first foundation slice
 
 Added canonical light color/font/spacing/radius variables and replaced generic primary/secondary Blade button styling with Warbun controls (44px target, teal focus, disabled state). Build PASS; auth/profile9 tests29 assertions PASS. Browser profile reviewed at390px; full theme/overlay/responsive suite remains pending. Next: consolidate remaining shared controls, implement theme and overlay foundation.
+
+### P01 — theme foundation
+
+Added pre-paint system/stored theme selection and persistent toggle in customer/CMS/auth shells; shared dark surfaces and control styles. Build PASS; backend113/929 PASS. Browser checked system-dark/manual-light persistence and390/834/1440px auth overflow; reviewed dark auth/store screenshots and fixed auth banner contrast, catalog filter surface and mobile wordmark wrapping. Full all-page dark audit and overlay foundation remain pending; P01 remains IN PROGRESS.

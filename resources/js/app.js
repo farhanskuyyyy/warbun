@@ -61,3 +61,24 @@ function updateWarbunCartCount() {
 updateWarbunCartCount();
 window.addEventListener('storage', updateWarbunCartCount);
 window.addEventListener('warbun:cartchange', updateWarbunCartCount);
+
+const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(dark) {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+    document.querySelectorAll('[data-theme-toggle]').forEach(button => button.setAttribute('aria-pressed', String(dark)));
+}
+applyTheme(document.documentElement.dataset.theme === 'dark');
+document.querySelectorAll('[data-theme-toggle]').forEach(button => button.addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme !== 'dark';
+    try { localStorage.setItem('warbun_theme', dark ? 'dark' : 'light'); } catch {}
+    applyTheme(dark);
+}));
+themeMedia.addEventListener('change', event => {
+    let preference;
+    try { preference = localStorage.getItem('warbun_theme'); } catch {}
+    if (!['light', 'dark'].includes(preference)) applyTheme(event.matches);
+});
+window.addEventListener('storage', event => {
+    if (event.key === 'warbun_theme') applyTheme(event.newValue === 'dark' || (event.newValue !== 'light' && themeMedia.matches));
+});

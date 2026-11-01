@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Warbun · @yield('title', __('Shop'))</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
+<html lang="{{ app()->getLocale() }}"><head>@include('components.theme-init')<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Warbun · @yield('title', __('Shop'))</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
 <body class="store-shell">
 <a class="skip-link" href="#main">{{ __('Skip to content') }}</a>
 <header class="store-header"><nav class="store-nav" aria-label="{{ __('Main navigation') }}">

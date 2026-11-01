@@ -1,7 +1,7 @@
 @props(['title' => __('Login')])
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-<head>
+<head>@include('components.theme-init')
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Warbun · {{ $title }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -10,7 +10,7 @@
     <a class="skip-link" href="#main">{{ __('Skip to content') }}</a>
     <header class="auth-header">
         <a class="brand" href="{{ route('landing') }}">warbun<span>{{ __('Your everyday essentials') }}</span></a>
-        <div class="auth-header-tools"><a href="{{ route('customer.shop') }}">{{ __('Browse products') }}</a><div class="auth-language">@include('components.locale-switcher')</div></div>
+        <div class="auth-header-tools">@include('components.theme-toggle')<a href="{{ route('customer.shop') }}">{{ __('Browse products') }}</a><div class="auth-language">@include('components.locale-switcher')</div></div>
     </header>
     <main id="main" class="auth-main">
         <section class="auth-story" aria-label="{{ __('Warbun') }}">

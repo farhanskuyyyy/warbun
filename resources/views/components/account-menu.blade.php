@@ -1,3 +1,4 @@
+@include('components.theme-toggle')
 <details class="account-menu">
     <summary aria-label="{{ __('Account') }}" title="{{ __('Account') }}"><span class="account-avatar"><x-icon name="user" /></span><span>{{ __('Account') }}</span><x-icon name="chevron-down" class="disclosure-icon" /></summary>
     <div class="account-popover">

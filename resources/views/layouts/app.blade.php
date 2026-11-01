@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>Warbun · @yield('title', __('Dashboard'))</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
+<head>@include('components.theme-init')<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>Warbun · @yield('title', __('Dashboard'))</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
 <body class="cms-shell">
 <a class="skip-link" href="#main">{{ __('Skip to content') }}</a>
 <aside class="desktop-sidebar">@include('components.workspace-navigation')</aside>
