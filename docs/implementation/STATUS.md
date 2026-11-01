@@ -64,4 +64,8 @@ Added pre-paint system/stored theme selection and persistent toggle in customer/
 
 ### P01 — native modal and state surfaces
 
-Replaced legacy custom focus trap with native dialog using existing Alpine open/close events. Browser profile destructive-confirmation opens, keeps focus inside, closes on Escape and returns focus. Profile5 tests21 assertions PASS; build PASS. Added reduced-motion handling and dark status surfaces. All-page component/theme audit still pending.
+Replaced legacy custom focus trap with native dialog using existing Alpine open/close events. Initial browser check FAILED to open destructive-confirmation; follow-up fix and retest required. Profile5 tests21 assertions PASS; build PASS. Added reduced-motion handling and dark status surfaces. All-page component/theme audit still pending.
+
+### Modal regression correction
+
+Native-modal browser opening check failed. Restored the previously working Alpine component rather than retaining an unverified migration. Commit10cee0c must not be treated as verified modal completion. Build and profile tests passed but did not establish pointer interaction. Native/shared overlay implementation remains TODO; investigate trusted click versus programmatic dispatch before marking P01 complete. P02–P11 remain TODO.
