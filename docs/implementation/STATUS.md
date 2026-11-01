@@ -61,3 +61,7 @@ Added canonical light color/font/spacing/radius variables and replaced generic p
 ### P01 — theme foundation
 
 Added pre-paint system/stored theme selection and persistent toggle in customer/CMS/auth shells; shared dark surfaces and control styles. Build PASS; backend113/929 PASS. Browser checked system-dark/manual-light persistence and390/834/1440px auth overflow; reviewed dark auth/store screenshots and fixed auth banner contrast, catalog filter surface and mobile wordmark wrapping. Full all-page dark audit and overlay foundation remain pending; P01 remains IN PROGRESS.
+
+### P01 — native modal and state surfaces
+
+Replaced legacy custom focus trap with native dialog using existing Alpine open/close events. Browser profile destructive-confirmation opens, keeps focus inside, closes on Escape and returns focus. Profile5 tests21 assertions PASS; build PASS. Added reduced-motion handling and dark status surfaces. All-page component/theme audit still pending.

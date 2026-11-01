@@ -602,3 +602,16 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 @media(max-width:480px) { .store-nav { gap:8px; } .store-tools { gap:4px; } .store-nav-link { gap:4px; } }
 :root[data-theme="dark"] :is(.catalog-filters,.product-type-placeholder) { background:var(--cream); color:var(--ink); }
 :root[data-theme="dark"] .store-nav-link { color:#f5a7b2; }
+
+.warbun-dialog { width:min(var(--dialog-width,672px),calc(100% - 32px)); max-height:calc(100dvh - 32px); margin:auto; padding:0; border:1px solid var(--line); border-radius:var(--radius-panel); background:var(--surface); color:var(--ink); overflow-y:auto; overscroll-behavior:contain; }
+.warbun-dialog::backdrop { background:rgb(0 0 0 / .6); }
+html:has(dialog[open]) { overflow:hidden; }
+:root[data-theme="dark"] :is(.panel,.catalog-filters,.auth-story,.shelf-tile,.stock-summary,.hero-note,.shopping-guide,.shelf-preview,.account-popover,.workspace-drawer) { background:var(--surface); color:var(--ink); border-color:var(--line); }
+:root[data-theme="dark"] :is(a.text-primary,.text-primary,.shelf-settings summary,.shelf-product-list summary) { color:#f5a7b2; }
+:root[data-theme="dark"] :is(.status-tone-pending,.status-tone-partial,.status-tone-debt) { --status-bg:#422f13; --status-ink:#fcd783; }
+:root[data-theme="dark"] :is(.status-tone-paid,.status-tone-completed) { --status-bg:#163b2b; --status-ink:#9de5b6; }
+:root[data-theme="dark"] .status-tone-confirmed { --status-bg:#1b3154; --status-ink:#b4d2ff; }
+:root[data-theme="dark"] .status-tone-preparing { --status-bg:#34234e; --status-ink:#dec3ff; }
+:root[data-theme="dark"] .status-tone-ready { --status-bg:#123c37; --status-ink:#94e2d5; }
+:root[data-theme="dark"] :is(.status-tone-failed,.status-tone-cancelled) { --status-bg:#4a2025; --status-ink:#ffb6be; }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; } }
