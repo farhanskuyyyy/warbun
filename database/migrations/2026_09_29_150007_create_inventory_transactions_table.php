@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-            
+
             $table->index('product_id');
             $table->index('type');
             $table->index('created_at');

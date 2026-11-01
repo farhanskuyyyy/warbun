@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             $table->index('debt_account_id');
             $table->index('customer_id');
             $table->index('type');

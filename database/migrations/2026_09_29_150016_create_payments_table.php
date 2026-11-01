@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamp('paid_at')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
-            
+
             $table->index(['payable_type', 'payable_id']);
             $table->index('customer_id');
             $table->index('status');

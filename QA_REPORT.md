@@ -1,5 +1,9 @@
 # Warbun — QA development
 
+## Final UI implementation baseline P00 · 1 November 2026
+
+Verified on branch `feat/warbun-final-ui`:113 backend tests/929 assertions pass, production build passes,21 browser route/viewport combinations pass without document overflow or JavaScript page errors. Mobile drawer focus/Escape and customer authorization smoke pass. Fixed pre-existing formatting in AuditController and12 migrations; Pint and backend retest pass. User database untouched; browser fixtures used disposable SQLite. [Evidence, screenshots, gap inventory and limits](docs/implementation/qa/P00-BASELINE.md). P01 is next; this is not final UI completion.
+
 ## Figcraft shelf grid view/editor · 1 November 2026
 
 Updated six existing Shelf entry frames in the same native file and added page 20 with separate view/edit, example move/resize, matching saved states, rack detail and unsaved confirmation. Preserved the prior numbered-product list for placement. Reviewed 54 main state renders, 24 dialogs and handoff; fixed footer spacing, initial save state, outlines, independent gesture geometry and product-assignment navigation. Text bounds checked across those 79 trees without accidental overflow; 216 example rack rectangles fit the grid without overlaps. Native drag uses predetermined frame transitions; free-form manipulation, editable inputs, persistence, collision detection and runtime keyboard/touch/accessibility remain unimplemented/untested. No Laravel/DB changes. [Frames, previews and implementation contract](design/figcraft/soft-neobrutalism/shelf-grid/README.md).

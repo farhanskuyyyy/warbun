@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('credit_limit', 15, 2)->default(0);
             $table->enum('status', ['active', 'suspended', 'closed'])->default('active');
             $table->timestamps();
-            
+
             $table->unique('customer_id');
         });
     }

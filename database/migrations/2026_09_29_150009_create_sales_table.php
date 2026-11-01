@@ -26,7 +26,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index('user_id');
             $table->index('customer_id');
             $table->index('sale_number');

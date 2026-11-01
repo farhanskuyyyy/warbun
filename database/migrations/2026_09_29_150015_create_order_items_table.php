@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('discount', 15, 2)->default(0);
             $table->decimal('subtotal', 15, 2);
             $table->timestamps();
-            
+
             $table->index('order_id');
             $table->index('product_id');
         });

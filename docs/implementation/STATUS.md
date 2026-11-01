@@ -2,11 +2,11 @@
 
 [Mulai di indeks](README.md). Tanggal baseline rencana: 1 November 2026.
 
-**Belum ada fase implementasi yang dijalankan melalui tasklist ini.** Inspeksi source/routes/desain untuk penyusunan dokumen tidak dihitung sebagai P00 selesai. Jangan menyalin tanda selesai dari tasklist lama.
+**P00 selesai pada 1 November 2026.** Baseline backend/build/browser diverifikasi terisolasi; formatting existing diperbaiki. P01–P11 belum selesai. Jangan menyalin tanda selesai dari tasklist lama.
 
 | Phase | Status | Commit implementasi | Bukti QA / blocker |
 | --- | --- | --- | --- |
-| P00 Baseline | TODO | — | — |
+| P00 Baseline | DONE | Commit `chore(ui): record verified implementation baseline` | [Baseline evidence](qa/P00-BASELINE.md) |
 | P01 Foundations | TODO | — | — |
 | P02 Shell/landing/auth | TODO | — | — |
 | P03 Catalog/picker/cart | TODO | — | — |
@@ -23,12 +23,12 @@ Status yang valid: TODO, IN PROGRESS, BLOCKED, DONE. DONE membutuhkan bukti DoD,
 
 ## Resume record
 
-- Branch / HEAD saat agent mulai: isi setelah verifikasi.
-- Last completed task: belum ada.
-- Current task: P00 baseline.
+- Branch / HEAD saat agent mulai: `feat/warbun-final-ui`, dibuat dari `7338c34`.
+- Last completed task: P00 baseline dan formatting existing.
+- Current task: P01 foundations (belum dimulai).
 - Working tree changes milik pengguna: inspect; saat handoff ada `.DS_Store` modified, jangan ikut commit.
-- Commands/tests actually run during implementation: belum ada.
-- Next safe action: baca aturan kerja dan inspeksi environment/branch/DB test tanpa menampilkan secrets.
+- Commands/tests actually run during implementation: PHPUnit113/929 PASS sebelum/sesudah fix; build PASS; Pint PASS setelah fix; Playwright21 kombinasi route/viewport PASS, drawer/focus/customer403 PASS.
+- Next safe action: inspect shared styles/components dan native foundations untuk P01. Buat ulang server QA terisolasi; server baseline port8876 dihentikan setelah verifikasi.
 
 ## Keputusan dan pertanyaan yang berpengaruh
 
@@ -44,8 +44,12 @@ Status yang valid: TODO, IN PROGRESS, BLOCKED, DONE. DONE membutuhkan bukti DoD,
 
 | ID | Severity | Route/steps | Status | Fix commit | Retest/evidence |
 | --- | --- | --- | --- | --- | --- |
-| — | — | Belum ada QA implementasi baru | — | — | — |
+| B001 | P3 | Pint gagal pada AuditController +12 migrations legacy | FIXED | Commit baseline | Pint PASS; PHPUnit113/929 PASS; hanya whitespace/import order |
 
 ## Handoff berikutnya
 
 Tambahkan catatan bertanggal setiap akhir sesi: task selesai, file tersentuh, hasil test, bug tersisa dan langkah berikut. Jangan hapus catatan penting sebelumnya; ringkas jika terlalu panjang.
+
+### 1 November 2026 — P00
+
+Branch implementasi dibuat;141 routes/103 views sesuai inventory. Fixture browser SQLite sementara, bukan DB pengguna. Dua screenshot terkurasi disimpan di `qa/p00/`. `.DS_Store` tidak disentuh. Lanjut P01; UI final belum diimplementasikan.

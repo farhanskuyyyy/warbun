@@ -4,13 +4,13 @@
 
 ## P00 — Baseline dan lingkungan aman
 
-- [ ] Baca manifest/lockfile, routes, controllers/services, view components, desain final, tasklist dan QA existing. Verifikasi branch/dirty tree; jangan mengubah `.DS_Store` pengguna.
-- [ ] Inventaris semua GET page dan child flows, JSON endpoints, aksi mutasi dan permission menggunakan `php artisan route:list --json`. Bandingkan dengan PAGE-COVERAGE; tambahkan route yang muncul setelah handoff.
-- [ ] Tandai fungsi existing, gap visual dan gap backend per modul. Contoh temuan saat rencana dibuat: customer quote masih memakai ongkir flat dari setting; radius/fee prototype belum merupakan implementasi.
-- [ ] Siapkan `.env` QA terpisah tanpa menampilkan secrets, DB disposable, session/cache/mail aman, user per role dan katalog fixture termasuk stok nol, nama panjang, gambar hilang.
-- [ ] Baca scripts QA sebelum menjalankan: beberapa mengisi/mengubah data. Pastikan URL/server browser menunjuk DB QA, bukan server operasional pengguna.
-- [ ] Jalankan baseline backend, build, formatting check dan smoke browser. Catat kegagalan existing sebagai issue terpisah dengan reproduksi; baseline lama di ARCHITECTURE/QA_REPORT bukan hasil saat ini.
-- [ ] Simpan route/view inventory, baseline hasil dan keputusan di STATUS/QA report. Buat branch implementasi bila belum ada.
+- [x] Baca manifest/lockfile, routes, controllers/services, view components, desain final, tasklist dan QA existing. Verifikasi branch/dirty tree; jangan mengubah `.DS_Store` pengguna.
+- [x] Inventaris semua GET page dan child flows, JSON endpoints, aksi mutasi dan permission menggunakan `php artisan route:list --json`. Bandingkan dengan PAGE-COVERAGE; tambahkan route yang muncul setelah handoff.
+- [x] Tandai fungsi existing, gap visual dan gap backend per modul. Contoh temuan saat rencana dibuat: customer quote masih memakai ongkir flat dari setting; radius/fee prototype belum merupakan implementasi.
+- [x] Siapkan `.env` QA terpisah tanpa menampilkan secrets, DB disposable, session/cache/mail aman, user per role dan katalog fixture termasuk stok nol, nama panjang, gambar hilang.
+- [x] Baca scripts QA sebelum menjalankan: beberapa mengisi/mengubah data. Pastikan URL/server browser menunjuk DB QA, bukan server operasional pengguna.
+- [x] Jalankan baseline backend, build, formatting check dan smoke browser. Catat kegagalan existing sebagai issue terpisah dengan reproduksi; baseline lama di ARCHITECTURE/QA_REPORT bukan hasil saat ini.
+- [x] Simpan route/view inventory, baseline hasil dan keputusan di STATUS/QA report. Buat branch implementasi bila belum ada.
 
 Exit: aplikasi dapat dijalankan dan diuji terisolasi, cakupan route lengkap, masalah baseline teridentifikasi. Jika runtime gagal, perbaiki penyebab minimum dulu; jangan lanjut kosmetik di atas aplikasi yang tidak dapat diakses.
 

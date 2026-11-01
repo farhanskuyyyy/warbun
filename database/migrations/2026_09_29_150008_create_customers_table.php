@@ -22,7 +22,7 @@ return new class extends Migration
             $table->enum('debt_status', ['eligible', 'restricted', 'suspended', 'blocked'])->default('eligible');
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index('phone');
             $table->index('email');
         });

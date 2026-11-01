@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'closed'])->default('active');
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             $table->index('user_id');
             $table->index('status');
         });

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->decimal('weight', 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index('sku');
             $table->index('barcode');
             $table->index('category_id');
