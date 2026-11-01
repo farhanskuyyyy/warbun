@@ -28,6 +28,19 @@ class CheckoutPolicyTest extends TestCase
         $quote = $policy->calculate(2500000, ['delivery_type' => 'pickup', 'payment_method' => 'qr']);
         $this->assertSame(17500, $quote['fee']);
         $this->assertSame(2517500, $quote['total']);
+        $delivery = $policy->calculate(2500000, ['delivery_type' => 'delivery', 'payment_method' => 'qr']);
+        $this->assertSame(24500, $delivery['fee']);
+        $this->assertSame(3524500, $delivery['total']);
+        DB::table('store_settings')->insert(['key' => 'ewallet_fee', 'value' => '2000', 'created_at' => now(), 'updated_at' => now()]);
+        $wallet = $policy->calculate(2500000, ['delivery_type' => 'delivery', 'payment_method' => 'ewallet']);
+        $this->assertSame(200000, $wallet['fee']);
+        $this->assertSame(3700000, $wallet['total']);
+        $rounded = $policy->calculate(350025, ['delivery_type' => 'pickup', 'payment_method' => 'qr']);
+        $this->assertSame(2500, $rounded['fee']);
+        DB::table('store_settings')->insert(['key' => 'payment_promo_methods', 'value' => 'qr', 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('store_settings')->insert(['key' => 'payment_promo_flat', 'value' => '1000', 'created_at' => now(), 'updated_at' => now()]);
+        $this->assertSame(0, $policy->calculate(2500000, ['delivery_type' => 'pickup', 'payment_method' => 'cash'])['discount']);
+        $this->assertSame(100000, $policy->calculate(2500000, ['delivery_type' => 'pickup', 'payment_method' => 'qr'])['discount']);
         $this->expectException(ValidationException::class);
         $policy->shippingForDistance(20000);
     }

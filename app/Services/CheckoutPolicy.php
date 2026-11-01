@@ -35,7 +35,8 @@ class CheckoutPolicy
             $this->invalid('Choose a supported payment channel.');
         }
         $promoRate = (int) $settings->get('payment_promo_bps', 0);
-        $discount = min($subtotal, Money::cents($settings->get('payment_promo_flat', '0')) + intdiv($subtotal * $promoRate + 500000, 1000000) * 100);
+        $eligible = in_array($method, array_map('trim', explode(',', $settings->get('payment_promo_methods', 'cash,transfer,ewallet,qr,online'))), true);
+        $discount = $eligible ? min($subtotal, Money::cents($settings->get('payment_promo_flat', '0')) + intdiv($subtotal * $promoRate + 500000, 1000000) * 100) : 0;
         $cap = Money::cents($settings->get('payment_promo_cap', '0'));
         if ($cap > 0) {
             $discount = min($discount, $cap);
@@ -43,7 +44,7 @@ class CheckoutPolicy
         $net = $subtotal - $discount;
         $rate = $method === 'qr' ? (int) $settings->get('qris_fee_bps', 0) : 0;
         $fee = $method === 'ewallet' ? Money::cents($settings->get('ewallet_fee', '0')) : intdiv(($net + $shipping) * $rate + 500000, 1000000) * 100;
-        $policy = ['radius' => $settings->get('radius_enabled', '0'), 'store_latitude' => $settings->get('store_latitude'), 'store_longitude' => $settings->get('store_longitude'), 'shipping_cost' => $settings->get('shipping_cost', '10000'), 'qris_fee_bps' => $settings->get('qris_fee_bps', '0'), 'ewallet_fee' => $settings->get('ewallet_fee', '0'), 'promo_bps' => $promoRate, 'promo_flat' => $settings->get('payment_promo_flat', '0'), 'promo_cap' => $settings->get('payment_promo_cap', '0')];
+        $policy = ['radius' => $settings->get('radius_enabled', '0'), 'store_latitude' => $settings->get('store_latitude'), 'store_longitude' => $settings->get('store_longitude'), 'shipping_cost' => $settings->get('shipping_cost', '10000'), 'qris_fee_bps' => $settings->get('qris_fee_bps', '0'), 'ewallet_fee' => $settings->get('ewallet_fee', '0'), 'promo_methods' => $settings->get('payment_promo_methods', 'cash,transfer,ewallet,qr,online'), 'promo_bps' => $promoRate, 'promo_flat' => $settings->get('payment_promo_flat', '0'), 'promo_cap' => $settings->get('payment_promo_cap', '0')];
 
         return ['shipping' => $shipping, 'fee' => $fee, 'discount' => $discount, 'total' => $net + $shipping + $fee, 'distance_meters' => $distance, 'method' => $method, 'channel' => $channel, 'fee_basis' => $net + $shipping, 'fee_rate_bps' => $rate, 'policy_version' => hash('sha256', json_encode($policy))];
     }
