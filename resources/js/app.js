@@ -82,3 +82,33 @@ themeMedia.addEventListener('change', event => {
 window.addEventListener('storage', event => {
     if (event.key === 'warbun_theme') applyTheme(event.newValue === 'dark' || (event.newValue !== 'light' && themeMedia.matches));
 });
+
+function closeNamedModal(name) { document.querySelectorAll('[data-modal-name]').forEach(d => { if (d.dataset.modalName === name) d.close(); }); }
+window.addEventListener('open-modal', event => { document.querySelectorAll('[data-modal-name]').forEach(d => { if (d.dataset.modalName === event.detail && !d.open) d.showModal(); }); });
+window.addEventListener('close-modal', event => closeNamedModal(event.detail));
+document.querySelectorAll('[data-modal-name]').forEach(dialog => {
+    if (dialog.hasAttribute('data-initial-open')) dialog.showModal();
+    dialog.addEventListener('close', event => { if (event.target !== dialog) dialog.close(); });
+    dialog.addEventListener('click', event => { const b=dialog.getBoundingClientRect(); if(event.target===dialog && (event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)) dialog.close(); });
+});
+
+document.addEventListener('click', event => { const b=event.target.closest('[data-open-named-modal]'); if(b) { event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal',{detail:b.dataset.openNamedModal})); } });
+
+import './store-overlays';
+
+import './shelf-grid';
+
+const posCartToggle=document.querySelector('[data-pos-cart-toggle]');
+posCartToggle?.addEventListener('click',()=>{const expanded=posCartToggle.getAttribute('aria-expanded')!=='true';posCartToggle.setAttribute('aria-expanded',String(expanded));document.getElementById('pos-cart-panel').classList.toggle('is-mobile-open',expanded);if(expanded)document.getElementById('pos-cart-panel').scrollIntoView({block:'start'});});
+const monitorDialog=document.getElementById('monitor-detail');
+function selectMonitorOrder(article,open=false){const copy=article.cloneNode(true);copy.querySelector('[data-monitor-select]')?.remove();copy.classList.add('is-detail');const selected=document.querySelector('[data-monitor-selected]');selected?.replaceChildren(copy.cloneNode(true));if(open&&innerWidth<1200){document.querySelector('[data-monitor-dialog-body]').replaceChildren(copy);monitorDialog.showModal();}}
+document.querySelectorAll('[data-monitor-select]').forEach(button=>button.addEventListener('click',()=>selectMonitorOrder(button.closest('article'),true)));
+const firstMonitorOrder=document.querySelector('.monitor-order');if(firstMonitorOrder)selectMonitorOrder(firstMonitorOrder);
+document.querySelector('[data-monitor-close]')?.addEventListener('click',()=>monitorDialog.close());
+
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){const dialogs=[...document.querySelectorAll('dialog[open]')];dialogs.at(-1)?.close();}});
+
+const posCheckout=document.getElementById('pos-checkout-dialog');
+document.querySelector('[data-pos-checkout-open]')?.addEventListener('click',()=>posCheckout.showModal());
+document.querySelector('[data-pos-checkout-close]')?.addEventListener('click',()=>posCheckout.close());
+if(!location.pathname.startsWith('/reports'))document.querySelectorAll('.cms-shell table').forEach(table=>{const labels=[...table.querySelectorAll('thead th')].map(h=>h.textContent.trim());if(!labels.length)return;table.classList.add('responsive-records');table.querySelectorAll('tbody tr').forEach(row=>[...row.children].forEach((cell,i)=>{if(cell.colSpan===1)cell.dataset.columnLabel=labels[i]||'';}));});
