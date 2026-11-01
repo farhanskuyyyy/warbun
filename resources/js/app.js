@@ -99,7 +99,17 @@ import './store-overlays';
 import './shelf-grid';
 
 const posCartToggle=document.querySelector('[data-pos-cart-toggle]');
-posCartToggle?.addEventListener('click',()=>{const expanded=posCartToggle.getAttribute('aria-expanded')!=='true';posCartToggle.setAttribute('aria-expanded',String(expanded));document.getElementById('pos-cart-panel').classList.toggle('is-mobile-open',expanded);if(expanded)document.getElementById('pos-cart-panel').scrollIntoView({block:'start'});});
+const posCartDialog=document.getElementById('pos-cart-dialog');
+const posCartPanel=document.getElementById('pos-cart-panel');
+if(posCartPanel&&posCartDialog){
+    const originalParent=posCartPanel.parentElement;
+    posCartToggle?.addEventListener('click',()=>{document.querySelector('[data-pos-cart-body]').append(posCartPanel);posCartPanel.classList.add('is-mobile-open');posCartToggle.setAttribute('aria-expanded','true');posCartDialog.showModal();});
+    posCartDialog.addEventListener('close',()=>{originalParent.append(posCartPanel);posCartPanel.classList.remove('is-mobile-open');posCartToggle.setAttribute('aria-expanded','false');});
+    document.querySelector('[data-pos-cart-close]').addEventListener('click',()=>posCartDialog.close());
+    matchMedia('(min-width:768px)').addEventListener('change',event=>{if(event.matches&&posCartDialog.open)posCartDialog.close();});
+    const observer=new MutationObserver(()=>{posCartToggle.textContent=document.querySelector('#total')?.textContent+' · '+document.querySelector('#pos-cart-title')?.textContent;});
+    observer.observe(document.getElementById('total'),{childList:true,subtree:true});
+}
 const monitorDialog=document.getElementById('monitor-detail');
 function selectMonitorOrder(article,open=false){const copy=article.cloneNode(true);copy.querySelector('[data-monitor-select]')?.remove();copy.classList.add('is-detail');const selected=document.querySelector('[data-monitor-selected]');selected?.replaceChildren(copy.cloneNode(true));if(open&&innerWidth<1200){document.querySelector('[data-monitor-dialog-body]').replaceChildren(copy);monitorDialog.showModal();}}
 document.querySelectorAll('[data-monitor-select]').forEach(button=>button.addEventListener('click',()=>selectMonitorOrder(button.closest('article'),true)));

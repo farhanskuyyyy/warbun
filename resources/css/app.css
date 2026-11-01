@@ -728,3 +728,26 @@ fieldset { min-width:0; } .checkout-layout>* { min-width:0; } .payment-accordion
 .theme-sun { display:none; } :root[data-theme=dark] .theme-sun { display:block; } :root[data-theme=dark] .theme-moon { display:none; }
 
 @media(max-width:599px){ .responsive-records thead { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); } .responsive-records,.responsive-records tbody,.responsive-records tr { display:block; width:100%; } .responsive-records tbody tr { border:1px solid var(--line); border-radius:10px; margin-bottom:12px; padding:12px; } .responsive-records tbody td { display:flex; justify-content:space-between; gap:16px; padding:8px; overflow-wrap:anywhere; } .responsive-records td[data-column-label]::before { content:attr(data-column-label); font-size:12px; color:var(--muted); flex:0 0 35%; } }
+
+@media(max-width:599px){ .cms-shell table.responsive-records { min-width:0!important; table-layout:auto; } .responsive-records tbody td { min-width:0!important; width:100%; white-space:normal; text-align:right; } .responsive-records tbody td>* { min-width:0; overflow-wrap:anywhere; } .responsive-records td::before { text-align:left; } }
+:root[data-theme=dark] :is(.bg-gray-100,.bg-gray-200,.bg-gray-50,.cart-empty,.product-type-placeholder,.shelf-preview,.shopping-cart-bar) { background:var(--cream); color:var(--ink); }
+:root[data-theme=dark] :is(.text-red-500,.text-red-600,.text-red-700) { color:#ffb6be; }
+:root[data-theme=dark] :is(.text-green-600,.text-green-700) { color:#9de5b6; }
+:root[data-theme=dark] :is(.text-yellow-600,.text-orange-600,.text-amber-600) { color:#fcd783; }
+:root[data-theme=dark] thead { background:var(--cream); color:var(--ink); }
+
+:root[data-theme=dark] :is(.nav-link:not(.is-active),.master-navigation summary,.sidebar-bottom,.context-label,.context-divider,.shop-shortcut,.workspace-footer,.continue-shopping,.cart-remove,.shelf-category,.hero-description,.store-footer a) { color:var(--muted); }
+:root[data-theme=dark] .nav-link.is-active { color:white; }
+:root[data-theme=dark] :is(.text-primary,.text-primary-dark,.text-red-800,.text-orange-700) { color:#f5a7b2; }
+:root[data-theme=dark] :is(thead tr,thead th) { background:var(--cream); color:var(--muted); }
+:root[data-theme=dark] .store-shell a:not([class*="button"]):not([aria-current]) { color:var(--secondary); }
+:root[data-theme=dark] .customer-bottom-nav a[aria-current] { color:white; }
+
+.field :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { border-color:#948b7f; } :root[data-theme=dark] .field :is(input,select,textarea) { border-color:#948b7f; }
+
+#pos-cart-dialog .pos-cart-panel { display:block; position:static; padding:0; border:0; } @media(max-width:767px){ .pos-mobile-cart { position:fixed; top:auto; bottom:20px; left:16px; right:16px; width:calc(100% - 32px); border-radius:16px; box-shadow:2px 3px 0 var(--ink); } .cms-content:has(.pos-workbench) { padding-bottom:100px; } }
+
+.warbun-button-danger { background:#b91c1c; color:white; border-color:#b91c1c; } .warbun-input { border:1px solid #948b7f; border-radius:6px; min-height:44px; background:var(--surface); color:var(--ink); } .warbun-input:focus { outline:3px solid var(--secondary); outline-offset:2px; --tw-ring-color:var(--secondary); }
+
+.transaction-status { white-space:nowrap; }
+@media(min-width:600px){ .cms-shell table { min-width:720px; } .cms-shell td.text-right { white-space:nowrap; } .cms-shell .panel:has(>table) { overflow-x:auto; } }

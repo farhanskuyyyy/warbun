@@ -10,6 +10,7 @@ if (configElement) {
     let pendingScans = 0;
     let scanQueue = Promise.resolve();
     let productsController;
+    let deliveryController; let deliveryReady=true;
     let searchTimer;
     let selectedCategory = '';
     let selectedShelf = '';
@@ -102,7 +103,7 @@ if (configElement) {
         field('debtPreview').textContent = labels.debtRemaining + ': ' + money(remaining / 100) + (customer?.eligible && remaining > Math.round(Number(customer.available) * 100) ? ' · ' + labels.creditExceeded : '');
         field('total').textContent = money(total / 100);
         field('changeTotal').textContent = money(field('paymentMethod').value === 'debt' ? 0 : Math.max(0, Math.round(Number(field('paidAmount').value || 0) * 100) - total) / 100);
-        field('payBtn').disabled = loading || savingCustomer || pendingScans > 0 || !cart.length || !config.activeShift || (isDelivery() && (!field('shippingAddressId').value || field('shippingAddressId').dataset.busy === 'true')) || (debt && (!customer?.eligible || remaining <= 0 || remaining > Math.round(Number(customer.available) * 100)));
+        field('payBtn').disabled = loading || savingCustomer || pendingScans > 0 || !cart.length || !config.activeShift || (isDelivery() && (!deliveryReady || !field('shippingAddressId').value || field('shippingAddressId').dataset.busy === 'true')) || (debt && (!customer?.eligible || remaining <= 0 || remaining > Math.round(Number(customer.available) * 100)));
         if (field('newCustomerBtn')) field('newCustomerBtn').disabled = loading || savingCustomer;
         field('barcodeInput').disabled = loading || !config.activeShift;
         field('scanBtn').disabled = loading || !config.activeShift;
@@ -212,7 +213,7 @@ if (configElement) {
 
     field('saleForm').addEventListener('submit', async event => {
         event.preventDefault();
-        if (loading || pendingScans || !cart.length || !config.activeShift || (isDelivery() && (!field('shippingAddressId').value || field('shippingAddressId').dataset.busy === 'true'))) return;
+        if (loading || pendingScans || !cart.length || !config.activeShift || (isDelivery() && (!deliveryReady || !field('shippingAddressId').value || field('shippingAddressId').dataset.busy === 'true'))) return;
         const payload = {
             address_id: isDelivery() ? field('shippingAddressId').value || null : null,
             shipping_latitude: isDelivery() ? field('posDelivery-latitude').value || null : null,
@@ -311,6 +312,16 @@ if (configElement) {
     });
     scanStatus(config.activeShift ? labels.scanReady : labels.shift);
     render();
-    window.addEventListener('addressbook:change', () => { if (!loading) {requestKey = crypto.randomUUID(); render();} });
+    async function checkDelivery(){
+        deliveryController?.abort();
+        if(!isDelivery()){deliveryReady=true;render();return;}
+        deliveryReady=false;render();
+        if(!field('shippingAddressId').value||!field('customerId').value)return;
+        deliveryController=new AbortController();const signal=deliveryController.signal;
+        try{const response=await fetch(config.deliveryQuoteUrl,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json','X-CSRF-TOKEN':config.csrf},body:JSON.stringify({customer_id:field('customerId').value,address_id:field('shippingAddressId').value}),signal});const quote=await response.json();if(!response.ok)throw Error(Object.values(quote.errors||{}).flat().join(' ')||labels.error);if(signal.aborted)return;config.shippingCost=quote.shipping;deliveryReady=true;field('saleError').textContent='';}catch(error){if(error.name==='AbortError')return;field('saleError').textContent=error.message;}render();
+    }
+    window.addEventListener('addressbook:change', () => { if (!loading) {requestKey = crypto.randomUUID(); checkDelivery();} });
+    document.querySelectorAll('[name="fulfillment_type"]').forEach(input=>input.addEventListener('change',checkDelivery));
+
     loadProducts();
 }

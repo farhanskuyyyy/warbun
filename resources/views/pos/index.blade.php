@@ -66,6 +66,7 @@
         </form>
     </section>
 </div>
+<dialog id="pos-cart-dialog" class="store-overlay" aria-labelledby="pos-cart-title"><header><h2 id="pos-cart-title">{{ __('Cart') }}</h2><button type="button" data-pos-cart-close aria-label="{{ __('Close') }}">×</button></header><div class="store-overlay-body" data-pos-cart-body></div></dialog>
 @can('customers.create')
 <dialog id="customerDialog" class="pos-customer-dialog" aria-labelledby="customerDialogTitle">
     <div class="pos-customer-heading"><h2 id="customerDialogTitle">{{ __('New customer') }}</h2><button id="closeCustomerBtn" type="button" class="button-secondary" aria-label="{{ __('Close') }}"><x-icon name="xmark" /></button></div>
