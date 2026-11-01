@@ -28,5 +28,4 @@
 @endforelse
 </div>
 <div class="catalog-pagination">{{ $products->withQueryString()->links() }}</div>
-<aside class="shopping-cart-bar" data-cart-bar hidden aria-label="{{ __('Cart') }}"><div><strong data-cart-bar-count></strong><span data-cart-bar-subtotal></span></div><a href="{{ route('customer.cart') }}" class="button-primary">{{ __('Review cart') }} <span aria-hidden="true">→</span></a></aside>
 @endsection

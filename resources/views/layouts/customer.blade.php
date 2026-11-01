@@ -5,7 +5,7 @@
 <header class="store-header"><nav class="store-nav" aria-label="{{ __('Main navigation') }}">
     <a href="{{ route('landing') }}" class="brand">warbun<span>{{ __('Your everyday essentials') }}</span></a>
     <a href="{{ route('customer.shop') }}" class="store-nav-link {{ request()->routeIs('customer.shop','customer.product') ? 'is-active' : '' }}"><x-icon name="store" /><span>{{ __('Shop') }}</span></a>
-    <div class="store-tools"><a class="cart-link" href="{{ route('customer.cart') }}" title="{{ __('Cart') }}"><x-icon name="cart-shopping" /><span class="sr-only">{{ __('Cart') }}</span><span data-cart-count class="cart-count">0</span></a>@include('components.account-menu')</div>
+    <a class="store-orders-link" href="{{ route('customer.history') }}">{{ __('My orders') }}</a><div class="store-tools"><a class="cart-link" href="{{ route('customer.cart') }}" title="{{ __('Cart') }}"><x-icon name="cart-shopping" /><span class="sr-only">{{ __('Cart') }}</span><span data-cart-count class="cart-count">0</span></a>@include('components.account-menu')</div>
 </nav></header>
 <script id="shopping-messages" type="application/json">{!! json_encode(['items' => __(':count items'), 'inCart' => __(':count in cart'), 'added' => __('Added to cart'), 'limit' => __('You have reached the available stock.')], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
 <main id="main" class="store-content">@include('components.feedback') @yield('content')</main>
@@ -23,4 +23,4 @@
         </nav>
     </div>
     <div class="footer-bottom"><span>© {{ date('Y') }} Warbun</span><span>{{ __('Pickup or delivery. Your choice.') }}</span></div>
-</footer>@stack('scripts')</body></html>
+</footer>@include('components.store-overlays')@stack('scripts')</body></html>

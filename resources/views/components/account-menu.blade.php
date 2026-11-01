@@ -1,4 +1,5 @@
 @include('components.theme-toggle')
+@guest<a class="store-login-link button-primary" href="{{ route('login') }}">{{ __('Login') }}</a>@endguest
 <details class="account-menu">
     <summary aria-label="{{ __('Account') }}" title="{{ __('Account') }}"><span class="account-avatar"><x-icon name="user" /></span><span>{{ __('Account') }}</span><x-icon name="chevron-down" class="disclosure-icon" /></summary>
     <div class="account-popover">
