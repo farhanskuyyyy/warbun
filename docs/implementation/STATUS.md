@@ -7,7 +7,7 @@
 | Phase | Status | Commit implementasi | Bukti QA / blocker |
 | --- | --- | --- | --- |
 | P00 Baseline | DONE | Commit `chore(ui): record verified implementation baseline` | [Baseline evidence](qa/P00-BASELINE.md) |
-| P01 Foundations | TODO | — | — |
+| P01 Foundations | IN PROGRESS | First token/button feature commit | Build PASS; auth/profile9 tests29 assertions PASS; full foundation QA pending |
 | P02 Shell/landing/auth | TODO | — | — |
 | P03 Catalog/picker/cart | TODO | — | — |
 | P04 Delivery/payment/checkout | TODO | — | — |
@@ -53,3 +53,7 @@ Tambahkan catatan bertanggal setiap akhir sesi: task selesai, file tersentuh, ha
 ### 1 November 2026 — P00
 
 Branch implementasi dibuat;141 routes/103 views sesuai inventory. Fixture browser SQLite sementara, bukan DB pengguna. Dua screenshot terkurasi disimpan di `qa/p00/`. `.DS_Store` tidak disentuh. Lanjut P01; UI final belum diimplementasikan.
+
+### P01 — first foundation slice
+
+Added canonical light color/font/spacing/radius variables and replaced generic primary/secondary Blade button styling with Warbun controls (44px target, teal focus, disabled state). Build PASS; auth/profile9 tests29 assertions PASS. Browser profile reviewed at390px; full theme/overlay/responsive suite remains pending. Next: consolidate remaining shared controls, implement theme and overlay foundation.

@@ -129,7 +129,46 @@
 dialog::backdrop { background: rgb(0 0 0 / 0.5); }
 dialog { max-height: calc(100dvh - 2rem); overflow-y: auto; }
 
-:root { --wine: #8b1e2d; --ink: #282724; --muted: #64615b; --paper: #f6f3ed; --line: #dedbd4; --cream: #ede6d8; }
+:root {
+    --wine: #8b1e2d;
+    --secondary: #236b65;
+    --ink: #282724;
+    --muted: #68635c;
+    --paper: #f8f6f1;
+    --surface: #ffffff;
+    --line: #dedbd4;
+    --cream: #ede6d8;
+    --font-body: system-ui, sans-serif;
+    --font-heading: Georgia, serif;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --radius-control: 6px;
+    --radius-panel: 12px;
+}
+.warbun-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid var(--wine);
+    border-radius: var(--radius-control);
+    font: 600 14px/1.5 var(--font-body);
+    text-align: center;
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+}
+.warbun-button-primary { background: var(--wine); color: #fff; }
+.warbun-button-secondary { background: var(--surface); color: var(--ink); border-color: var(--muted); }
+.warbun-button:hover:not(:disabled) { box-shadow: 2px 2px 0 var(--ink); }
+.warbun-button:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
+.warbun-button:disabled { opacity: .55; cursor: not-allowed; }
+
 html { scroll-padding-bottom: 100px; }
 .auth-shell { min-height: 100dvh; display: flex; flex-direction: column; background: #faf9f6; }
 .auth-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 5vw; border-bottom: 1px solid var(--line); }
