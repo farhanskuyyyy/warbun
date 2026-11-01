@@ -11,7 +11,7 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'request_key',
+        'request_key', 'service_fee', 'checkout_snapshot',
         'order_number', 'customer_id', 'subtotal', 'discount', 'tax',
         'shipping_cost', 'total', 'status', 'payment_status',
         'fulfillment_type', 'shipping_address', 'notes',
@@ -19,6 +19,7 @@ class Order extends Model
     ];
 
     protected $casts = [
+        'service_fee' => 'decimal:2', 'checkout_snapshot' => 'array',
         'shipping_latitude' => 'decimal:7',
         'shipping_longitude' => 'decimal:7',
         'subtotal' => 'decimal:2',

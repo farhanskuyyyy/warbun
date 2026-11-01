@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Notifications\OperationalNotification;
 use App\Support\DeliveryPoint;
 use App\Support\Money;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -44,11 +45,23 @@ class OrderService
                 }
                 $line = Money::multiply(Money::cents($product->selling_price), $qty);
                 $subtotal += $line;
-                $items[] = ['product_id' => (int) $id, 'quantity' => $qty, 'unit_price' => $product->selling_price, 'subtotal' => Money::decimal($line)];
+                $items[] = ['product_name' => $product->name, 'product_id' => (int) $id, 'quantity' => $qty, 'unit_price' => $product->selling_price, 'subtotal' => Money::decimal($line)];
             }
-            $shipping = $data['delivery_type'] === 'delivery' ? Money::cents(DB::table('store_settings')->where('key', 'shipping_cost')->value('value') ?? '10000') : 0;
+            $policy = app(CheckoutPolicy::class);
+            $charges = $policy->calculate($subtotal, $data);
+            $shipping = $charges['shipping'];
+            if (! empty($data['quote_token'])) {
+                try {
+                    $quote = json_decode(Crypt::decryptString($data['quote_token']), true, 512, JSON_THROW_ON_ERROR);
+                } catch (\Throwable $exception) {
+                    $this->invalid('Your quote has expired. Review the total and try again.');
+                }
+                if (($quote['user_id'] ?? null) !== auth()->id() || ($quote['expires'] ?? 0) < now()->timestamp || ! hash_equals($quote['fingerprint'] ?? '', $policy->fingerprint($data['items'], $charges, $data))) {
+                    $this->invalid('Prices or delivery details changed. Review the total and try again.');
+                }
+            }
             $data = array_merge($data, DeliveryPoint::snapshot($data, $data['delivery_type'] === 'delivery'));
-            $order = Order::create(['shipping_latitude' => $data['shipping_latitude'], 'shipping_longitude' => $data['shipping_longitude'], 'order_number' => 'ORD-'.Str::uuid(), 'request_key' => $data['request_key'], 'customer_id' => $customer->id, 'subtotal' => Money::decimal($subtotal), 'shipping_cost' => Money::decimal($shipping), 'total' => Money::decimal($subtotal + $shipping), 'fulfillment_type' => $data['delivery_type'], 'shipping_address' => $data['address'] ?? null, 'notes' => $data['notes'] ?? null, 'status' => 'pending', 'payment_status' => 'pending']);
+            $order = Order::create(['shipping_latitude' => $data['shipping_latitude'], 'shipping_longitude' => $data['shipping_longitude'], 'order_number' => 'ORD-'.Str::uuid(), 'request_key' => $data['request_key'], 'customer_id' => $customer->id, 'subtotal' => Money::decimal($subtotal), 'shipping_cost' => Money::decimal($shipping), 'discount' => Money::decimal($charges['discount']), 'service_fee' => Money::decimal($charges['fee']), 'checkout_snapshot' => $charges, 'total' => Money::decimal($charges['total']), 'fulfillment_type' => $data['delivery_type'], 'shipping_address' => $data['address'] ?? null, 'notes' => $data['notes'] ?? null, 'status' => 'pending', 'payment_status' => 'pending']);
             foreach ($items as $item) {
                 $order->items()->create($item);
                 app(StockService::class)->change($item['product_id'], -$item['quantity'], 'Online order reservation', 'order', $order->id);
