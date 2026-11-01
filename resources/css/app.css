@@ -751,3 +751,9 @@ fieldset { min-width:0; } .checkout-layout>* { min-width:0; } .payment-accordion
 
 .transaction-status { white-space:nowrap; }
 @media(min-width:600px){ .cms-shell table { min-width:720px; } .cms-shell td.text-right { white-space:nowrap; } .cms-shell .panel:has(>table) { overflow-x:auto; } }
+
+:root[data-theme=dark] .bg-green-100 { background:#163b2b; color:#9de5b6; }
+:root[data-theme=dark] .bg-red-100 { background:#4a2025; color:#ffb6be; }
+:root[data-theme=dark] :is(.bg-yellow-100,.bg-amber-100,.bg-orange-100) { background:#422f13; color:#fcd783; }
+:root[data-theme=dark] .bg-blue-100 { background:#1b3154; color:#b4d2ff; }
+.store-hero .button-secondary { background:#e4f0ea; color:#236b65; border:1.5px solid var(--ink); box-shadow:3px 4px 0 var(--ink); border-radius:10px; }

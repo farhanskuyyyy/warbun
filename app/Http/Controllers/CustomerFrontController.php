@@ -123,7 +123,7 @@ class CustomerFrontController extends Controller
     public function history()
     {
         $customer = Customer::where('user_id', auth()->id())->firstOrFail();
-        $orders = $customer->orders()->with('items.product')->latest()->paginate(12);
+        $orders = $customer->orders()->with('items.product', 'payments')->latest()->paginate(12);
         $transactions = $customer->debtTransactions()->latest()->paginate(20, ['*'], 'debt_page');
 
         $sales = $customer->sales()->with('items.product')->latest()->paginate(20, ['*'], 'sales_page');
