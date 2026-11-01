@@ -2,6 +2,8 @@
 @section('title', __('Product placement'))
 @section('header', __('Product placement'))
 @section('content')
+@include('components.shelf-grid')
+<details class="shelf-assignment-section" @if(request('shelf') || request('search')) open @endif><summary class="button-secondary">{{ __('Set product locations') }}</summary>
 <div class="monitor-heading"><div><h2>{{ __('Find it on the shelf') }}</h2><p>{{ __('Assign a main shelf and position for each product. Cashiers and order pickers see the same location.') }}</p></div><a class="button-secondary" href="{{ route('pos.index') }}"><x-icon name="cash-register" />{{ __('Open cashier') }}</a></div>
 <section class="panel shelf-overview" aria-labelledby="shelvesHeading">
     <div class="shelf-heading"><h2 id="shelvesHeading">{{ __('Shelves') }}</h2><span>{{ __('Numbered overview, not a floor plan.') }}</span></div>
@@ -25,4 +27,5 @@
 </article>
 @empty<div class="panel"><h2>{{ __('No products found') }}</h2><p>{{ __('Choose another shelf or clear your search.') }}</p></div>@endforelse
 </div><div class="mt-6">{{ $products->links() }}</div>
+</details>
 @endsection

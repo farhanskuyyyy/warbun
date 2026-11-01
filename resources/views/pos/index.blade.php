@@ -8,6 +8,7 @@
 @else
 <div class="panel mb-4"><p>{{ __('Active Shift') }} · {{ $activeShift->opened_at->translatedFormat('d M Y H:i') }}</p><form action="{{ route('pos.close-shift') }}" method="POST" class="flex flex-wrap gap-3 mt-3">@csrf<label class="field">{{ __('Closing cash') }}<input name="closing_cash" type="number" min="0" step="0.01" required></label><button class="button-primary">{{ __('Close Shift') }}</button></form></div>
 @endif
+<button type="button" class="button-primary pos-mobile-cart" aria-expanded="false" aria-controls="pos-cart-panel" data-pos-cart-toggle>{{ __('Cart') }}</button>
 <div class="pos-workbench">
     <section class="panel pos-products">
         <form id="barcodeForm" class="pos-scanner">
@@ -17,7 +18,7 @@
         </form>
         <p id="scanState" class="pos-scan-state" role="status" aria-live="polite"></p>
         <x-barcode-scan-actions target="barcodeInput" submit="barcodeForm" :disabled="!$activeShift" />
-        <section class="shelf-overview" aria-labelledby="posShelvesHeading">
+        <details class="shelf-overview" aria-labelledby="posShelvesHeading"><summary>{{ __('Choose shelf') }}</summary>
             <div class="shelf-heading"><h2 id="posShelvesHeading">{{ __('Shelf minimap') }}</h2>@can('products.view')<a href="{{ route('shelves.index') }}">{{ __('Product placement') }}</a>@endcan</div>
             <p>{{ __('Choose a shelf, then a product to see details and add it. Numbers identify shelves, not floor positions.') }}</p>
             <div class="shelf-map" role="group" aria-label="{{ __('Filter by shelf') }}">
@@ -26,7 +27,7 @@
                 <button type="button" class="shelf-tile" data-pos-shelf="unassigned" aria-pressed="false" aria-controls="productList"><x-icon name="box" /><strong>{{ __('Unassigned') }}</strong><span>{{ __('Without location') }}</span></button>
             </div>
             @if($shelves->isEmpty())<p class="mt-3">{{ __('No shelves yet. Create shelves in Product placement; products remain available below.') }}</p>@endif
-        </section>
+        </details>
         <label class="field">{{ __('Search product or barcode') }}<input id="productSearch" type="search" autocomplete="off"></label>
         <div class="pos-category-filter">
             <p>{{ __('Category') }}</p>
@@ -39,26 +40,29 @@
         <div id="productList" class="max-h-[60vh] overflow-y-auto grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3"></div>
         <button id="moreProductsBtn" type="button" class="button-secondary mt-3" hidden>{{ __('Load more products') }}</button>
     </section>
-    <section class="panel">
+    <section class="panel pos-cart-panel" id="pos-cart-panel">
         <h2 class="text-xl font-semibold mb-3">{{ __('Cart') }}</h2><div id="cartItems" class="space-y-3"></div>
         <form id="saleForm" class="space-y-3 mt-4">
             <fieldset class="pos-fulfillment"><legend>{{ __('Order type') }}</legend><label><input type="radio" name="fulfillment_type" value="in_store" checked><span>{{ __('Direct sale') }}</span></label><label><input type="radio" name="fulfillment_type" value="delivery"><span><x-icon name="truck" />{{ __('Delivery') }}</span></label></fieldset>
             <div class="pos-customer-heading"><label for="customerId">{{ __('Customer') }}</label>@can('customers.create')<button id="newCustomerBtn" type="button" class="button-secondary"><x-icon name="user-plus" />{{ __('Add customer') }}</button>@endcan</div>
             <label class="field"><span class="sr-only">{{ __('Customer') }}</span><select id="customerId"><option value="">{{ __('Walk-in customer') }}</option>@foreach($customers as $c)<option value="{{ $c->id }}">{{ $c->name }}{{ $c->phone ? ' · '.$c->phone : '' }}</option>@endforeach</select></label>
             <div id="deliveryFields" class="pos-delivery-fields" hidden><x-address-selector address-id="shippingAddress" address-name="shipping_address" point-id="posDelivery" /><p>{{ __('Shipping fee') }}: <strong id="shippingFee"></strong></p><p>{{ __('Choose a customer and verify the recipient address and phone number.') }}</p></div>
+            <p class="flex justify-between font-semibold text-xl"><span>{{ __('Total') }}</span><span id="total">Rp 0</span></p>
+            <button type="button" class="button-primary w-full" data-pos-checkout-open>{{ __('Payment') }}</button>
+            <dialog id="pos-checkout-dialog" class="store-overlay" aria-labelledby="pos-checkout-title"><header><h2 id="pos-checkout-title">{{ __('Payment') }}</h2><button type="button" data-pos-checkout-close aria-label="{{ __('Close') }}">×</button></header><div class="store-overlay-body space-y-3">
             <label class="field">{{ __('Order notes') }}<input id="saleNotes" maxlength="2000"></label>
             <label class="field">{{ __('Payment Method') }}<select id="paymentMethod">@foreach(['cash','transfer','ewallet','qr','debt'] as $method)<option value="{{ $method }}">{{ __('status.'.$method) }}</option>@endforeach</select></label>
             <p id="creditInfo" class="pos-credit-info" role="status"></p>
             <label class="field"><span id="paidAmountLabel">{{ __('Paid amount') }}</span><input id="paidAmount" type="number" min="0" step="0.01" value="0" required aria-describedby="depositHelp"></label>
             <p id="depositHelp" class="pos-credit-info" hidden>{{ __('For credit, enter the cash deposit or 0. The remainder becomes debt. For full payment, select another payment method.') }}</p>
             @can('sales.override-discount')<label class="field">{{ __('Discount') }}<input id="discount" type="number" min="0" step="0.01" value="0"></label>@endcan
-            <p class="flex justify-between font-semibold text-xl"><span>{{ __('Total') }}</span><span id="total">Rp 0</span></p>
             <p class="flex justify-between"><span>{{ __('Change') }}</span><span id="changeTotal">Rp 0</span></p>
             <p id="debtPreview" class="pos-credit-info" hidden></p>
             <label class="field">{{ __('Receipt paper') }}<select id="receiptPaper"><option value="80">80 mm</option><option value="58">58 mm</option></select></label>
             <label class="pos-print-choice"><input id="printReceipt" type="checkbox" checked><span>{{ __('Open print dialog after payment') }}</span></label>
             <p id="saleError" role="alert" class="text-red-700"></p>
             <button id="payBtn" class="button-primary w-full" disabled>{{ __('Complete sale') }}</button>
+            </div></dialog>
         </form>
     </section>
 </div>
@@ -83,7 +87,7 @@
     <p id="productDialogError" role="alert" class="text-red-700"></p><button id="addProductBtn" type="button" class="button-primary w-full">{{ __('Add to cart') }}</button>
 </dialog>
 <script id="pos-config" type="application/json">{!! json_encode([
-    'customerUrl' => route('pos.customers'), 'shippingCost' => \Illuminate\Support\Facades\DB::table('store_settings')->where('key','shipping_cost')->value('value') ?? '10000',
+    'deliveryQuoteUrl'=>route('pos.delivery-quote'), 'customerUrl' => route('pos.customers'), 'shippingCost' => \Illuminate\Support\Facades\DB::table('store_settings')->where('key','shipping_cost')->value('value') ?? '10000',
     'customers' => $customers->map(fn($c) => ['id'=>$c->id,'name'=>$c->name,'phone'=>$c->phone,'address'=>$c->address,'latitude'=>$c->latitude,'longitude'=>$c->longitude,'eligible'=>(bool)($c->user?->is_active && $c->can_use_debt && $c->debt_status === 'eligible' && (!$c->debtAccount || $c->debtAccount->status === 'active')), 'available'=>\App\Support\Money::decimal(max(0,\App\Support\Money::cents($c->credit_limit)-\App\Support\Money::cents($c->debtAccount?->outstanding_balance ?? $c->outstanding_balance)))]),
     'productsUrl' => route('pos.products'), 'barcodeUrl' => route('pos.barcode'), 'saleUrl' => route('pos.process-sale'),
     'csrf' => csrf_token(), 'activeShift' => (bool) $activeShift, 'locale' => app()->getLocale() === 'id' ? 'id-ID' : 'en-US',

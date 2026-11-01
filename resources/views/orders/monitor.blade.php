@@ -8,7 +8,7 @@
     @foreach($counts as $stage => $count)<a class="status-tone-{{ $stage }}" href="{{ route('orders.monitor', ['status'=>$stage,'search'=>$search]) }}" @if($status === $stage) aria-current="page" @endif><x-transaction-status :status="$stage" /><strong>{{ $count }}</strong></a>@endforeach
 </nav>
 <form method="GET" class="monitor-filters panel"><label class="field">{{ __('Find customer or reference') }}<input name="search" type="search" value="{{ $search }}" maxlength="100"></label><label class="field">{{ __('Status') }}<select name="status">@foreach(['active','pending','confirmed','preparing','ready','completed','cancelled','refunded'] as $stage)<option value="{{ $stage }}" @selected($status === $stage)>{{ $stage === 'active' ? __('Active queue') : __('status.'.$stage) }}</option>@endforeach</select></label><button class="button-primary">{{ __('Filter orders') }}</button></form>
-<div class="monitor-orders">
+<div class="monitor-workspace"><div class="monitor-orders">
 @forelse($entries as $entry)
 @php
     $isOnline = $entry->source === 'online';
@@ -27,6 +27,7 @@
     <details><summary>{{ __('Items') }} · {{ $record->items->sum('quantity') }}</summary><ul>@foreach($record->items as $item)<li>{{ $item->quantity }} × {{ $item->product?->name ?? __('Unavailable product') }}<x-product-location :product="$item->product" /></li>@endforeach</ul>@if($record->notes)<p>{{ $record->notes }}</p>@endif</details>
     <div class="monitor-payment"><strong>{{ \App\Support\Money::format($record->total) }}</strong>@if($isOnline)<x-transaction-status :status="$record->payment_status" />@elseif($record->status === 'refunded')<x-transaction-status status="refunded" />@elseif($record->debt_amount > 0)<x-transaction-status status="debt" :label="__('Debt remaining').': '.\App\Support\Money::format($record->debt_amount)" />@else<x-transaction-status status="paid" />@endif</div>
     @if($isOnline && $stage === 'ready' && $record->payment_status !== 'paid')<p class="monitor-notice">{{ __('Record payment before completing this order.') }}</p>@endif
+    <button type="button" class="button-secondary" data-monitor-select>{{ __('Order details') }}</button>
     <footer>
         @if($canAdvance)<form method="POST" action="{{ $isOnline ? route('orders.update-status',$record) : route('orders.delivery-status',$record) }}">@csrf @method('PUT')<input type="hidden" name="status" value="{{ $next }}"><button class="button-primary">{{ __($actions[$next]) }}</button></form>@endif
         @if($isOnline)<a class="button-secondary" href="{{ route('orders.show',$record) }}">{{ __('Order details') }}</a>@else @can('sales.view')@if($record->user_id === auth()->id() || auth()->user()->can('reports.staff'))<a class="button-secondary" href="{{ route('pos.receipt',$record) }}">{{ __('Receipt') }}</a>@endif @endcan @endif
@@ -36,5 +37,5 @@
 <div class="panel monitor-empty"><h2>{{ __('No orders in this queue') }}</h2><p>{{ __('Choose another status or clear your search.') }}</p><a class="button-secondary" href="{{ route('orders.monitor') }}">{{ __('Show active orders') }}</a></div>
 @endforelse
 </div>
-<div class="mt-6">{{ $entries->links() }}</div>
+<aside class="panel monitor-selected" aria-label="{{ __('Selected order') }}" data-monitor-selected><p>{{ __('Choose an order to see details.') }}</p></aside></div><dialog id="monitor-detail" class="store-overlay" aria-label="{{ __('Order details') }}"><header><h2>{{ __('Order details') }}</h2><button type="button" data-monitor-close aria-label="{{ __('Close') }}">×</button></header><div class="store-overlay-body" data-monitor-dialog-body></div></dialog><div class="mt-6">{{ $entries->links() }}</div>
 @endsection
