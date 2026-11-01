@@ -21,6 +21,7 @@ use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShelfController;
+use App\Http\Controllers\ShelfLayoutController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Middleware\BackofficePermission;
@@ -56,6 +57,8 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
     Route::resource('units', UnitController::class)->except(['show']);
     Route::resource('suppliers', SupplierController::class)->except(['show']);
     Route::resource('products', ProductController::class);
+    Route::get('/shelf-layout/{shelf}/products', [ShelfLayoutController::class, 'products'])->name('shelves.products');
+    Route::put('/shelf-layout', [ShelfLayoutController::class, 'update'])->name('shelves.layout');
     Route::resource('shelves', ShelfController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::put('/shelves/products/{product}/location', [ShelfController::class, 'place'])->withTrashed()->name('shelves.place');
 
@@ -70,6 +73,7 @@ Route::middleware(['auth', BackofficePermission::class])->group(function () {
 
     // POS
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+    Route::post('/pos/delivery-quote', [PosController::class, 'deliveryQuote'])->name('pos.delivery-quote');
     Route::get('/pos/products', [PosController::class, 'products'])->name('pos.products');
     Route::get('/pos/barcode', [PosController::class, 'barcode'])->name('pos.barcode');
     Route::post('/pos/process-sale', [PosController::class, 'processSale'])->name('pos.process-sale');

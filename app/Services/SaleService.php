@@ -70,7 +70,7 @@ class SaleService
             if ($discount > $subtotal || ($discount && ! auth()->user()->can('sales.override-discount'))) {
                 $this->invalid('Discount is not allowed.');
             }
-            $shipping = $delivery ? Money::cents(DB::table('store_settings')->where('key', 'shipping_cost')->value('value') ?? '10000') : 0;
+            $shipping = $delivery ? app(CheckoutPolicy::class)->calculate(0, array_merge($data, ['delivery_type' => 'delivery', 'payment_method' => 'cash']))['shipping'] : 0;
             $total = $subtotal - $discount + $shipping;
             $paid = Money::cents($data['paid_amount']);
             $debt = $data['payment_method'] === 'debt';

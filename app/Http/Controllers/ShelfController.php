@@ -26,7 +26,9 @@ class ShelfController extends Controller
         $products = $query->paginate(20)->withQueryString();
         $unassigned = Product::withTrashed()->whereNull('shelf_id')->count();
 
-        return view('shelves.index', compact('shelves', 'products', 'unassigned'));
+        $layout = DB::table('shelf_layouts')->where('id', 1)->first();
+
+        return view('shelves.index', compact('shelves', 'products', 'unassigned', 'layout'));
     }
 
     public function store(Request $request)

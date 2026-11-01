@@ -11,15 +11,27 @@ use App\Models\Sale;
 use App\Models\Shelf;
 use App\Models\User;
 use App\Services\AddressBookService;
+use App\Services\CheckoutPolicy;
 use App\Services\SaleService;
 use App\Services\ShiftService;
 use App\Support\DeliveryPoint;
+use App\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class PosController extends Controller
 {
+    public function deliveryQuote(Request $request)
+    {
+        $data = $request->validate(['customer_id' => 'required|integer|exists:customers,id', 'address_id' => 'required|integer|min:1']);
+        $customer = Customer::findOrFail($data['customer_id']);
+        $point = app(AddressBookService::class)->shipping($customer, $data['address_id']);
+        $quote = app(CheckoutPolicy::class)->calculate(0, array_merge($point, ['delivery_type' => 'delivery', 'payment_method' => 'cash']));
+
+        return response()->json(['shipping' => Money::decimal($quote['shipping'])]);
+    }
+
     public function index()
     {
         $activeShift = CashierShift::where('user_id', auth()->id())->where('status', 'active')->first();
