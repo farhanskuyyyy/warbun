@@ -95,7 +95,7 @@ class ManagementController extends Controller
 
     public function saveSettings(Request $request)
     {
-        $v = $request->validate(['store_name' => 'required|string|max:120', 'debt_terms' => 'required|integer|min:1|max:365', 'shipping_cost' => 'required|decimal:0,2|min:0', 'store_contact' => 'nullable|string|max:200', 'payment_instructions' => 'nullable|string|max:2000']);
+        $v = $request->validate(['payment_promo_bps' => 'sometimes|integer|min:0|max:10000', 'payment_promo_flat' => 'sometimes|decimal:0,2|min:0|max:1000000', 'payment_promo_cap' => 'sometimes|decimal:0,2|min:0|max:1000000', 'radius_enabled' => 'sometimes|boolean', 'store_latitude' => 'required_if:radius_enabled,1|nullable|numeric|between:-90,90', 'store_longitude' => 'required_if:radius_enabled,1|nullable|numeric|between:-180,180', 'qris_fee_bps' => 'sometimes|integer|min:0|max:10000', 'ewallet_fee' => 'sometimes|decimal:0,2|min:0|max:1000000', 'store_name' => 'required|string|max:120', 'debt_terms' => 'required|integer|min:1|max:365', 'shipping_cost' => 'required|decimal:0,2|min:0', 'store_contact' => 'nullable|string|max:200', 'payment_instructions' => 'nullable|string|max:2000']);
         DB::transaction(function () use ($v) {
             $old = DB::table('store_settings')->pluck('value', 'key')->all();
             foreach ($v as $key => $value) {

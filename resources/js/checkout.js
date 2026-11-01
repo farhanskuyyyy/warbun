@@ -21,7 +21,7 @@ if (configElement) {
             if (draft.customerId === config.customerId && typeof draft.address_id === 'string') form.address_id.dataset.draft = draft.address_id;
         } catch { /* A damaged draft should not block checkout. */ }
     }
-    const saveDraft = () => sessionStorage.setItem('warbun_checkout_draft', JSON.stringify({customerId:config.customerId, address_id:form.address_id.value, delivery_type:form.delivery_type.value, payment_method:form.payment_method.value, address:form.address.value, notes:form.notes.value, shipping_latitude:form.shipping_latitude.value, shipping_longitude:form.shipping_longitude.value}));
+    const saveDraft = () => sessionStorage.setItem('warbun_checkout_draft', JSON.stringify({customerId:config.customerId, address_id:form.address_id.value, delivery_type:form.delivery_type.value, payment_method:form.payment_method.value,payment_channel:form.payment_channel.value, address:form.address.value, notes:form.notes.value, shipping_latitude:form.shipping_latitude.value, shipping_longitude:form.shipping_longitude.value}));
     form.addEventListener('input', saveDraft);
     form.addEventListener('change', saveDraft);
     const element = (tag, className, value) => {const node = document.createElement(tag); node.className = className; if (value !== undefined) node.textContent = value; return node;};
@@ -66,9 +66,9 @@ if (configElement) {
         controller = new AbortController(); const signal = controller.signal;
         status.textContent = text.checking;
         try {
-            const response = await fetch(config.quoteUrl, {method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN':config.csrf}, body:JSON.stringify({items:items.map(item => ({product_id:item.id, quantity:item.quantity})), delivery_type:form.delivery_type.value}), signal});
-            if (!response.ok) throw new Error('Cart quote unavailable');
-            const quote = await response.json(); if (signal.aborted) return;
+            const response = await fetch(config.quoteUrl, {method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN':config.csrf}, body:JSON.stringify({items:items.map(item => ({product_id:item.id, quantity:item.quantity})), delivery_type:form.delivery_type.value, payment_method:form.payment_method.value,payment_channel:form.payment_channel.value||null,address_id:form.address_id.value||null,shipping_latitude:form.shipping_latitude.value||null,shipping_longitude:form.shipping_longitude.value||null}), signal});
+            if (!response.ok) { const failure=await response.json(); throw new Error(Object.values(failure.errors||{}).flat().join(' ') || text.error); }
+            const quote = await response.json(); if (signal.aborted) return; form.querySelector('[name=quote_token]').value=quote.quote_token; document.getElementById('feeTotal').textContent=currency(quote.fee||0);document.getElementById('discountTotal').textContent=currency(quote.discount||0);
             const focusedId = Number(document.activeElement?.dataset.quantityId);
             items = items.map(item => ({...item, ...quote.items.find(line => line.id === item.id)}));
             localStorage.setItem('warbun_cart', JSON.stringify(items)); window.dispatchEvent(new Event('warbun:cartchange'));
@@ -77,12 +77,13 @@ if (configElement) {
             errors.textContent = quote.errors.join(' '); status.textContent = quote.errors.length ? '' : text.ready; canSubmit(quote.errors.length === 0);
         } catch (error) {
             if (error.name === 'AbortError') return;
-            status.textContent = ''; errors.textContent = text.error; retry.hidden = false;
+            status.textContent = ''; errors.textContent = error.message || text.error; retry.hidden = false;
         }
     }
+    form.querySelectorAll('[name=payment_choice]').forEach(radio=>radio.addEventListener('change',()=>{form.payment_method.value=radio.value;form.payment_channel.value=radio.dataset.channel;form.payment_method.dispatchEvent(new Event('change',{bubbles:true}));}));
     retry.addEventListener('click', check);
     form.delivery_type.addEventListener('change', () => {fulfillment(); check();});
-    form.payment_method.addEventListener('change', fulfillment);
+    form.payment_method.addEventListener('change', () => {fulfillment(); check();});
     form.addEventListener('change', () => localStorage.setItem('warbun_checkout_key', crypto.randomUUID()));
     guestAction?.addEventListener('click', event => {if (!ready) event.preventDefault();});
     form.addEventListener('submit', event => {
@@ -94,6 +95,7 @@ if (configElement) {
         canSubmit(false); if (submit) submit.textContent = text.placing;
     });
     window.addEventListener('storage', event => {if (event.key === 'warbun_cart') {items = read(); render(); check();}});
-    window.addEventListener('addressbook:change', () => {canSubmit(ready); saveDraft();});
+    window.addEventListener('addressbook:change', () => {canSubmit(false); saveDraft(); check();});
+    const initialChannel=[...form.querySelectorAll('[name=payment_choice]')].find(r=>r.value===form.payment_method.value);if(initialChannel){initialChannel.checked=true;form.payment_channel.value=initialChannel.dataset.channel;}
     fulfillment(); render(); check(); saveDraft();
 }
