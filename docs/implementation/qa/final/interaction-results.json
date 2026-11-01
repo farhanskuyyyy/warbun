@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "results": [
+    "Trusted pointer and keyboard: modal open, focus containment, Escape and focus return",
+    "Product picker → add → cart dock → cart sheet",
+    "Shelf drag, save/reload and live product detail",
+    "Customer checkout, saved receipt and CMS denial",
+    "Quote network failure disables checkout; retry recovers",
+    "POS product dialog, payment modal, sale and change receipt",
+    "Mobile monitor detail overlay"
+  ],
+  "errors": []
+}

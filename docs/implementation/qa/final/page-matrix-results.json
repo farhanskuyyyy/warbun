@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "results": [
+    "54 owner pages: 390px light",
+    "54 owner pages: 390px dark",
+    "54 owner pages: 834px light",
+    "54 owner pages: 834px dark",
+    "54 owner pages: 1440px light",
+    "54 owner pages: 1440px dark",
+    "Trusted pointer and keyboard: modal open, focus containment, Escape and focus return",
+    "Product picker → add → cart dock → cart sheet",
+    "Shelf drag, save/reload and live product detail",
+    "Customer checkout, saved receipt and CMS denial"
+  ],
+  "errors": []
+}
