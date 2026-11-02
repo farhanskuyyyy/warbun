@@ -16,7 +16,7 @@ This repository contains an existing Laravel application, a final Figcraft desig
 | Open the canonical design | [final.figcraft](design/figcraft/soft-neobrutalism/final.figcraft), [frame map](docs/implementation/01-DESIGN-MAP.md), [selected previews](design/figcraft/PREVIEWS.md) |
 | Verify and fix the completed implementation | [QA and repair plan](docs/implementation/07-QA-AND-RELEASE.md) |
 
-At the 1 November 2026 handoff, all phases in the new implementation plan start TODO. Older completed development checklists describe existing work, not completion of this revamp. Check STATUS and actual source before continuing; this dated note is not a substitute for verification.
+The final-design implementation and software QA phases P00–P11 were completed on 2 November 2026. See [the final QA report](docs/implementation/qa/FINAL-QA.md) for tested behavior, evidence, configuration and the remaining external provider/hardware checks. STATUS is the source for future work; older completed checklists are not a substitute for current verification.
 
 The implementation covers customer landing/auth/catalog/cart/checkout/orders and all CMS pages, including POS, monitoring and an interactive shelf-layout editor. Dedicated native frames guide major screens; other CRUD pages reuse final components with their existing functionality. Commit per verified phase or feature, then complete functional, visual and responsive QA and fix bugs directly. Full instructions are portable Markdown files and do not require this conversation or a specific coding agent.
 
@@ -143,3 +143,9 @@ php artisan serve --host=127.0.0.1 --port=8765 --no-reload
 ```
 
 Di terminal lain, dari root project: `node scripts/qa-browser.cjs`. Tutup server sementara setelah pengujian. Hasil browser dan screenshot berada di `docs/qa/`.
+
+## Final design branch: local upgrade
+
+The final UI adds checkout snapshots and a versioned shelf-layout table. Back up your development database, then run `php artisan migrate` and `npm run build`; restart PHP and refresh the browser. Do not run `migrate:fresh` on existing store data. The configured local development database was backed up and upgraded on 2 November 2026; see the final QA report for verification and the private backup location.
+
+Delivery radius and customer payment fees are configured in Store settings. Radius mode is opt-in and requires the store/address pins; defaults preserve fixed shipping and zero new fees/promotions. Channel options remain manual/store-confirmed unless an actual gateway adapter is configured. Read the [final QA and rollout notes](docs/implementation/qa/FINAL-QA.md) before enabling policies.

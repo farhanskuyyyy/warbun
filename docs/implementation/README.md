@@ -1,12 +1,12 @@
 # Implementasi Warbun dari final.figcraft
 
-Status: **rencana implementasi, belum dikerjakan**. Disusun 1 November 2026 dari source Laravel, daftar 141 route terdaftar, dan 20 halaman native Figcraft. Checklist baru ini tidak mewarisi tanda selesai dari tasklist development lama.
+Status: **implementasi dan QA software P00–P11 selesai, 2 November 2026**. [Laporan akhir dan batas verifikasi](qa/FINAL-QA.md). Disusun 1 November 2026 dari source Laravel, daftar 141 route terdaftar, dan 20 halaman native Figcraft. Checklist baru ini tidak mewarisi tanda selesai dari tasklist development lama.
 
 ## Mulai di sini — untuk agent mana pun
 
 Implementasikan seluruh halaman customer dan CMS Warbun mengikuti [final.figcraft](../../design/figcraft/soft-neobrutalism/final.figcraft), tanpa menghilangkan fungsi aplikasi existing. Selesaikan fase berurutan, commit per fase atau fitur yang sudah diverifikasi, lalu lakukan QA menyeluruh dan **langsung perbaiki bug yang ditemukan**, uji ulang, dan catat buktinya. Jangan berhenti pada daftar rekomendasi atau screenshot statis.
 
-Permintaan saat dokumen ini dibuat adalah menyusun tasklist, bukan mulai mengubah aplikasi. Agent yang menerima instruksi menjalankan rencana ini harus mengerjakan kode dan pengujian sesuai kontrak di bawah.
+Dokumen ini bermula sebagai tasklist. Implementasi sudah dijalankan; agent berikutnya harus membaca STATUS.md dan laporan QA sebelum mengulang pekerjaan. Jalankan ulang pemeriksaan yang relevan ketika ada perubahan baru.
 
 1. Tentukan repo root dari folder yang berisi `artisan`, `composer.json`, dan `routes/web.php`. Semua path di dokumen ini relatif terhadap repo; tidak membutuhkan path Mac pembuatnya.
 2. Baca `AGENTS.md`, `README.md`, `PRD.md`, `ARCHITECTURE.md`, `tasklist.md`, `DESIGN_SYSTEM.md`, serta dokumen fase. Periksa instruksi ancestor yang tersedia. Jangan menimpa pekerjaan lokal pengguna.

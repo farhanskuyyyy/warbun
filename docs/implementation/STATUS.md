@@ -2,33 +2,34 @@
 
 [Mulai di indeks](README.md). Tanggal baseline rencana: 1 November 2026.
 
-**P00 selesai pada 1 November 2026.** Baseline backend/build/browser diverifikasi terisolasi; formatting existing diperbaiki. P01–P11 belum selesai. Jangan menyalin tanda selesai dari tasklist lama.
+**P00–P11 implementasi dan QA software selesai pada 2 November 2026.** Lihat [laporan akhir](qa/FINAL-QA.md) untuk bukti, konfigurasi, dan batas pemeriksaan hardware/provider. Tidak ada push/deploy. DB development lokal sudah dibackup dan menerima migrasi additive; verifikasi data dijelaskan di laporan akhir.
 
 | Phase | Status | Commit implementasi | Bukti QA / blocker |
 | --- | --- | --- | --- |
 | P00 Baseline | DONE | Commit `chore(ui): record verified implementation baseline` | [Baseline evidence](qa/P00-BASELINE.md) |
-| P01 Foundations | IN PROGRESS | First token/button feature commit | Build PASS; auth/profile9 tests29 assertions PASS; full foundation QA pending |
-| P02 Shell/landing/auth | TODO | — | — |
-| P03 Catalog/picker/cart | TODO | — | — |
-| P04 Delivery/payment/checkout | TODO | — | — |
-| P05 Orders/receipts/reorder | TODO | — | — |
-| P06 CMS shell/dashboard | TODO | — | — |
-| P07 CRUD/stock/settings | TODO | — | — |
-| P08 POS/shift/history | TODO | — | — |
-| P09 Monitor/finance/reports/audit | TODO | — | — |
-| P10 Shelf grid | TODO | — | — |
-| P11 Full QA and fixes | TODO | — | — |
+| P01 Foundations | DONE | 512afb2,675c085 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P02 Shell/landing/auth | DONE | 500d7c5,288e3ff | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P03 Catalog/picker/cart | DONE | 500d7c5,369c0fa | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P04 Delivery/payment/checkout | DONE | 1bda1e3,d84db15,e1ea2b5 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P05 Orders/receipts/reorder | DONE | 500d7c5,686ebc6 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P06 CMS shell/dashboard | DONE | d220622 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P07 CRUD/stock/settings | DONE | d220622,d84db15 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P08 POS/shift/history | DONE | 88e8e4b,d220622,675c085 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P09 Monitor/finance/reports/audit | DONE | d220622,675c085 | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P10 Shelf grid | DONE | 88e8e4b,512afb2 + keyboard fix | [Verified scope and evidence](qa/FINAL-QA.md) |
+| P11 Full QA and fixes | DONE | cb49418 | [Verified scope and evidence](qa/FINAL-QA.md) |
 
 Status yang valid: TODO, IN PROGRESS, BLOCKED, DONE. DONE membutuhkan bukti DoD, bukan hanya kode atau screenshot tersedia.
 
 ## Resume record
 
 - Branch / HEAD saat agent mulai: `feat/warbun-final-ui`, dibuat dari `7338c34`.
-- Last completed task: P00 baseline dan formatting existing.
-- Current task: P01 foundations (belum dimulai).
+- Last completed task: P11 software QA, fixes and handoff.
+- Current task: complete; no unfinished implementation phase.
 - Working tree changes milik pengguna: inspect; saat handoff ada `.DS_Store` modified, jangan ikut commit.
-- Commands/tests actually run during implementation: PHPUnit113/929 PASS sebelum/sesudah fix; build PASS; Pint PASS setelah fix; Playwright21 kombinasi route/viewport PASS, drawer/focus/customer403 PASS.
-- Next safe action: inspect shared styles/components dan native foundations untuk P01. Buat ulang server QA terisolasi; server baseline port8876 dihentikan setelah verifikasi.
+- Commands/tests actually run during implementation:117 SQLite tests/962 assertions PASS;41 MySQL financial/layout tests/189 assertions PASS at checkpoint; build/Pint PASS;324 owner render checks plus36 customer/48 guest checks PASS; trusted browser interactions and network retry PASS; MySQL final-item race and legacy migration fixture PASS.
+- Next safe action: review FINAL-QA.md; local development migrations are already applied. Other environments require their own backup, additive migrations and build. Operational/provider/hardware validation and deployment remain separate; do not reset data.
+
 
 ## Keputusan dan pertanyaan yang berpengaruh
 
@@ -69,3 +70,7 @@ Replaced legacy custom focus trap with native dialog using existing Alpine open/
 ### Modal regression correction
 
 Native-modal browser opening check failed. Restored the previously working Alpine component rather than retaining an unverified migration. Commit10cee0c must not be treated as verified modal completion. Build and profile tests passed but did not establish pointer interaction. Native/shared overlay implementation remains TODO; investigate trusted click versus programmatic dispatch before marking P01 complete. P02–P11 remain TODO.
+
+### 2 November 2026 — P01–P11 completion
+
+Implemented final storefront, overlays, history/receipts, financial quotes/policies, CMS shared adaptations, POS/monitor and persistent shelf editor. Corrected defects identified by visual and functional tests. Native design unchanged. Evidence is curated under `qa/final/`; bulk screenshots remain local. See FINAL-QA.md for the actual tested scope and manual operational limits. Earlier entries above describe intermediate states and are superseded by this completion entry.

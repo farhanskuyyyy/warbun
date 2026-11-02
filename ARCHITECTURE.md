@@ -77,3 +77,11 @@ SaleService retains the authoritative price/stock/shift/credit checks, locks and
 1. Auth/permissions + transactional stock/POS/debt/payment/shift foundations.
 2. Customer ordering, refunds, opname, management/settings/reporting, localization.
 3. Automated regression checks, isolated migration/seed, browser QA and final consistency report.
+
+## Final UI contracts — 2 November 2026
+
+CheckoutPolicy centralizes optional radius shipping, configured customer fee/promotion calculation, policy hashing and quote fingerprints. Browser quotes expire after10 minutes and bind user, lines, payment channel, policy and fulfillment/address; pickup ignores an irrelevant saved delivery address. Checkout rechecks price/stock under existing transaction locks before saving order charges and product-name snapshots. Legacy direct clients remain server-authoritative; tokenless requests retain compatibility.
+
+Orders add service_fee/checkout_snapshot; order_items add product_name. Historical records keep null/default values and existing financial amounts. Shelf layouts use one store-wide row with JSON geometry and revision, atomically locked and validated against16×12 bounds/overlap and current shelf IDs. POS delivery quotes resolve the selected customer's saved address before using the same radius policy. New routes retain BackofficePermission.
+
+Additive migration rollback is deliberately refused if it would erase recorded checkout snapshots or saved layout revisions. Roll back application code with these columns retained; export/reconcile before an intentional destructive schema removal. [QA and rollout notes](docs/implementation/qa/FINAL-QA.md).

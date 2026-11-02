@@ -89,3 +89,7 @@ ENERGY 2 / RHYTHM 3 / MOTION 1 continues the accepted retail direction. Two labe
 ## Final design foundation tokens (P01 in progress)
 
 Shared CSS now defines wine #8B1E2D, secondary #236B65, paper #F8F6F1, surface white, ink #282724, muted #68635C, system-ui/Georgia font roles,4/8/12/16/24px spacing and6/12px control/panel radii. Primary/secondary Blade buttons use44px minimum height and teal keyboard focus. Dark theme and broader component adoption remain pending; do not treat this slice as full final-design parity.
+
+## Final Figcraft implementation — 2 November 2026
+
+Shared roles are implemented across customer/CMS/auth: Georgia page headings, system controls, burgundy primary, teal focus, light/dark variables,44px controls, native dialogs/sheets and semantic states. Mobile customer navigation/cart docks and CMS table-to-record adaptations use content-driven breakpoints. Shelf positions use16×12 logical cells and are persisted independently of inventory. [Actual implementation and QA scope](docs/implementation/qa/FINAL-QA.md). Earlier in-progress notes above are historical.

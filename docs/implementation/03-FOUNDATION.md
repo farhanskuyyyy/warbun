@@ -1,6 +1,6 @@
 # P00–P01: baseline dan fondasi
 
-[Indeks](README.md) · Terapkan [DoD setiap fase](00-WORKING-AGREEMENT.md).
+[Indeks](README.md) · Implemented; [actual QA scope and external limits](qa/FINAL-QA.md) · Terapkan [DoD setiap fase](00-WORKING-AGREEMENT.md).
 
 ## P00 — Baseline dan lingkungan aman
 
@@ -20,15 +20,15 @@ Commit: `chore(ui): record final design implementation baseline`.
 
 Sumber: `resources/css/app.css`, `resources/js/app.js`, `resources/views/components/`, `layouts/`, native foundations dan CMS components. Dependency: P00.
 
-- [ ] Petakan color, typography, spacing, border, radius, elevation, z-index, container dan breakpoint ke sistem styling existing; catat mapping di DESIGN_SYSTEM.md, jangan duplikasi CSS per halaman.
-- [ ] Logo lowercase, Georgia heading, system-ui body dan tabular numerals pada harga. Uji fallback OS dan format mata uang existing.
-- [ ] Konsolidasikan button/link/icon-button, input/select/textarea/password, checkbox/radio, error/helper, loading, pagination, empty state, feedback, badge status dan table/card mobile.
-- [ ] Overlay foundation: modal, drawer, bottom sheet, confirmation, focus trap/return, Escape, backdrop, body scroll lock, `aria-labelledby`, inert background yang sesuai; nested overlay tidak meninggalkan scroll lock.
-- [ ] Modal header/footer tetap terlihat, body scroll, safe-area mobile, keyboard virtual tidak menutup CTA/input. Tidak ada container overflow yang memotong account dropdown.
-- [ ] Theme light/dark persisten tanpa flash besar; respect pilihan existing/system saat belum memilih. Active navigation memakai lebih dari warna, icon benar-benar center.
-- [ ] Komponen status menerima domain/value, unknown status punya fallback netral; jangan menganggap order.ready berarti payment.paid.
-- [ ] Label tombol ikon, keyboard focus terlihat, target sentuh minimal nyaman, error terhubung ke field; toast bukan satu-satunya bukti error/payment.
-- [ ] Pastikan ID/EN dan teks panjang tidak merusak komponen. Hindari menambah library hanya untuk tooltip atau sheet sederhana.
+- [x] Petakan color, typography, spacing, border, radius, elevation, z-index, container dan breakpoint ke sistem styling existing; catat mapping di DESIGN_SYSTEM.md, jangan duplikasi CSS per halaman.
+- [x] Logo lowercase, Georgia heading, system-ui body dan tabular numerals pada harga. Uji fallback OS dan format mata uang existing.
+- [x] Konsolidasikan button/link/icon-button, input/select/textarea/password, checkbox/radio, error/helper, loading, pagination, empty state, feedback, badge status dan table/card mobile.
+- [x] Overlay foundation: modal, drawer, bottom sheet, confirmation, focus trap/return, Escape, backdrop, body scroll lock, `aria-labelledby`, inert background yang sesuai; nested overlay tidak meninggalkan scroll lock.
+- [x] Modal header/footer tetap terlihat, body scroll, safe-area mobile, keyboard virtual tidak menutup CTA/input. Tidak ada container overflow yang memotong account dropdown.
+- [x] Theme light/dark persisten tanpa flash besar; respect pilihan existing/system saat belum memilih. Active navigation memakai lebih dari warna, icon benar-benar center.
+- [x] Komponen status menerima domain/value, unknown status punya fallback netral; jangan menganggap order.ready berarti payment.paid.
+- [x] Label tombol ikon, keyboard focus terlihat, target sentuh minimal nyaman, error terhubung ke field; toast bukan satu-satunya bukti error/payment.
+- [x] Pastikan ID/EN dan teks panjang tidak merusak komponen. Hindari menambah library hanya untuk tooltip atau sheet sederhana.
 
 QA: buka component examples atau halaman representatif; uji dialog dengan keyboard dan mobile, perubahan tema + refresh, teks panjang, zoom 200%. Test behavior shared JS/Blade yang berisiko. Build harus lulus. Jika komponen shared memengaruhi halaman lama, smoke semua shell sebelum commit.
 

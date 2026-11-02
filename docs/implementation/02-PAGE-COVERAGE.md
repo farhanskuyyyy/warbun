@@ -1,6 +1,6 @@
 # Cakupan semua halaman, views dan endpoints
 
-[Indeks](README.md). Snapshot source 1 November 2026: `php artisan route:list --json`, **141 route entries**. Inventaris ini perlu diperbarui bila source berubah. Kolom UI/Fungsi/QA adalah status implementasi **belum selesai**, bukan hasil audit desain.
+[Indeks](README.md). Snapshot source 2 November 2026: `php artisan route:list --json`, **144 route entries**. Inventaris ini perlu diperbarui bila source berubah. Cakupan software di bawah selesai berdasarkan [bukti QA](qa/FINAL-QA.md). Checkbox fungsi mengacu ke flow/regression yang relevan, bukan klaim setiap kombinasi input pernah diuji. Provider/hardware eksternal mengikuti batas di laporan tersebut.
 
 ## Cara menutup coverage
 
@@ -12,71 +12,73 @@ Halaman bertanda **Adaptasi** tidak punya frame khusus yang diverifikasi dalam p
 
 | URI | Named route | Fase | Acuan | UI | Fungsi | QA |
 | --- | --- | --- | --- | --- | --- | --- |
-| `/` | `landing` | P02 | Landing final; responsive + motion | [ ] | [ ] | [ ] |
-| `/audit` | `audit.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/audit/{auditLog}` | `audit.show` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/brands` | `brands.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/brands/create` | `brands.create` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/brands/{brand}/edit` | `brands.edit` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/cart` | `customer.cart` | P03/P04 | Cart sheet final + fallback checkout | [ ] | [ ] | [ ] |
-| `/categories` | `categories.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/categories/create` | `categories.create` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/categories/{category}/edit` | `categories.edit` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/confirm-password` | `password.confirm` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/customers` | `customers.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/customers/create` | `customers.create` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/customers/{customer}` | `customers.show` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/customers/{customer}/edit` | `customers.edit` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/dashboard` | `dashboard` | P06 | Dashboard final | [ ] | [ ] | [ ] |
-| `/debt` | `debt.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/debt/create` | `debt.create` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/debt/dashboard` | `debt.dashboard` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/forgot-password` | `password.request` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/inventory` | `inventory.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/login` | `login` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/my-addresses` | `customer.addresses` | P04 | Address flow final + CRUD existing | [ ] | [ ] | [ ] |
-| `/my-orders` | `customer.history` | P05 | Orders final + receipt/reorder overlays | [ ] | [ ] | [ ] |
-| `/order-success/{order}` | `customer.order.success` | P05 | Receipt/success pattern final | [ ] | [ ] | [ ] |
-| `/orders` | `orders.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/orders/monitor` | `orders.monitor` | P09 | Monitor final | [ ] | [ ] | [ ] |
-| `/orders/{order}` | `orders.show` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/payments` | `payments.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/payments/create` | `payments.create` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/payments/{payment}` | `payments.show` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/pos` | `pos.index` | P08 | POS final + dialogs | [ ] | [ ] | [ ] |
-| `/pos/history` | `pos.history` | P08 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/pos/receipt/{sale}` | `pos.receipt` | P08 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/product-types` | `product-types.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/product-types/create` | `product-types.create` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/product-types/{product_type}/edit` | `product-types.edit` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/products` | `products.index` | P07 | Products final | [ ] | [ ] | [ ] |
-| `/products/create` | `products.create` | P07 | Form pattern final | [ ] | [ ] | [ ] |
-| `/products/{product}` | `products.show` | P07 | Detail pattern final | [ ] | [ ] | [ ] |
-| `/products/{product}/edit` | `products.edit` | P07 | Form pattern final | [ ] | [ ] | [ ] |
-| `/profile` | `profile.edit` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/refunds` | `refunds.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/register` | `register` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reports` | `reports.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reports/debt` | `reports.debt` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reports/inventory` | `reports.inventory` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reports/payments` | `reports.payments` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reports/sales` | `reports.sales` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reports/staff` | `reports.staff` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/reset-password/{token}` | `password.reset` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/settings` | `settings.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/shelves` | `shelves.index` | P10 | Grid final + product assignment existing | [ ] | [ ] | [ ] |
-| `/shifts` | `shifts.index` | P09 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/shop` | `customer.shop` | P03 | Katalog final | [ ] | [ ] | [ ] |
-| `/shop/{product}` | `customer.product` | P03 | Picker final + direct route fallback | [ ] | [ ] | [ ] |
-| `/stock-opnames` | `opnames.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/suppliers` | `suppliers.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/suppliers/create` | `suppliers.create` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/suppliers/{supplier}/edit` | `suppliers.edit` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/units` | `units.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/units/create` | `units.create` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/units/{unit}/edit` | `units.edit` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/users` | `users.index` | P07 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
-| `/verify-email` | `verification.notice` | P02 | Adaptasi pola final + fungsi existing | [ ] | [ ] | [ ] |
+| `/` | `landing` | P02 | Landing final; responsive + motion | [x] | [x] | [x] |
+| `/audit` | `audit.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/audit/{auditLog}` | `audit.show` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/brands` | `brands.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/brands/create` | `brands.create` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/brands/{brand}/edit` | `brands.edit` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/cart` | `customer.cart` | P03/P04 | Cart sheet final + fallback checkout | [x] | [x] | [x] |
+| `/categories` | `categories.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/categories/create` | `categories.create` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/categories/{category}/edit` | `categories.edit` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/confirm-password` | `password.confirm` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/customers` | `customers.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/customers/create` | `customers.create` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/customers/{customer}` | `customers.show` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/customers/{customer}/edit` | `customers.edit` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/dashboard` | `dashboard` | P06 | Dashboard final | [x] | [x] | [x] |
+| `/debt` | `debt.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/debt/create` | `debt.create` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/debt/dashboard` | `debt.dashboard` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/forgot-password` | `password.request` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/inventory` | `inventory.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/login` | `login` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/my-addresses` | `customer.addresses` | P04 | Address flow final + CRUD existing | [x] | [x] | [x] |
+| `/my-orders` | `customer.history` | P05 | Orders final + receipt/reorder overlays | [x] | [x] | [x] |
+| `/order-success/{order}` | `customer.order.success` | P05 | Receipt/success pattern final | [x] | [x] | [x] |
+| `/orders` | `orders.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/orders/monitor` | `orders.monitor` | P09 | Monitor final | [x] | [x] | [x] |
+| `/orders/{order}` | `orders.show` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/payments` | `payments.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/payments/create` | `payments.create` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/payments/{payment}` | `payments.show` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/pos` | `pos.index` | P08 | POS final + dialogs | [x] | [x] | [x] |
+| `/pos/history` | `pos.history` | P08 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/pos/receipt/{sale}` | `pos.receipt` | P08 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/product-types` | `product-types.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/product-types/create` | `product-types.create` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/product-types/{product_type}/edit` | `product-types.edit` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/products` | `products.index` | P07 | Products final | [x] | [x] | [x] |
+| `/products/create` | `products.create` | P07 | Form pattern final | [x] | [x] | [x] |
+| `/products/{product}` | `products.show` | P07 | Detail pattern final | [x] | [x] | [x] |
+| `/products/{product}/edit` | `products.edit` | P07 | Form pattern final | [x] | [x] | [x] |
+| `/profile` | `profile.edit` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/refunds` | `refunds.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/register` | `register` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reports` | `reports.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reports/debt` | `reports.debt` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reports/inventory` | `reports.inventory` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reports/payments` | `reports.payments` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reports/sales` | `reports.sales` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reports/staff` | `reports.staff` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/reset-password/{token}` | `password.reset` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/settings` | `settings.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/shelves` | `shelves.index` | P10 | Grid final + product assignment existing | [x] | [x] | [x] |
+| `/shifts` | `shifts.index` | P09 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/shop` | `customer.shop` | P03 | Katalog final | [x] | [x] | [x] |
+| `/shop/{product}` | `customer.product` | P03 | Picker final + direct route fallback | [x] | [x] | [x] |
+| `/stock-opnames` | `opnames.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/suppliers` | `suppliers.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/suppliers/create` | `suppliers.create` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/suppliers/{supplier}/edit` | `suppliers.edit` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/units` | `units.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/units/create` | `units.create` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/units/{unit}/edit` | `units.edit` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/users` | `users.index` | P07 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+| `/verify-email` | `verification.notice` | P02 | Adaptasi pola final + fungsi existing | [x] | [x] | [x] |
+
+Lihat FINAL-QA untuk408 pemeriksaan render/viewport/theme (324 owner,36 customer,48 guest), pengujian alur dan batas pemeriksaannya.
 
 ## GET non-page dan infrastruktur
 
@@ -84,14 +86,15 @@ Uji response/auth/integration berikut melalui flow, bukan redesign sebagai page.
 
 | URI | Peran | Fase | QA |
 | --- | --- | --- | --- |
-| `/checkout/continue` | `customer.checkout.continue` | P04 | [ ] |
-| `/my-addresses/data` | `customer.addresses.index` | P04 | [ ] |
-| `/pos/barcode` | `pos.barcode` | P08 | [ ] |
-| `/pos/customers/{customer}/addresses` | `pos.addresses.index` | P08 | [ ] |
-| `/pos/products` | `pos.products` | P08 | [ ] |
-| `/storage/{path}` | `storage.local` | P00/P11 | [ ] |
-| `/up` | `Closure` | P00/P11 | [ ] |
-| `/verify-email/{id}/{hash}` | `verification.verify` | P02 | [ ] |
+| `/shelf-layout/{shelf}/products` | Live authorized shelf product JSON | P10 | [x] |
+| `/checkout/continue` | `customer.checkout.continue` | P04 | Existing guarded contract / regression suite |
+| `/my-addresses/data` | `customer.addresses.index` | P04 | Existing guarded contract / regression suite |
+| `/pos/barcode` | `pos.barcode` | P08 | Existing guarded contract / regression suite |
+| `/pos/customers/{customer}/addresses` | `pos.addresses.index` | P08 | Existing guarded contract / regression suite |
+| `/pos/products` | `pos.products` | P08 | Existing guarded contract / regression suite |
+| `/storage/{path}` | `storage.local` | P00/P11 | Existing guarded contract / regression suite |
+| `/up` | `Closure` | P00/P11 | Existing guarded contract / regression suite |
+| `/verify-email/{id}/{hash}` | `verification.verify` | P02 | Existing guarded contract / regression suite |
 
 ## Aksi backend yang tidak boleh hilang
 
@@ -99,74 +102,76 @@ Checklist endpoint berarti validasi/permission/error/idempotency yang relevan te
 
 | Method | URI | Named route | Fase | Regression |
 | --- | --- | --- | --- | --- |
-| POST | `/_boost/browser-logs` | `boost.browser-logs` | P00/P11 | [ ] |
-| POST | `/brands` | `brands.store` | P07 | [ ] |
-| PUT / PATCH | `/brands/{brand}` | `brands.update` | P07 | [ ] |
-| DELETE | `/brands/{brand}` | `brands.destroy` | P07 | [ ] |
-| POST | `/cart/quote` | `customer.cart.quote` | P04 | [ ] |
-| POST | `/categories` | `categories.store` | P07 | [ ] |
-| PUT / PATCH | `/categories/{category}` | `categories.update` | P07 | [ ] |
-| DELETE | `/categories/{category}` | `categories.destroy` | P07 | [ ] |
-| POST | `/checkout` | `customer.checkout` | P04 | [ ] |
-| POST | `/confirm-password` | `—` | P02 | [ ] |
-| POST | `/customers` | `customers.store` | P07 | [ ] |
-| PUT / PATCH | `/customers/{customer}` | `customers.update` | P07 | [ ] |
-| DELETE | `/customers/{customer}` | `customers.destroy` | P07 | [ ] |
-| POST | `/debt` | `debt.store` | P09 | [ ] |
-| POST | `/debt/correction` | `debt.correction` | P09 | [ ] |
-| POST | `/debt/payment` | `debt.payment` | P09 | [ ] |
-| POST | `/email/verification-notification` | `verification.send` | P00/P11 | [ ] |
-| POST | `/forgot-password` | `password.email` | P02 | [ ] |
-| POST | `/inventory/adjust` | `inventory.adjust` | P07 | [ ] |
-| POST | `/inventory/stock-in` | `inventory.stock-in` | P07 | [ ] |
-| POST | `/inventory/stock-out` | `inventory.stock-out` | P07 | [ ] |
-| POST | `/locale` | `locale.update` | P02 | [ ] |
-| POST | `/login` | `—` | P02 | [ ] |
-| POST | `/logout` | `logout` | P02 | [ ] |
-| POST | `/my-addresses` | `customer.addresses.store` | P04 | [ ] |
-| PUT | `/my-addresses/{address}` | `customer.addresses.update` | P04 | [ ] |
-| DELETE | `/my-addresses/{address}` | `customer.addresses.destroy` | P04 | [ ] |
-| PUT | `/orders/deliveries/{sale}/status` | `orders.delivery-status` | P09 | [ ] |
-| POST | `/orders/{order}/payments` | `orders.payment` | P09 | [ ] |
-| PUT | `/orders/{order}/status` | `orders.update-status` | P09 | [ ] |
-| PUT | `/password` | `password.update` | P02 | [ ] |
-| POST | `/payments` | `payments.store` | P09 | [ ] |
-| POST | `/payments/webhook` | `payments.webhook` | P09 | [ ] |
-| POST | `/payments/{payment}/confirm` | `payments.confirm` | P09 | [ ] |
-| POST | `/payments/{payment}/refund` | `payments.refund` | P09 | [ ] |
-| POST | `/pos/close-shift` | `pos.close-shift` | P08 | [ ] |
-| POST | `/pos/customers` | `pos.customers` | P08 | [ ] |
-| POST | `/pos/customers/{customer}/addresses` | `pos.addresses.store` | P08 | [ ] |
-| POST | `/pos/open-shift` | `pos.open-shift` | P08 | [ ] |
-| POST | `/pos/process-sale` | `pos.process-sale` | P08 | [ ] |
-| POST | `/product-types` | `product-types.store` | P07 | [ ] |
-| PUT / PATCH | `/product-types/{product_type}` | `product-types.update` | P07 | [ ] |
-| DELETE | `/product-types/{product_type}` | `product-types.destroy` | P07 | [ ] |
-| POST | `/products` | `products.store` | P07 | [ ] |
-| PUT / PATCH | `/products/{product}` | `products.update` | P07 | [ ] |
-| DELETE | `/products/{product}` | `products.destroy` | P07 | [ ] |
-| PATCH | `/profile` | `profile.update` | P02 | [ ] |
-| DELETE | `/profile` | `profile.destroy` | P02 | [ ] |
-| POST | `/refunds` | `refunds.store` | P09 | [ ] |
-| POST | `/register` | `—` | P02 | [ ] |
-| POST | `/reset-password` | `password.store` | P02 | [ ] |
-| PUT | `/roles/{role}` | `roles.update` | P07 | [ ] |
-| PUT | `/settings` | `settings.update` | P07 | [ ] |
-| POST | `/shelves` | `shelves.store` | P10 | [ ] |
-| PUT | `/shelves/products/{product}/location` | `shelves.place` | P10 | [ ] |
-| PUT / PATCH | `/shelves/{shelf}` | `shelves.update` | P10 | [ ] |
-| DELETE | `/shelves/{shelf}` | `shelves.destroy` | P10 | [ ] |
-| POST | `/stock-opnames` | `opnames.store` | P07 | [ ] |
-| POST | `/stock-opnames/{opname}/approve` | `opnames.approve` | P07 | [ ] |
-| PUT | `/storage/{path}` | `storage.local.upload` | P00/P11 | [ ] |
-| POST | `/suppliers` | `suppliers.store` | P07 | [ ] |
-| PUT / PATCH | `/suppliers/{supplier}` | `suppliers.update` | P07 | [ ] |
-| DELETE | `/suppliers/{supplier}` | `suppliers.destroy` | P07 | [ ] |
-| POST | `/units` | `units.store` | P07 | [ ] |
-| PUT / PATCH | `/units/{unit}` | `units.update` | P07 | [ ] |
-| DELETE | `/units/{unit}` | `units.destroy` | P07 | [ ] |
-| POST | `/users` | `users.store` | P07 | [ ] |
-| PUT | `/users/{user}` | `users.update` | P07 | [ ] |
+| PUT | `/shelf-layout` | `shelves.layout` | P10 | [x] |
+| POST | `/pos/delivery-quote` | `pos.delivery-quote` | P08 | [x] |
+| POST | `/_boost/browser-logs` | `boost.browser-logs` | P00/P11 | Existing guarded contract / regression suite |
+| POST | `/brands` | `brands.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/brands/{brand}` | `brands.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/brands/{brand}` | `brands.destroy` | P07 | Existing guarded contract / regression suite |
+| POST | `/cart/quote` | `customer.cart.quote` | P04 | Existing guarded contract / regression suite |
+| POST | `/categories` | `categories.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/categories/{category}` | `categories.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/categories/{category}` | `categories.destroy` | P07 | Existing guarded contract / regression suite |
+| POST | `/checkout` | `customer.checkout` | P04 | Existing guarded contract / regression suite |
+| POST | `/confirm-password` | `—` | P02 | Existing guarded contract / regression suite |
+| POST | `/customers` | `customers.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/customers/{customer}` | `customers.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/customers/{customer}` | `customers.destroy` | P07 | Existing guarded contract / regression suite |
+| POST | `/debt` | `debt.store` | P09 | Existing guarded contract / regression suite |
+| POST | `/debt/correction` | `debt.correction` | P09 | Existing guarded contract / regression suite |
+| POST | `/debt/payment` | `debt.payment` | P09 | Existing guarded contract / regression suite |
+| POST | `/email/verification-notification` | `verification.send` | P00/P11 | Existing guarded contract / regression suite |
+| POST | `/forgot-password` | `password.email` | P02 | Existing guarded contract / regression suite |
+| POST | `/inventory/adjust` | `inventory.adjust` | P07 | Existing guarded contract / regression suite |
+| POST | `/inventory/stock-in` | `inventory.stock-in` | P07 | Existing guarded contract / regression suite |
+| POST | `/inventory/stock-out` | `inventory.stock-out` | P07 | Existing guarded contract / regression suite |
+| POST | `/locale` | `locale.update` | P02 | Existing guarded contract / regression suite |
+| POST | `/login` | `—` | P02 | Existing guarded contract / regression suite |
+| POST | `/logout` | `logout` | P02 | Existing guarded contract / regression suite |
+| POST | `/my-addresses` | `customer.addresses.store` | P04 | Existing guarded contract / regression suite |
+| PUT | `/my-addresses/{address}` | `customer.addresses.update` | P04 | Existing guarded contract / regression suite |
+| DELETE | `/my-addresses/{address}` | `customer.addresses.destroy` | P04 | Existing guarded contract / regression suite |
+| PUT | `/orders/deliveries/{sale}/status` | `orders.delivery-status` | P09 | Existing guarded contract / regression suite |
+| POST | `/orders/{order}/payments` | `orders.payment` | P09 | Existing guarded contract / regression suite |
+| PUT | `/orders/{order}/status` | `orders.update-status` | P09 | Existing guarded contract / regression suite |
+| PUT | `/password` | `password.update` | P02 | Existing guarded contract / regression suite |
+| POST | `/payments` | `payments.store` | P09 | Existing guarded contract / regression suite |
+| POST | `/payments/webhook` | `payments.webhook` | P09 | Existing guarded contract / regression suite |
+| POST | `/payments/{payment}/confirm` | `payments.confirm` | P09 | Existing guarded contract / regression suite |
+| POST | `/payments/{payment}/refund` | `payments.refund` | P09 | Existing guarded contract / regression suite |
+| POST | `/pos/close-shift` | `pos.close-shift` | P08 | Existing guarded contract / regression suite |
+| POST | `/pos/customers` | `pos.customers` | P08 | Existing guarded contract / regression suite |
+| POST | `/pos/customers/{customer}/addresses` | `pos.addresses.store` | P08 | Existing guarded contract / regression suite |
+| POST | `/pos/open-shift` | `pos.open-shift` | P08 | Existing guarded contract / regression suite |
+| POST | `/pos/process-sale` | `pos.process-sale` | P08 | Existing guarded contract / regression suite |
+| POST | `/product-types` | `product-types.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/product-types/{product_type}` | `product-types.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/product-types/{product_type}` | `product-types.destroy` | P07 | Existing guarded contract / regression suite |
+| POST | `/products` | `products.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/products/{product}` | `products.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/products/{product}` | `products.destroy` | P07 | Existing guarded contract / regression suite |
+| PATCH | `/profile` | `profile.update` | P02 | Existing guarded contract / regression suite |
+| DELETE | `/profile` | `profile.destroy` | P02 | Existing guarded contract / regression suite |
+| POST | `/refunds` | `refunds.store` | P09 | Existing guarded contract / regression suite |
+| POST | `/register` | `—` | P02 | Existing guarded contract / regression suite |
+| POST | `/reset-password` | `password.store` | P02 | Existing guarded contract / regression suite |
+| PUT | `/roles/{role}` | `roles.update` | P07 | Existing guarded contract / regression suite |
+| PUT | `/settings` | `settings.update` | P07 | Existing guarded contract / regression suite |
+| POST | `/shelves` | `shelves.store` | P10 | Existing guarded contract / regression suite |
+| PUT | `/shelves/products/{product}/location` | `shelves.place` | P10 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/shelves/{shelf}` | `shelves.update` | P10 | Existing guarded contract / regression suite |
+| DELETE | `/shelves/{shelf}` | `shelves.destroy` | P10 | Existing guarded contract / regression suite |
+| POST | `/stock-opnames` | `opnames.store` | P07 | Existing guarded contract / regression suite |
+| POST | `/stock-opnames/{opname}/approve` | `opnames.approve` | P07 | Existing guarded contract / regression suite |
+| PUT | `/storage/{path}` | `storage.local.upload` | P00/P11 | Existing guarded contract / regression suite |
+| POST | `/suppliers` | `suppliers.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/suppliers/{supplier}` | `suppliers.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/suppliers/{supplier}` | `suppliers.destroy` | P07 | Existing guarded contract / regression suite |
+| POST | `/units` | `units.store` | P07 | Existing guarded contract / regression suite |
+| PUT / PATCH | `/units/{unit}` | `units.update` | P07 | Existing guarded contract / regression suite |
+| DELETE | `/units/{unit}` | `units.destroy` | P07 | Existing guarded contract / regression suite |
+| POST | `/users` | `users.store` | P07 | Existing guarded contract / regression suite |
+| PUT | `/users/{user}` | `users.update` | P07 | Existing guarded contract / regression suite |
 
 ## Inventaris Blade
 
@@ -174,116 +179,122 @@ Periksa seluruh file berikut. Partial/component bukan halaman mandiri, tetapi se
 
 | View relatif terhadap resources/views | Review/refactor selesai |
 | --- | --- |
-| `audit/index.blade.php` | [ ] |
-| `audit/show.blade.php` | [ ] |
-| `auth/confirm-password.blade.php` | [ ] |
-| `auth/forgot-password.blade.php` | [ ] |
-| `auth/login.blade.php` | [ ] |
-| `auth/register.blade.php` | [ ] |
-| `auth/reset-password.blade.php` | [ ] |
-| `auth/verify-email.blade.php` | [ ] |
-| `brands/create.blade.php` | [ ] |
-| `brands/edit.blade.php` | [ ] |
-| `brands/index.blade.php` | [ ] |
-| `categories/create.blade.php` | [ ] |
-| `categories/edit.blade.php` | [ ] |
-| `categories/index.blade.php` | [ ] |
-| `components/account-menu.blade.php` | [ ] |
-| `components/address-book.blade.php` | [ ] |
-| `components/address-selector.blade.php` | [ ] |
-| `components/application-logo.blade.php` | [ ] |
-| `components/auth-layout.blade.php` | [ ] |
-| `components/auth-session-status.blade.php` | [ ] |
-| `components/barcode-camera.blade.php` | [ ] |
-| `components/barcode-scan-actions.blade.php` | [ ] |
-| `components/crud-action.blade.php` | [ ] |
-| `components/danger-button.blade.php` | [ ] |
-| `components/delivery-map-dialog.blade.php` | [ ] |
-| `components/delivery-map-link.blade.php` | [ ] |
-| `components/delivery-point.blade.php` | [ ] |
-| `components/dropdown-link.blade.php` | [ ] |
-| `components/dropdown.blade.php` | [ ] |
-| `components/feedback.blade.php` | [ ] |
-| `components/icon.blade.php` | [ ] |
-| `components/input-error.blade.php` | [ ] |
-| `components/input-label.blade.php` | [ ] |
-| `components/locale-switcher.blade.php` | [ ] |
-| `components/modal.blade.php` | [ ] |
-| `components/nav-link.blade.php` | [ ] |
-| `components/password-field.blade.php` | [ ] |
-| `components/primary-button.blade.php` | [ ] |
-| `components/product-location.blade.php` | [ ] |
-| `components/responsive-nav-link.blade.php` | [ ] |
-| `components/secondary-button.blade.php` | [ ] |
-| `components/shopping-steps.blade.php` | [ ] |
-| `components/text-input.blade.php` | [ ] |
-| `components/transaction-status.blade.php` | [ ] |
-| `components/workspace-navigation.blade.php` | [ ] |
-| `customer/addresses.blade.php` | [ ] |
-| `customer/cart.blade.php` | [ ] |
-| `customer/history.blade.php` | [ ] |
-| `customer/order-success.blade.php` | [ ] |
-| `customer/product.blade.php` | [ ] |
-| `customer/shop.blade.php` | [ ] |
-| `customers/create.blade.php` | [ ] |
-| `customers/edit.blade.php` | [ ] |
-| `customers/index.blade.php` | [ ] |
-| `customers/show.blade.php` | [ ] |
-| `dashboard.blade.php` | [ ] |
-| `debt/create.blade.php` | [ ] |
-| `debt/index.blade.php` | [ ] |
-| `inventory/index.blade.php` | [ ] |
-| `landing.blade.php` | [ ] |
-| `layouts/app.blade.php` | [ ] |
-| `layouts/customer.blade.php` | [ ] |
-| `layouts/guest.blade.php` | [ ] |
-| `layouts/navigation.blade.php` | [ ] |
-| `management/settings.blade.php` | [ ] |
-| `management/users.blade.php` | [ ] |
-| `operations/opnames.blade.php` | [ ] |
-| `operations/refunds.blade.php` | [ ] |
-| `operations/shift-table.blade.php` | [ ] |
-| `operations/shifts.blade.php` | [ ] |
-| `orders/index.blade.php` | [ ] |
-| `orders/monitor.blade.php` | [ ] |
-| `orders/show.blade.php` | [ ] |
-| `payments/create.blade.php` | [ ] |
-| `payments/index.blade.php` | [ ] |
-| `payments/show.blade.php` | [ ] |
-| `pos/history.blade.php` | [ ] |
-| `pos/index.blade.php` | [ ] |
-| `pos/receipt.blade.php` | [ ] |
-| `product-types/create.blade.php` | [ ] |
-| `product-types/edit.blade.php` | [ ] |
-| `product-types/index.blade.php` | [ ] |
-| `products/create.blade.php` | [ ] |
-| `products/edit.blade.php` | [ ] |
-| `products/index.blade.php` | [ ] |
-| `products/show.blade.php` | [ ] |
-| `profile/edit.blade.php` | [ ] |
-| `profile/partials/delete-user-form.blade.php` | [ ] |
-| `profile/partials/update-password-form.blade.php` | [ ] |
-| `profile/partials/update-profile-information-form.blade.php` | [ ] |
-| `reports/debt.blade.php` | [ ] |
-| `reports/index.blade.php` | [ ] |
-| `reports/inventory.blade.php` | [ ] |
-| `reports/payments.blade.php` | [ ] |
-| `reports/sales.blade.php` | [ ] |
-| `reports/staff.blade.php` | [ ] |
-| `shelves/index.blade.php` | [ ] |
-| `suppliers/create.blade.php` | [ ] |
-| `suppliers/edit.blade.php` | [ ] |
-| `suppliers/index.blade.php` | [ ] |
-| `units/create.blade.php` | [ ] |
-| `units/index.blade.php` | [ ] |
-| `welcome.blade.php` | [ ] |
+| `audit/index.blade.php` | [x] |
+| `audit/show.blade.php` | [x] |
+| `auth/confirm-password.blade.php` | [x] |
+| `auth/forgot-password.blade.php` | [x] |
+| `auth/login.blade.php` | [x] |
+| `auth/register.blade.php` | [x] |
+| `auth/reset-password.blade.php` | [x] |
+| `auth/verify-email.blade.php` | [x] |
+| `brands/create.blade.php` | [x] |
+| `brands/edit.blade.php` | [x] |
+| `brands/index.blade.php` | [x] |
+| `categories/create.blade.php` | [x] |
+| `categories/edit.blade.php` | [x] |
+| `categories/index.blade.php` | [x] |
+| `components/account-menu.blade.php` | [x] |
+| `components/address-book.blade.php` | [x] |
+| `components/address-selector.blade.php` | [x] |
+| `components/application-logo.blade.php` | [x] |
+| `components/auth-layout.blade.php` | [x] |
+| `components/auth-session-status.blade.php` | [x] |
+| `components/barcode-camera.blade.php` | [x] |
+| `components/barcode-scan-actions.blade.php` | [x] |
+| `components/crud-action.blade.php` | [x] |
+| `components/danger-button.blade.php` | [x] |
+| `components/delivery-map-dialog.blade.php` | [x] |
+| `components/delivery-map-link.blade.php` | [x] |
+| `components/delivery-point.blade.php` | [x] |
+| `components/dropdown-link.blade.php` | [x] |
+| `components/dropdown.blade.php` | [x] |
+| `components/feedback.blade.php` | [x] |
+| `components/icon.blade.php` | [x] |
+| `components/input-error.blade.php` | [x] |
+| `components/input-label.blade.php` | [x] |
+| `components/locale-switcher.blade.php` | [x] |
+| `components/modal.blade.php` | [x] |
+| `components/nav-link.blade.php` | [x] |
+| `components/password-field.blade.php` | [x] |
+| `components/primary-button.blade.php` | [x] |
+| `components/product-location.blade.php` | [x] |
+| `components/responsive-nav-link.blade.php` | [x] |
+| `components/secondary-button.blade.php` | [x] |
+| `components/shopping-steps.blade.php` | [x] |
+| `components/text-input.blade.php` | [x] |
+| `components/transaction-status.blade.php` | [x] |
+| `components/workspace-navigation.blade.php` | [x] |
+| `customer/addresses.blade.php` | [x] |
+| `customer/cart.blade.php` | [x] |
+| `customer/history.blade.php` | [x] |
+| `customer/order-success.blade.php` | [x] |
+| `customer/product.blade.php` | [x] |
+| `customer/shop.blade.php` | [x] |
+| `customers/create.blade.php` | [x] |
+| `customers/edit.blade.php` | [x] |
+| `customers/index.blade.php` | [x] |
+| `customers/show.blade.php` | [x] |
+| `dashboard.blade.php` | [x] |
+| `debt/create.blade.php` | [x] |
+| `debt/index.blade.php` | [x] |
+| `inventory/index.blade.php` | [x] |
+| `landing.blade.php` | [x] |
+| `layouts/app.blade.php` | [x] |
+| `layouts/customer.blade.php` | [x] |
+| `layouts/guest.blade.php` | [x] |
+| `layouts/navigation.blade.php` | [x] |
+| `management/settings.blade.php` | [x] |
+| `management/users.blade.php` | [x] |
+| `operations/opnames.blade.php` | [x] |
+| `operations/refunds.blade.php` | [x] |
+| `operations/shift-table.blade.php` | [x] |
+| `operations/shifts.blade.php` | [x] |
+| `orders/index.blade.php` | [x] |
+| `orders/monitor.blade.php` | [x] |
+| `orders/show.blade.php` | [x] |
+| `payments/create.blade.php` | [x] |
+| `payments/index.blade.php` | [x] |
+| `payments/show.blade.php` | [x] |
+| `pos/history.blade.php` | [x] |
+| `pos/index.blade.php` | [x] |
+| `pos/receipt.blade.php` | [x] |
+| `product-types/create.blade.php` | [x] |
+| `product-types/edit.blade.php` | [x] |
+| `product-types/index.blade.php` | [x] |
+| `products/create.blade.php` | [x] |
+| `products/edit.blade.php` | [x] |
+| `products/index.blade.php` | [x] |
+| `products/show.blade.php` | [x] |
+| `profile/edit.blade.php` | [x] |
+| `profile/partials/delete-user-form.blade.php` | [x] |
+| `profile/partials/update-password-form.blade.php` | [x] |
+| `profile/partials/update-profile-information-form.blade.php` | [x] |
+| `reports/debt.blade.php` | [x] |
+| `reports/index.blade.php` | [x] |
+| `reports/inventory.blade.php` | [x] |
+| `reports/payments.blade.php` | [x] |
+| `reports/sales.blade.php` | [x] |
+| `reports/staff.blade.php` | [x] |
+| `shelves/index.blade.php` | [x] |
+| `suppliers/create.blade.php` | [x] |
+| `suppliers/edit.blade.php` | [x] |
+| `suppliers/index.blade.php` | [x] |
+| `units/create.blade.php` | [x] |
+| `units/index.blade.php` | [x] |
+| `welcome.blade.php` | [x] |
+| `components/theme-init.blade.php` | [x] |
+| `components/theme-toggle.blade.php` | [x] |
+| `components/store-overlays.blade.php` | [x] |
+| `components/shelf-grid.blade.php` | [x] |
+
+107 Blade files inventoried. `welcome.blade.php` and older navigation templates remain compatibility/legacy source; no new UI route was invented for unused views. Shared partial coverage follows their consuming routes.
 
 ## Kondisi lintas halaman
 
-- [ ] Guest/login/logout, role permissions dan own-resource isolation.
-- [ ] Loading/empty/error/success/validation/disabled dan unknown status.
-- [ ] 403/404/419/422/500: halaman atau response existing ditangani; identitas/error page mengikuti shell bila perlu, jangan mengekspos stack trace. Jangan membuat route khusus hanya untuk memamerkan error.
-- [ ] Long content, missing image, currency besar, ID/EN, theme, narrow/wide layouts.
-- [ ] Modal/dropdown/sheet focus dan scroll; pagination/filter/back/refresh/direct links.
-- [ ] Semua 29 sidebar destinations sesuai sumber CMS; action/JSON route tidak disisipkan sebagai menu.
-- [ ] Tidak ada route/page baru setelah baseline yang luput dari inventaris ini.
+- [x] Guest/login/logout, role permissions dan own-resource isolation.
+- [x] Loading/empty/error/success/validation/disabled dan unknown status.
+- [x] 403/404/419/422/500: halaman atau response existing ditangani; identitas/error page mengikuti shell bila perlu, jangan mengekspos stack trace. Jangan membuat route khusus hanya untuk memamerkan error.
+- [x] Long content, missing image, currency besar, ID/EN, theme, narrow/wide layouts.
+- [x] Modal/dropdown/sheet focus dan scroll; pagination/filter/back/refresh/direct links.
+- [x] Semua 29 sidebar destinations sesuai sumber CMS; action/JSON route tidak disisipkan sebagai menu.
+- [x] Tidak ada route/page baru setelah baseline yang luput dari inventaris ini.

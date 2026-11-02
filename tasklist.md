@@ -88,5 +88,5 @@ Development QA is complete for the implemented scope; evidence is in [QA_REPORT.
 
 ## Implementasi desain final Figcraft — rencana baru
 
-- [ ] Jalankan [tasklist implementasi final, P00–P11](docs/implementation/README.md) untuk seluruh halaman customer dan CMS. Status detail: [STATUS.md](docs/implementation/STATUS.md).
-- [ ] Commit per fase/fitur setelah verifikasi; lakukan QA menyeluruh dan langsung perbaiki bug sesuai paket handoff tersebut. Checklist lama di bawah/atas tidak menandakan revamp final ini sudah selesai.
+- [x] Jalankan [tasklist implementasi final, P00–P11](docs/implementation/README.md) untuk seluruh halaman customer dan CMS. Status detail: [STATUS.md](docs/implementation/STATUS.md).
+- [x] Commit per fase/fitur setelah verifikasi; lakukan QA menyeluruh dan langsung perbaiki bug sesuai paket handoff tersebut. Checklist lama di bawah/atas tidak menandakan revamp final ini sudah selesai.

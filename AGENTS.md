@@ -18,7 +18,7 @@ Stack: Laravel/PHP, server-rendered Blade, Alpine.js, Tailwind, Vite, MySQL and 
 4. For the final UI implementation, [implementation index](docs/implementation/README.md), [working agreement](docs/implementation/00-WORKING-AGREEMENT.md), [STATUS](docs/implementation/STATUS.md), and the active phase document.
 5. Inspect related source, tests, applicable nested/ancestor instructions and CI if present before patching.
 
-At handoff on 1 November 2026, the final-design implementation plan P00–P11 is **TODO**. Completed items in the older tasklist do not mean the final Figcraft design has been implemented. Re-check STATUS, Git and source on every new session rather than treating this dated statement as permanent.
+Implementation and software QA phases P00–P11 were completed on 2 November 2026. Read STATUS and the final QA report before choosing new work. Earlier TODO statements in historical notes describe the planning/baseline stage. Re-check source and Git rather than assuming later work has also been verified.
 
 ## Source map
 

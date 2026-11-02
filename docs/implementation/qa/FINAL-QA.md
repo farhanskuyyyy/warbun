@@ -17,7 +17,7 @@ Completed 2 November 2026 on `feat/warbun-final-ui`. Work started 1 November. Na
 | P08 | POS catalog/cart workspace, mobile cart sheet, payment modal, delivery quote and existing shift/receipt/history workflows | `88e8e4b`, `d220622`, `675c085` |
 | P09 | Oldest-first monitor queue with selected detail/sidebar or mobile overlay; consistent transaction/financial/report/audit surfaces | `d220622`, `675c085` |
 | P10 | Actual grid drag/resize, numeric and keyboard alternatives, atomic revisioned save, bounds/collision checks and live shelf-product detail | `88e8e4b`, `512afb2`, QA fixes |
-| P11 | Automated page matrix, real browser interactions, SQLite/MySQL regressions, concurrent stock test, migration checks, visual corrections and this handoff | Final QA/test commits |
+| P11 | Automated page matrix, real browser interactions, SQLite/MySQL regressions, concurrent stock test, migration checks, visual corrections and this handoff | cb49418 |
 
 Dedicated frames were used for major customer/CMS/operational layouts. CRUD pages without dedicated final frames reuse the shared shell/components with existing source content; they are adaptations, not invented native frames. Native nodes 423/2, 25060, 27088 and33762 were inspected and rendered through Figcraft MCP; related page IDs and state specifications are in DESIGN-MAP. Laravel/Blade/Alpine architecture and transactional services were retained.
 
@@ -40,7 +40,7 @@ Dedicated frames were used for major customer/CMS/operational layouts. CRUD page
 
 The page matrix verifies rendering, overflow and runtime errors. The interaction and backend suites establish additional behavior; the matrix alone is not represented as complete functional coverage of every row/action permutation.
 
-Browser tests ran on a disposable SQLite server at127.0.0.1:8876, separate session cookies, array cache/mail and testing environment. MySQL tests used only `warbun_qa_final_20261101`. The user database and `.env` were not migrated or seeded. The unrelated `.DS_Store` change was excluded. No payment, email, deploy or push to an external service occurred.
+Browser tests ran on a disposable SQLite server at127.0.0.1:8876, separate session cookies, array cache/mail and testing environment. MySQL tests used only `warbun_qa_final_20261101`. Test transactions did not use the local development database; `.env` was unchanged. After testing, the local development database was backed up and additively upgraded, without reset or seed. The unrelated `.DS_Store` change was excluded. No payment, email, deploy or push to an external service occurred.
 
 ## Visual review and fixes
 
@@ -91,3 +91,11 @@ Manual channel choices/logos are instructions for store-confirmed payments, not 
 No live gateway/refund transfer, external email, physical printer/scanner/camera/GPS, real iOS/Windows hardware or full screen-reader certification was performed. System font rendering can vary by OS. Browser emulation and CSS fallback coverage do not replace those checks. The full page/interaction run used Chrome. Installed WebKit passed14 secondary page/theme checks plus native modal and product/cart interactions. Firefox was NOT RUN: its installed executable timed out during launch with the available runner; no compatibility pass is claimed. These operational/provider/hardware checks remain required before claiming those particular production integrations work.
 
 No P0/P1/P2 software defect from the executed checks remains open. Full production deployment and real-provider enablement are separate operations, not part of this implementation report.
+
+## Local development schema upgrade
+
+The configured local MySQL database had five pending migrations, including three existing migrations. A private pre-upgrade dump is retained at `/tmp/warbun-local-backup-20261102-075648/database.sql` (directory0700/file0600); copy it to durable private storage if needed because temporary storage can be cleared. No dump is committed.
+
+An in-process upgrade helper initially reused a cached connection: additive schema changes reached the local database while migration records were written to the disposable copy. Repeated verification also produced duplicate generated address backfills. The helper was replaced with a separate migration subprocess against a restored copy. All12 protected tables matched their pre-upgrade record hashes, all eight affected schemas matched the verified copy, duplicate generated addresses were removed while retaining the original generated row, and the final address backfill matched the copy. Only then were the five local migration records reconciled. No existing financial, customer, product or user record was changed. The disposable real-data copy was deleted.
+
+Local migration status is now fully applied. This development upgrade does not imply deployment or migration of another environment.

@@ -1,5 +1,10 @@
 # Warbun — QA development
 
+## Final design implementation P00–P11 · 2 November 2026
+
+Implemented storefront/CMS design adaptations, cart/product/receipt overlays, authoritative fee/radius quotes and immutable snapshots, POS/monitor changes and a persistent shelf grid editor. Software QA completed:117 SQLite tests/962 assertions;41 MySQL financial/policy/layout tests/189 assertions at checkpoint;324 owner page/theme/viewport checks;36 customer and48 guest route checks; real pointer/keyboard browser interactions; MySQL last-item race and legacy migration fixture. Bugs found were corrected and retested. [Full results, screenshots, rollout instructions and external verification limits](docs/implementation/qa/FINAL-QA.md). Local development database backed up and additively upgraded;12 protected table hashes unchanged. No push/deploy.
+
+
 ## Final UI implementation baseline P00 · 1 November 2026
 
 Verified on branch `feat/warbun-final-ui`:113 backend tests/929 assertions pass, production build passes,21 browser route/viewport combinations pass without document overflow or JavaScript page errors. Mobile drawer focus/Escape and customer authorization smoke pass. Fixed pre-existing formatting in AuditController and12 migrations; Pint and backend retest pass. User database untouched; browser fixtures used disposable SQLite. [Evidence, screenshots, gap inventory and limits](docs/implementation/qa/P00-BASELINE.md). P01 is next; this is not final UI completion.
