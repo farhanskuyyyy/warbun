@@ -1,0 +1,13 @@
+services:
+  php:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: warbun-php
+    restart: unless-stopped
+    # host network: php-fpm listen 127.0.0.1:8092 di loopback host,
+    # jadi Laravel tetap akses MySQL host via 127.0.0.1 (root@localhost) tanpa ubah MySQL
+    network_mode: host
+    volumes:
+      # path identik dengan nginx root -> SCRIPT_FILENAME nginx cocok
+      - /var/www/warbun:/var/www/warbun
